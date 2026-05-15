@@ -1,6 +1,7 @@
 {
   "name": "murguia-emprende",
   "version": "1.0.0",
+  "type": "module",
   "description": "Murguía Emprende — Family Office Investment Platform",
   "scripts": {
     "dev": "vercel dev",
