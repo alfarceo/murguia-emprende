@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Murguía Emprende</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0a0a0a; --surface:#141414; --surface2:#1c1c1c; --surface3:#242424;
+  --border:#2c2c2c; --border2:#383838;
+  --gold:#c9a84c; --gold-light:#e2c47a; --gold-dim:rgba(201,168,76,0.1); --gold-border:rgba(201,168,76,0.25);
+  --text:#f0ece4; --text2:#b0aca4; --text3:#6a6660;
+  --green:#4caf7d; --green-dim:rgba(76,175,125,0.1); --green-border:rgba(76,175,125,0.25);
+  --red:#e05a5a; --red-dim:rgba(224,90,90,0.1); --red-border:rgba(224,90,90,0.25);
+  --amber:#e8a93a; --amber-dim:rgba(232,169,58,0.1); --amber-border:rgba(232,169,58,0.25);
+  --r:10px; --r-sm:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;font-family:'DM Sans',sans-serif;font-weight:300;background:var(--bg);color:var(--text);}
+.screen{display:none;min-height:100vh;flex-direction:column;}
+.screen.active{display:flex;}
+
+/* LOGIN */
+.login-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:24px;}
+.login-box{width:100%;max-width:400px;}
+.login-logo{text-align:center;margin-bottom:36px;}
+.login-seal{width:52px;height:52px;border-radius:50%;border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:17px;color:var(--gold);margin:0 auto 14px;}
+.login-brand{font-family:'Playfair Display',serif;font-size:22px;}
+.login-brand em{color:var(--gold);font-style:normal;}
+.login-sub{font-size:13px;color:var(--text3);margin-top:4px;}
+.login-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:28px;}
+.login-section-title{font-size:15px;font-weight:500;margin-bottom:18px;}
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
+.field label{font-size:12px;color:var(--text2);}
+.field input,.field select,.field textarea{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 12px;outline:none;transition:border-color .2s;width:100%;}
+.field input:focus,.field textarea:focus{border-color:var(--gold-border);}
+.field textarea{resize:vertical;min-height:64px;}
+.pass-wrap{position:relative;}
+.pass-wrap input{padding-right:44px;}
+.pass-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text3);font-size:16px;padding:0;line-height:1;}
+.pass-eye:hover{color:var(--text2);}
+.req{color:var(--red);margin-left:2px;}
+.btn-gold{width:100%;padding:12px;background:var(--gold);color:#0a0a0a;border:none;border-radius:var(--r-sm);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:background .2s;margin-top:6px;}
+.btn-gold:hover{background:var(--gold-light);}
+.btn-gold:disabled{background:var(--surface3);color:var(--text3);cursor:not-allowed;}
+.err-msg{font-size:13px;color:var(--red);margin-top:10px;text-align:center;min-height:18px;}
+.login-toggle{text-align:center;margin-top:14px;font-size:13px;color:var(--text3);}
+.login-toggle a{color:var(--gold);cursor:pointer;}
+
+/* APP HEADER */
+.app-header{display:flex;align-items:center;justify-content:space-between;padding:13px 22px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;}
+.hdr-left{display:flex;align-items:center;gap:11px;}
+.hdr-seal{width:30px;height:30px;border-radius:50%;border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:11px;color:var(--gold);}
+.hdr-brand{font-family:'Playfair Display',serif;font-size:15px;}
+.hdr-brand em{color:var(--gold);font-style:normal;}
+.hdr-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.hdr-user{font-size:13px;color:var(--text2);}
+.btn-sm{padding:6px 13px;border-radius:var(--r-sm);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--text2);transition:border-color .2s,color .2s;white-space:nowrap;}
+.btn-sm:hover{border-color:var(--gold);color:var(--gold);}
+.btn-sm.gold{background:var(--gold);color:#0a0a0a;border-color:var(--gold);font-weight:500;}
+.btn-sm.gold:hover{background:var(--gold-light);}
+.btn-sm.danger{border-color:var(--red-border);color:var(--red);}
+
+/* PANELS */
+.panel{display:none;flex:1;overflow:hidden;flex-direction:column;}
+.panel.active{display:flex;}
+.scroll-body{flex:1;overflow-y:auto;padding:22px;}
+.scroll-body::-webkit-scrollbar{width:4px;}
+.scroll-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+
+/* DASHBOARD */
+.section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.section-title{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);}
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px;}
+.proj-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;cursor:pointer;transition:border-color .2s,transform .15s;}
+.proj-card:hover{border-color:var(--gold-border);transform:translateY(-2px);}
+.proj-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;gap:8px;}
+.proj-name{font-size:14px;font-weight:500;}
+.proj-owner{font-size:11px;color:var(--text3);margin-top:2px;}
+.proj-desc{font-size:13px;color:var(--text2);line-height:1.55;margin-bottom:10px;}
+.proj-meta{display:flex;gap:10px;font-size:11px;color:var(--text3);flex-wrap:wrap;}
+.status-badge{font-size:10px;font-weight:500;padding:3px 8px;border-radius:20px;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
+.s-nuevo{background:var(--gold-dim);color:var(--gold);border:1px solid var(--gold-border);}
+.s-evaluacion{background:var(--amber-dim);color:var(--amber);border:1px solid var(--amber-border);}
+.s-tarea{background:var(--red-dim);color:var(--red);border:1px solid var(--red-border);}
+.s-listo{background:var(--green-dim);color:var(--green);border:1px solid var(--green-border);}
+.s-rechazado{background:var(--surface3);color:var(--text3);border:1px solid var(--border2);}
+.empty-state{text-align:center;padding:50px 20px;color:var(--text3);}
+.empty-state p{font-size:14px;margin-bottom:16px;}
+
+/* PROJECT TABS */
+.proj-tabs{display:flex;border-bottom:1px solid var(--border);background:var(--surface);padding:0 20px;flex-shrink:0;}
+.ptab{padding:11px 16px;font-size:13px;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;white-space:nowrap;}
+.ptab.active{color:var(--gold);border-bottom-color:var(--gold);}
+.ptab:hover:not(.active){color:var(--text2);}
+
+/* FORM */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:880px;}
+@media(max-width:700px){.form-grid{grid-template-columns:1fr;}.projects-grid{grid-template-columns:1fr;}}
+.form-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:11px;}
+.form-section.full{grid-column:1/-1;}
+.section-label{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);}
+.form-actions{display:flex;gap:10px;padding:14px 22px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0;flex-wrap:wrap;}
+.notice{display:flex;gap:8px;align-items:flex-start;padding:10px 14px;border-radius:var(--r-sm);font-size:13px;line-height:1.6;margin-bottom:14px;}
+.notice.info{background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--text2);}
+.notice.err{background:var(--red-dim);border:1px solid var(--red-border);color:var(--red);}
+.notice.ok{background:var(--green-dim);border:1px solid var(--green-border);color:var(--green);}
+
+/* CHAT */
+.chat-layout{display:grid;grid-template-columns:190px 1fr;flex:1;overflow:hidden;}
+@media(max-width:700px){.chat-layout{grid-template-columns:1fr;}}
+.steps-bar{background:var(--surface);border-right:1px solid var(--border);padding:14px 10px;display:flex;flex-direction:column;gap:3px;overflow-y:auto;}
+.steps-lbl{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;padding:0 4px;}
+.step{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:var(--r-sm);}
+.step.active{background:var(--gold-dim);}
+.step.done{background:var(--green-dim);}
+.step-n{width:20px;height:20px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text3);flex-shrink:0;}
+.step.active .step-n{border-color:var(--gold);color:var(--gold);}
+.step.done .step-n{border-color:var(--green);color:var(--green);}
+.step-lbl{font-size:11px;color:var(--text3);line-height:1.3;}
+.step.active .step-lbl{color:var(--text);}
+.step.done .step-lbl{color:var(--green);}
+.dj-card{margin-top:auto;padding:12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);}
+.dj-av{width:34px;height:34px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:13px;color:var(--gold);margin-bottom:6px;}
+.dj-name{font-size:13px;font-weight:500;}
+.dj-role{font-size:11px;color:var(--text3);margin-top:1px;}
+.chat-main{display:flex;flex-direction:column;overflow:hidden;}
+.prog-bar{height:2px;background:var(--surface2);flex-shrink:0;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));transition:width .5s;}
+.chat-err{background:var(--red-dim);border:1px solid var(--red-border);border-radius:var(--r-sm);padding:8px 14px;font-size:13px;color:var(--red);display:none;margin:8px 18px 0;}
+.chat-err.show{display:block;}
+.chat-msgs{flex:1;overflow-y:auto;padding:18px 22px;display:flex;flex-direction:column;gap:13px;}
+.chat-msgs::-webkit-scrollbar{width:4px;}
+.chat-msgs::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+.msg-row{display:flex;gap:10px;align-items:flex-start;animation:fadeUp .2s ease;}
+.msg-row.user{flex-direction:row-reverse;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
+.av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;}
+.av.dj{background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--gold);font-family:'Playfair Display',serif;}
+.av.usr{background:var(--surface2);border:1px solid var(--border2);color:var(--text2);}
+.bubble{max-width:78%;padding:10px 14px;border-radius:14px;font-size:14px;line-height:1.75;}
+.bubble.dj{background:var(--surface2);border:1px solid var(--border);color:var(--text);border-top-left-radius:3px;}
+.bubble.usr{background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--text);border-top-right-radius:3px;}
+.bubble.think{color:var(--text3);font-style:italic;}
+.bubble.think::after{content:'';display:inline-block;animation:dots 1.2s infinite;}
+@keyframes dots{0%,20%{content:'.'}40%,60%{content:'..'}80%,100%{content:'...'}}
+.opts-wrap{display:flex;flex-direction:column;gap:5px;margin-top:8px;}
+.opt-btn{background:var(--surface3);border:1px solid var(--border2);border-radius:var(--r-sm);padding:8px 12px;text-align:left;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text2);cursor:pointer;transition:border-color .2s,color .2s,background .2s;}
+.opt-btn:hover{border-color:var(--gold);color:var(--text);background:var(--gold-dim);}
+.opt-btn.sel{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);pointer-events:none;}
+.opt-btn:disabled{opacity:.5;pointer-events:none;}
+.chat-input-area{padding:12px 18px 14px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0;}
+.chat-inp-wrap{display:flex;gap:8px;align-items:flex-end;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:8px 12px;transition:border-color .2s;}
+.chat-inp-wrap:focus-within{border-color:var(--gold-border);}
+.chat-inp-wrap textarea{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;resize:none;min-height:20px;max-height:100px;line-height:1.6;}
+.chat-inp-wrap textarea::placeholder{color:var(--text3);}
+.send-btn{width:30px;height:30px;border-radius:50%;background:var(--gold);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s;}
+.send-btn:hover{background:var(--gold-light);}
+.send-btn:disabled{background:var(--surface3);cursor:not-allowed;}
+.send-btn svg{width:13px;height:13px;fill:#0a0a0a;}
+.send-btn:disabled svg{fill:var(--text3);}
+.chat-hint{font-size:11px;color:var(--text3);margin-top:5px;text-align:center;}
+
+/* MEMO */
+.memo-inner{max-width:680px;display:flex;flex-direction:column;gap:14px;}
+.memo-eyebrow{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:500;}
+.memo-title{font-family:'Playfair Display',serif;font-size:24px;margin:4px 0 2px;}
+.memo-meta{font-size:13px;color:var(--text3);}
+.memo-divider{height:1px;background:var(--border);}
+.scores{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;}
+.score-c{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:13px;text-align:center;}
+.score-n{font-family:'Playfair Display',serif;font-size:26px;}
+.score-d{font-size:13px;color:var(--text3);}
+.score-l{font-size:10px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-top:3px;}
+.memo-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px;}
+.memo-card-lbl{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);font-weight:500;margin-bottom:7px;}
+.memo-card p{font-size:14px;color:var(--text);line-height:1.75;}
+.verdict-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.verdict{padding:6px 15px;border-radius:24px;font-size:13px;font-weight:500;}
+.v-pitch{background:var(--green-dim);color:var(--green);border:1px solid var(--green-border);}
+.v-rev{background:var(--amber-dim);color:var(--amber);border:1px solid var(--amber-border);}
+.v-no{background:var(--red-dim);color:var(--red);border:1px solid var(--red-border);}
+
+/* TASKS */
+.task-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:9px;display:flex;gap:11px;align-items:flex-start;}
+.task-check{width:20px;height:20px;border:1px solid var(--border2);border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;transition:background .2s,border-color .2s;font-size:12px;}
+.task-check.done{background:var(--green-dim);border-color:var(--green);color:var(--green);}
+.task-text{font-size:14px;line-height:1.6;}
+.task-text.done{text-decoration:line-through;color:var(--text3);}
+.task-date{font-size:11px;color:var(--text3);margin-top:3px;}
+.add-task-row{display:flex;gap:8px;margin-top:14px;}
+.add-task-inp{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:9px 12px;outline:none;}
+.add-task-inp:focus{border-color:var(--gold-border);}
+
+/* ADMIN */
+.admin-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:22px;}
+@media(max-width:700px){.admin-stats{grid-template-columns:1fr;}}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:15px;}
+.stat-n{font-family:'Playfair Display',serif;font-size:30px;color:var(--gold);}
+.stat-l{font-size:12px;color:var(--text3);margin-top:3px;}
+.admin-table{width:100%;border-collapse:collapse;}
+.admin-table th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);padding:8px 11px;text-align:left;border-bottom:1px solid var(--border);}
+.admin-table td{font-size:13px;padding:11px;border-bottom:1px solid var(--border);color:var(--text2);}
+.admin-table tr:hover td{background:var(--surface2);}
+.admin-table td:first-child{color:var(--text);}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:100;display:none;}
+.modal-overlay.show{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px;width:100%;max-width:380px;}
+.modal h3{font-size:16px;font-weight:500;margin-bottom:16px;}
+.modal-actions{display:flex;gap:8px;margin-top:16px;}
+</style>
+</head>
+<body>
+
+<!-- ═══ LOGIN ═══ -->
+<div class="screen active" id="screen-login">
+  <div class="login-wrap">
+    <div class="login-box">
+      <div class="login-logo">
+        <div class="login-seal">MV</div>
+        <div class="login-brand">Murguía <em>Emprende</em></div>
+        <div class="login-sub">Family Office · Proyectos de inversión</div>
+      </div>
+      <div class="login-card">
+        <div class="login-section-title" id="login-title">Iniciar sesión</div>
+        <div class="field" id="field-nombre" style="display:none">
+          <label>Nombre completo <span class="req">*</span></label>
+          <input type="text" id="inp-nombre" placeholder="Ej. Juanpis Murguía">
+        </div>
+        <div class="field">
+          <label>Correo electrónico</label>
+          <input type="email" id="inp-email" placeholder="tu@email.com" onkeydown="if(event.key==='Enter')doLogin()">
+        </div>
+        <div class="field">
+          <label>Contraseña</label>
+          <div class="pass-wrap">
+            <input type="password" id="inp-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+            <button class="pass-eye" onclick="togglePass('inp-pass',this)" tabindex="-1">👁</button>
+          </div>
+        </div>
+        <div class="field" id="field-confirm" style="display:none">
+          <label>Confirmar contraseña</label>
+          <div class="pass-wrap">
+            <input type="password" id="inp-confirm" placeholder="••••••••">
+            <button class="pass-eye" onclick="togglePass('inp-confirm',this)" tabindex="-1">👁</button>
+          </div>
+        </div>
+        <button class="btn-gold" id="login-btn" onclick="doLogin()">Entrar</button>
+        <div class="err-msg" id="login-err"></div>
+      </div>
+      <div class="login-toggle" id="login-toggle">
+        ¿Primera vez? <a onclick="toggleRegister()">Crear cuenta</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ APP ═══ -->
+<div class="screen" id="screen-app">
+  <header class="app-header">
+    <div class="hdr-left">
+      <div class="hdr-seal">MV</div>
+      <div class="hdr-brand">Murguía <em>Emprende</em></div>
+    </div>
+    <div class="hdr-right">
+      <span class="hdr-user" id="hdr-user"></span>
+      <button class="btn-sm gold" id="btn-admin" onclick="showAdmin()" style="display:none">⚙ Admin</button>
+      <button class="btn-sm gold" onclick="newProject()">+ Nuevo proyecto</button>
+      <button class="btn-sm" onclick="doLogout()">Salir</button>
+    </div>
+  </header>
+
+  <!-- DASHBOARD -->
+  <div class="panel active" id="panel-dash">
+    <div class="scroll-body">
+      <div class="section-hdr">
+        <div class="section-title" id="dash-title">Mis proyectos</div>
+      </div>
+      <div class="projects-grid" id="projects-grid"></div>
+    </div>
+  </div>
+
+  <!-- PROJECT -->
+  <div class="panel" id="panel-proj">
+    <div class="proj-tabs">
+      <div class="ptab active" id="ptab-form" onclick="switchTab('form')">📋 Formulario</div>
+      <div class="ptab" id="ptab-dj" onclick="switchTab('dj')">🎩 Don Juan</div>
+      <div class="ptab" id="ptab-memo" onclick="switchTab('memo')">📄 Memo</div>
+      <div class="ptab" id="ptab-tasks" onclick="switchTab('tasks')">✅ Tareas</div>
+      <div style="margin-left:auto;display:flex;align-items:center;padding:0 8px;">
+        <button class="btn-sm" onclick="showDash()">← Volver</button>
+      </div>
+    </div>
+
+    <!-- FORM -->
+    <div class="panel active" id="pnl-form">
+      <div class="scroll-body">
+        <div id="form-notice" style="display:none"></div>
+        <div class="form-grid">
+          <div class="form-section">
+            <div class="section-label">Básico</div>
+            <div class="field"><label>Nombre del proyecto <span class="req">*</span></label><input type="text" id="f-proyecto" placeholder="Ej. VendFit"></div>
+            <div class="field"><label>Industria <span class="req">*</span></label><input type="text" id="f-industria" placeholder="Ej. Fitness, Tecnología..."></div>
+            <div class="field"><label>Etapa actual</label>
+              <select id="f-etapa"><option value="">Selecciona</option><option>Solo la idea</option><option>Ya investigué el mercado</option><option>Tengo un prototipo / MVP</option><option>Ya tengo primeros clientes</option><option>Negocio en operación</option></select>
+            </div>
+          </div>
+          <div class="form-section">
+            <div class="section-label">Problema y solución</div>
+            <div class="field"><label>¿Qué problema resuelves? <span class="req">*</span></label><textarea id="f-problema" placeholder="¿A quién le duele hoy?"></textarea></div>
+            <div class="field"><label>¿Cuál es tu solución? <span class="req">*</span></label><textarea id="f-solucion" placeholder="¿Qué ofreces exactamente?"></textarea></div>
+          </div>
+          <div class="form-section">
+            <div class="section-label">Mercado</div>
+            <div class="field"><label>Cliente objetivo <span class="req">*</span></label><input type="text" id="f-cliente" placeholder="Edad, perfil, ubicación..."></div>
+            <div class="field"><label>Tamaño del mercado</label><input type="text" id="f-mercado" placeholder="Ej. ~500K gimnasios en LATAM"></div>
+            <div class="field"><label>Evidencia de demanda</label><textarea id="f-demanda" placeholder="¿Entrevistaste clientes? ¿Datos?"></textarea></div>
+          </div>
+          <div class="form-section">
+            <div class="section-label">Modelo de negocio</div>
+            <div class="field"><label>¿Cómo genera dinero? <span class="req">*</span></label><textarea id="f-modelo" placeholder="Venta directa, suscripción..."></textarea></div>
+            <div class="field"><label>Precio / ticket promedio</label><input type="text" id="f-precio" placeholder="Ej. $250/mes"></div>
+            <div class="field"><label>Costo de adquirir un cliente</label><input type="text" id="f-cac" placeholder="CAC estimado"></div>
+          </div>
+          <div class="form-section">
+            <div class="section-label">Competencia</div>
+            <div class="field"><label>¿Quiénes son tus competidores?</label><textarea id="f-competencia" placeholder="Nombres, empresas..."></textarea></div>
+            <div class="field"><label>¿Por qué ganarías tú? <span class="req">*</span></label><textarea id="f-ventaja" placeholder="Tu ventaja real — específica."></textarea></div>
+          </div>
+          <div class="form-section">
+            <div class="section-label">Tecnología e IA</div>
+            <div class="field"><label>¿Cómo integra IA? <span class="req">*</span></label><textarea id="f-ia" placeholder="¿Qué procesos? ¿Qué ventaja?"></textarea></div>
+            <div class="field"><label>¿Qué pasa si no usas IA?</label><textarea id="f-sinia" placeholder="Riesgo de no adoptar tecnología"></textarea></div>
+          </div>
+          <div class="form-section">
+            <div class="section-label">Equipo</div>
+            <div class="field"><label>¿Quién está contigo? <span class="req">*</span></label><textarea id="f-equipo" placeholder="Nombres, roles, experiencia..."></textarea></div>
+            <div class="field"><label>¿Qué perfil les falta?</label><input type="text" id="f-falta" placeholder="Ej. Desarrollador, director comercial..."></div>
+          </div>
+          <div class="form-section">
+            <div class="section-label">Financiero</div>
+            <div class="field"><label>Inversión requerida (USD) <span class="req">*</span></label><input type="text" id="f-inversion" placeholder="Ej. $50,000 USD"></div>
+            <div class="field"><label>Uso de los fondos <span class="req">*</span></label><textarea id="f-uso" placeholder="40% inventario, 30% operación..."></textarea></div>
+            <div class="field"><label>Proyección de retorno</label><textarea id="f-retorno" placeholder="¿Cuándo proyectas breakeven?"></textarea></div>
+          </div>
+          <div class="form-section">
+            <div class="section-label">Riesgos</div>
+            <div class="field"><label>¿Cuál es el riesgo más grande? <span class="req">*</span></label><textarea id="f-riesgo" placeholder="Sé honesto. ¿Qué podría salir mal?"></textarea></div>
+            <div class="field"><label>KPIs que medirás</label><textarea id="f-kpis" placeholder="Ticket promedio, retención, margen..."></textarea></div>
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-sm gold" onclick="saveAndDJ()">Guardar y hablar con Don Juan →</button>
+        <button class="btn-sm" onclick="saveForm()">Guardar borrador</button>
+        <button class="btn-sm" id="btn-demo" onclick="loadDemo()" style="display:none;border-style:dashed">🎯 Cargar demo PULSE</button>
+      </div>
+    </div>
+
+    <!-- DON JUAN -->
+    <div class="panel" id="pnl-dj">
+      <div class="chat-layout">
+        <aside class="steps-bar">
+          <div class="steps-lbl">Evaluación</div>
+          <div class="step" id="st-0"><div class="step-n">1</div><div class="step-lbl">Revisión</div></div>
+          <div class="step" id="st-1"><div class="step-n">2</div><div class="step-lbl">Idea</div></div>
+          <div class="step" id="st-2"><div class="step-n">3</div><div class="step-lbl">Mercado</div></div>
+          <div class="step" id="st-3"><div class="step-n">4</div><div class="step-lbl">Modelo</div></div>
+          <div class="step" id="st-4"><div class="step-n">5</div><div class="step-lbl">Competencia</div></div>
+          <div class="step" id="st-5"><div class="step-n">6</div><div class="step-lbl">IA</div></div>
+          <div class="step" id="st-6"><div class="step-n">7</div><div class="step-lbl">Equipo</div></div>
+          <div class="step" id="st-7"><div class="step-n">8</div><div class="step-lbl">Financiero</div></div>
+          <div class="step" id="st-8"><div class="step-n">9</div><div class="step-lbl">Riesgos</div></div>
+          <div class="dj-card" style="margin-top:auto">
+            <div class="dj-av">DJ</div>
+            <div class="dj-name">Don Juan</div>
+            <div class="dj-role">Patriarca<br>Murguía Emprende</div>
+          </div>
+        </aside>
+        <div class="chat-main">
+          <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+          <div class="chat-err" id="chat-err"></div>
+          <div class="chat-msgs" id="chat-msgs"></div>
+          <div class="chat-input-area">
+            <div class="chat-inp-wrap">
+              <textarea id="chat-inp" placeholder="Escribe tu respuesta..." rows="1" disabled></textarea>
+              <button class="send-btn" id="send-btn" onclick="sendMsg()" disabled>
+                <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
+              </button>
+            </div>
+            <div class="chat-hint">Enter para enviar · Shift+Enter para nueva línea</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEMO -->
+    <div class="panel" id="pnl-memo">
+      <div class="scroll-body">
+        <div class="memo-inner" id="memo-inner">
+          <p style="color:var(--text3);font-size:14px">El memo aparecerá aquí cuando Don Juan termine la evaluación.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TASKS -->
+    <div class="panel" id="pnl-tasks">
+      <div class="scroll-body">
+        <div class="section-hdr" style="margin-bottom:14px"><div class="section-title">Tareas</div></div>
+        <div id="tasks-list"></div>
+        <div class="add-task-row" id="add-task-row" style="display:none">
+          <input class="add-task-inp" id="new-task-inp" placeholder="Agregar tarea..." onkeydown="if(event.key==='Enter')addTask()">
+          <button class="btn-sm gold" onclick="addTask()">Agregar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN -->
+  <div class="panel" id="panel-admin">
+    <div class="scroll-body">
+      <div class="section-hdr" style="margin-bottom:18px">
+        <div class="section-title">Panel de administración</div>
+        <button class="btn-sm" onclick="showDash()">← Volver</button>
+      </div>
+      <div class="admin-stats" id="admin-stats"></div>
+      <div class="section-hdr" style="margin-bottom:10px"><div class="section-title">Usuarios registrados</div></div>
+      <table class="admin-table" style="margin-bottom:24px">
+        <thead><tr><th>Nombre</th><th>Email</th><th>Registro</th><th>Proyectos</th><th>Acciones</th></tr></thead>
+        <tbody id="admin-users-body"></tbody>
+      </table>
+      <div class="section-hdr" style="margin-bottom:10px"><div class="section-title">Todos los proyectos</div></div>
+      <table class="admin-table">
+        <thead><tr><th>Proyecto</th><th>Emprendedor</th><th>Estado</th><th>Inversión</th><th>Actualizado</th><th></th></tr></thead>
+        <tbody id="admin-proj-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- PASSWORD RESET MODAL -->
+<div class="modal-overlay" id="modal-reset">
+  <div class="modal">
+    <h3>Restablecer contraseña</h3>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:14px">Nueva contraseña para: <strong id="reset-email-label"></strong></p>
+    <div class="field">
+      <label>Nueva contraseña</label>
+      <div class="pass-wrap">
+        <input type="password" id="reset-pass" placeholder="Mínimo 4 caracteres">
+        <button class="pass-eye" onclick="togglePass('reset-pass',this)" tabindex="-1">👁</button>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-sm gold" onclick="confirmReset()">Confirmar</button>
+      <button class="btn-sm" onclick="closeModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// API calls go through /api/dj — key is secure on server
+// Admin status comes from server
+
+// ── DB ──
+function db(){ try{ return JSON.parse(localStorage.getItem('mv2_db')||'{"users":{},"projects":{}}'); }catch(e){ return {users:{},projects:{}}; } }
+function saveDB(d){ localStorage.setItem('mv2_db', JSON.stringify(d)); }
+
+// ── STATE ──
+let user = null;
+let projId = null;
+let djMsgs = [];
+let djStep = 0;
+let djBusy = false;
+let djStarted = false;
+let resetTarget = null;
+
+function isAdmin(){ return user && user.is_admin === true; }
+
+// ── UTILS ──
+function togglePass(id, btn){
+  const inp = document.getElementById(id);
+  const show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  btn.textContent = show ? '🙈' : '👁';
+}
+
+function setNotice(id, msg, type='info'){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.className = 'notice ' + type;
+  el.innerHTML = msg;
+  el.style.display = msg ? 'flex' : 'none';
+}
+
+function statusLabel(s){
+  return {nuevo:'Nuevo',evaluacion:'En evaluación',tarea:'Tarea pendiente',listo:'Listo para consejo',rechazado:'No recomendado'}[s]||'Nuevo';
+}
+function statusClass(s){
+  return {nuevo:'s-nuevo',evaluacion:'s-evaluacion',tarea:'s-tarea',listo:'s-listo',rechazado:'s-rechazado'}[s]||'s-nuevo';
+}
+
+// ── AUTH ──
+let registerMode = false;
+function toggleRegister(){
+  registerMode = !registerMode;
+  document.getElementById('login-title').textContent = registerMode ? 'Crear cuenta' : 'Iniciar sesión';
+  document.getElementById('login-btn').textContent = registerMode ? 'Registrarme' : 'Entrar';
+  document.getElementById('field-nombre').style.display = registerMode ? 'flex' : 'none';
+  document.getElementById('field-confirm').style.display = registerMode ? 'flex' : 'none';
+  document.getElementById('login-toggle').innerHTML = registerMode
+    ? '¿Ya tienes cuenta? <a onclick="toggleRegister()">Iniciar sesión</a>'
+    : '¿Primera vez? <a onclick="toggleRegister()">Crear cuenta</a>';
+  document.getElementById('login-err').textContent = '';
+}
+
+async function doLogin(){
+  const email = (document.getElementById('inp-email').value||'').trim().toLowerCase();
+  const pass = document.getElementById('inp-pass').value;
+  const errEl = document.getElementById('login-err');
+  errEl.textContent = '';
+  if(!email || !pass){ errEl.textContent = 'Completa todos los campos.'; return; }
+  if(!email.includes('@')){ errEl.textContent = 'Escribe un correo válido.'; return; }
+  const btn = document.getElementById('login-btn');
+  btn.disabled = true; btn.textContent = 'Conectando...';
+  try {
+    if(registerMode){
+      const name = (document.getElementById('inp-nombre').value||'').trim();
+      const confirm = document.getElementById('inp-confirm').value;
+      if(!name){ errEl.textContent = 'Escribe tu nombre completo.'; btn.disabled=false; btn.textContent='Registrarme'; return; }
+      if(pass !== confirm){ errEl.textContent = 'Las contraseñas no coinciden.'; btn.disabled=false; btn.textContent='Registrarme'; return; }
+      if(pass.length < 4){ errEl.textContent = 'Mínimo 4 caracteres.'; btn.disabled=false; btn.textContent='Registrarme'; return; }
+      const res = await fetch('/api/auth', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'register',email,password:pass,name})});
+      const data = await res.json();
+      if(!res.ok){ errEl.textContent = data.error||'Error al registrarse'; btn.disabled=false; btn.textContent='Registrarme'; return; }
+      user = data.user;
+    } else {
+      const res = await fetch('/api/auth', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'login',email,password:pass})});
+      const data = await res.json();
+      if(!res.ok){ errEl.textContent = data.error||'Error al iniciar sesión'; btn.disabled=false; btn.textContent='Entrar'; return; }
+      user = data.user;
+    }
+    localStorage.setItem('mv2_session', JSON.stringify(user));
+    showApp();
+  } catch(e) {
+    errEl.textContent = 'Error de conexión. Intenta de nuevo.';
+    btn.disabled=false; btn.textContent=registerMode?'Registrarme':'Entrar';
+  }
+}
+
+function doLogout(){
+  user = null; projId = null;
+  localStorage.removeItem('mv2_session');
+  document.getElementById('screen-app').classList.remove('active');
+  document.getElementById('screen-login').classList.add('active');
+  document.getElementById('inp-pass').value = '';
+}
+
+function showApp(){
+  document.getElementById('screen-login').classList.remove('active');
+  document.getElementById('screen-app').classList.add('active');
+  document.getElementById('hdr-user').textContent = user.name;
+  document.getElementById('btn-admin').style.display = isAdmin() ? 'inline-block' : 'none';
+  showDash();
+}
+
+function showDemoBtn(){
+  const btn = document.getElementById('btn-demo');
+  if(btn) btn.style.display = (user && user.email === 'fonarceo@gmail.com') ? 'inline-block' : 'none';
+}
+
+// ── PANELS ──
+function showPanel(id){
+  ['panel-dash','panel-proj','panel-admin'].forEach(p=>{
+    document.getElementById(p).classList.toggle('active', p===id);
+  });
+}
+
+function showDash(){ showPanel('panel-dash'); renderDash(); }
+function showAdmin(){ showPanel('panel-admin'); renderAdmin(); }
+
+// ── DASHBOARD ──
+function renderDash(){
+  const d = db();
+  const all = Object.values(d.projects);
+  const projs = isAdmin() ? all : all.filter(p=>p.ownerEmail===user.email);
+  document.getElementById('dash-title').textContent = isAdmin() ? 'Todos los proyectos' : 'Mis proyectos';
+  const grid = document.getElementById('projects-grid');
+  if(!projs.length){
+    grid.innerHTML = '<div class="empty-state"><p>Aún no hay proyectos.</p><button class="btn-sm gold" onclick="newProject()">+ Presentar mi primera idea</button></div>';
+    return;
+  }
+  grid.innerHTML = projs.sort((a,b)=>b.updatedAt-a.updatedAt).map(p=>`
+    <div class="proj-card" onclick="openProj('${p.id}')">
+      <div class="proj-card-top">
+        <div><div class="proj-name">${p.nombre||'Sin nombre'}</div><div class="proj-owner">${p.ownerName}</div></div>
+        <span class="status-badge ${statusClass(p.status)}">${statusLabel(p.status)}</span>
+      </div>
+      <div class="proj-desc">${p.problema ? p.problema.slice(0,90)+'...' : 'Sin descripción aún'}</div>
+      <div class="proj-meta">
+        <span>📅 ${new Date(p.updatedAt).toLocaleDateString('es-MX')}</span>
+        ${p.inversion?'<span>💰 '+p.inversion+'</span>':''}
+        ${(p.tasks||[]).filter(t=>!t.done).length>0?'<span style="color:var(--red)">⚠ '+(p.tasks.filter(t=>!t.done).length)+' tarea(s)</span>':''}
+      </div>
+    </div>`).join('');
+}
+
+// ── PROJECT ──
+function newProject(){
+  const d = db();
+  const id = 'p' + Date.now();
+  d.projects[id] = { id, ownerEmail: user.email, ownerName: user.name, nombre:'', status:'nuevo', createdAt:Date.now(), updatedAt:Date.now(), tasks:[], djMsgs:[], djStep:0, djStarted:false, memo:null };
+  saveDB(d);
+  openProj(id);
+}
+
+function openProj(id){
+  projId = id;
+  showPanel('panel-proj');
+  switchTab('form');
+  loadForm();
+}
+
+function proj(){ return db().projects[projId]; }
+
+function loadForm(){
+  const p = proj(); if(!p) return;
+  ['proyecto','industria','etapa','problema','solucion','cliente','mercado','demanda','modelo','precio','cac','competencia','ventaja','ia','sinia','equipo','falta','inversion','uso','retorno','riesgo','kpis'].forEach(k=>{
+    const el = document.getElementById('f-'+k);
+    if(el) el.value = p['f_'+k]||'';
+  });
+  setNotice('form-notice','');
+}
+
+function getForm(){
+  const d={};
+  ['proyecto','industria','etapa','problema','solucion','cliente','mercado','demanda','modelo','precio','cac','competencia','ventaja','ia','sinia','equipo','falta','inversion','uso','retorno','riesgo','kpis'].forEach(k=>{
+    const el = document.getElementById('f-'+k);
+    d[k] = el ? el.value.trim() : '';
+  });
+  return d;
+}
+
+function saveForm(silent){
+  const d = db(); const f = getForm();
+  Object.keys(f).forEach(k=>{ d.projects[projId]['f_'+k]=f[k]; });
+  d.projects[projId].nombre = f.proyecto||'Sin nombre';
+  d.projects[projId].problema = f.problema;
+  d.projects[projId].inversion = f.inversion;
+  d.projects[projId].updatedAt = Date.now();
+  saveDB(d);
+  if(!silent) setNotice('form-notice','✓ Guardado correctamente','ok');
+}
+
+const REQ = ['proyecto','industria','problema','solucion','cliente','ventaja','ia','equipo','inversion','uso','riesgo','modelo'];
+function saveAndDJ(){
+  const f = getForm();
+  const missing = REQ.filter(k=>!f[k]);
+  if(missing.length){
+    setNotice('form-notice','⚠ Faltan '+missing.length+' campo(s) obligatorio(s). Don Juan necesita toda la información para evaluarte.','err');
+    missing.forEach(k=>{ const el=document.getElementById('f-'+k); if(el){el.style.borderColor='var(--red)';setTimeout(()=>el.style.borderColor='',3000);} });
+    return;
+  }
+  saveForm(true);
+  switchTab('dj');
+  initDJ();
+}
+
+// ── TABS ──
+function switchTab(name){ showDemoBtn();
+  ['form','dj','memo','tasks'].forEach(t=>{
+    document.getElementById('ptab-'+t).classList.toggle('active',t===name);
+    document.getElementById('pnl-'+t).classList.toggle('active',t===name);
+  });
+  if(name==='tasks') renderTasks();
+  if(name==='memo'){ const p=proj(); if(p&&p.memo) renderMemo(p.memo); }
+}
+
+// ── DON JUAN ──
+const DJ_SYS = `Eres el abuelo. El Sr. Juan Murguía Pozzi — patriarca de la familia Murguía y abuelo de los nietos emprendedores que presentan proyectos en Murguía Emprende.
+
+QUIÉN ERES:
+Abogado, naciste el 24 de agosto de 1949. Llevaste Afianzadora Insurgentes al liderazgo del mercado en 7 años. Fundaste el Grupo Financiero Aserta. 50 años construyendo empresas con confianza como capital principal.
+
+TU FAMILIA:
+- Juan Pablo (hijo favorito, no lo admites), casado con Esperanza "Espis". Hijos: María "Mariquita", Ximena, Juan Pablo "Juanpis".
+- Lucero, casada con Francisco "Lobas". Hijos: Francisco "Bechi", Juan Pablo "Juanpa", Rodrigo, Nicolás "Nicotel".
+- Regina, casada con Alfonso Arceo Obregón (yerno favorito, tampoco lo admites — aunque todos lo saben). Hijos: Alfonso "Fon", Regina, Alexa. José tiene Síndrome de Down — con él eres especialmente cariñoso.
+- Ana María, casada con Alejandro "Alex". Hijos: Sofía, Alejandro, Santiago.
+- José Ignacio "Boris", casado con Alexis. Hijos: José Ignacio "Jos", Almudena "Almu", Jerónimo "Jero", Álvaro.
+
+PERSONALIDAD:
+Siempre estás riendo — tu carcajada se escuchaba a cinco casas. Chistes constantes que repites con gusto, como "¿hicieron café?" con doble sentido. Cuando alguien canta mal, aúllas AUUUU. "¿Quién compuso esto?" cuando suena música clásica. En el tenis ganabas con la cabeza — dejaditas, globos, y "¡Dime el nombre de tu profesor para demandarlo!" Estratégico hasta el tuétano. Fe y familia como valores centrales.
+
+CÓMO HABLAS:
+- Directo y eficiente. Sin teatro excesivo.
+- "Mijo" con moderación — no en cada mensaje.
+- Preguntas de opción múltiple con este formato EXACTO:
+<<OPCIONES>>
+¿Tu pregunta?
+[Opción A]
+[Opción B]
+[Opción C]
+[Otra — lo explico yo]
+<</OPCIONES>>
+- Preguntas abiertas cuando necesitas desarrollo propio.
+- UNA sola pregunta por mensaje. En español siempre.
+- Llega rápido a las conclusiones.
+
+FASES:
+FASE 1 — Lee el formulario. En UN mensaje diles qué está bien y qué falta. Luego empieza tu primera pregunta.
+FASE 2 — Preguntas difíciles que no están en el formulario. Una a la vez. Al terminar escribe exactamente: |||EVALUACION_COMPLETA|||`;
+
+function buildCtx(){
+  const p = proj();
+  return `Nieto emprendedor: ${user.name}
+
+FORMULARIO:
+Proyecto: ${p.f_proyecto||'—'} | Industria: ${p.f_industria||'—'} | Etapa: ${p.f_etapa||'—'}
+Problema: ${p.f_problema||'VACÍO'}
+Solución: ${p.f_solucion||'VACÍO'}
+Cliente: ${p.f_cliente||'VACÍO'} | Mercado: ${p.f_mercado||'—'}
+Demanda: ${p.f_demanda||'—'}
+Modelo: ${p.f_modelo||'VACÍO'} | Precio: ${p.f_precio||'—'} | CAC: ${p.f_cac||'—'}
+Competencia: ${p.f_competencia||'—'}
+Ventaja: ${p.f_ventaja||'VACÍO'}
+IA: ${p.f_ia||'VACÍO'} | Sin IA: ${p.f_sinia||'—'}
+Equipo: ${p.f_equipo||'VACÍO'} | Falta: ${p.f_falta||'—'}
+Inversión: ${p.f_inversion||'VACÍO'} | Uso: ${p.f_uso||'VACÍO'}
+Retorno: ${p.f_retorno||'—'} | Riesgo: ${p.f_riesgo||'VACÍO'} | KPIs: ${p.f_kpis||'—'}
+
+Saluda brevemente a tu nieto (usa su apodo si lo reconoces). Revisa el formulario en UN mensaje — qué está bien y qué falta. Luego empieza tu primera pregunta directamente.`;
+}
+
+async function callDJ(txt, init){
+  if(!init && txt) djMsgs.push({role:'user',content:txt});
+  const msgs = init ? [{role:'user',content:buildCtx()}] : djMsgs;
+  const res = await fetch('/api/dj',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({action:'chat', messages:msgs})
+  });
+  if(!res.ok){ const e=await res.json().catch(()=>({})); throw new Error(e.error||'Error '+res.status); }
+  const data = await res.json();
+  if(!data||!data.reply) throw new Error('Respuesta inesperada');
+  const reply = data.reply;
+  if(init) djMsgs=[{role:'user',content:buildCtx()},{role:'assistant',content:reply}];
+  else djMsgs.push({role:'assistant',content:reply});
+  saveDJ();
+  return reply;
+}
+
+function saveDJ(){
+  const d=db();
+  if(!d.projects[projId]) return;
+  d.projects[projId].djMsgs=djMsgs;
+  d.projects[projId].djStep=djStep;
+  d.projects[projId].djStarted=djStarted;
+  d.projects[projId].updatedAt=Date.now();
+  saveDB(d);
+}
+
+function parseOpts(text){
+  const m=text.match(/<<OPCIONES>>([\s\S]*?)<\/OPCIONES>>/);
+  if(!m) return null;
+  const lines=m[1].trim().split('\n').map(l=>l.trim()).filter(Boolean);
+  const q=lines[0];
+  const opts=lines.slice(1).filter(l=>l.startsWith('[')&&l.endsWith(']')).map(l=>l.slice(1,-1));
+  const before=text.slice(0,text.indexOf('<<OPCIONES>>')).trim();
+  const after=text.slice(text.indexOf('<</OPCIONES>>')+13).trim();
+  return{before,q,opts,after};
+}
+
+function addMsg(text, role, thinking){
+  const row=document.createElement('div');
+  row.className='msg-row'+(role==='user'?' user':'');
+  const av=document.createElement('div');
+  av.className='av '+(role==='user'?'usr':'dj');
+  av.textContent=role==='user'?'Tú':'DJ';
+  const b=document.createElement('div');
+  b.className='bubble '+(role==='user'?'usr':'dj')+(thinking?' think':'');
+  if(role!=='user'&&!thinking){
+    const parsed=parseOpts(text);
+    if(parsed){
+      let html='';
+      if(parsed.before) html+=`<p style="margin-bottom:8px">${parsed.before}</p>`;
+      html+=`<p style="margin-bottom:8px;font-weight:500">${parsed.q}</p>`;
+      b.innerHTML=html;
+      const wrap=document.createElement('div');
+      wrap.className='opts-wrap';
+      const otherDiv=document.createElement('div');
+      otherDiv.style.cssText='display:none;margin-top:8px';
+      const otherInp=document.createElement('textarea');
+      otherInp.placeholder='Escribe tu respuesta...';
+      otherInp.style.cssText='width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r-sm);color:var(--text);font-family:"DM Sans",sans-serif;font-size:13px;padding:8px 10px;resize:none;min-height:56px;outline:none;margin-bottom:6px';
+      const otherSend=document.createElement('button');
+      otherSend.textContent='Enviar';
+      otherSend.style.cssText='padding:7px 14px;background:var(--gold);color:#0a0a0a;border:none;border-radius:var(--r-sm);font-family:"DM Sans",sans-serif;font-size:13px;cursor:pointer';
+      otherSend.onclick=()=>{ const v=otherInp.value.trim(); if(!v) return; wrap.querySelectorAll('.opt-btn').forEach(b=>b.disabled=true); otherDiv.style.display='none'; sendChoice(v); };
+      otherDiv.appendChild(otherInp); otherDiv.appendChild(otherSend);
+      parsed.opts.forEach(opt=>{
+        const btn=document.createElement('button');
+        btn.className='opt-btn'; btn.textContent=opt;
+        btn.onclick=()=>{ wrap.querySelectorAll('.opt-btn').forEach(b=>b.disabled=true); btn.classList.add('sel'); otherDiv.style.display='none'; sendChoice(opt); };
+        wrap.appendChild(btn);
+      });
+      const otherBtn=document.createElement('button');
+      otherBtn.className='opt-btn'; otherBtn.style.borderStyle='dashed'; otherBtn.textContent='✏️ Otra respuesta...';
+      otherBtn.onclick=()=>{ otherDiv.style.display='block'; otherInp.focus(); };
+      wrap.appendChild(otherBtn);
+      b.appendChild(wrap); b.appendChild(otherDiv);
+      if(parsed.after){ const p=document.createElement('p'); p.style.marginTop='8px'; p.textContent=parsed.after; b.appendChild(p); }
+    } else { b.textContent=text; }
+  } else { b.textContent=text; }
+  row.appendChild(av); row.appendChild(b);
+  document.getElementById('chat-msgs').appendChild(row);
+  document.getElementById('chat-msgs').scrollTop=9999;
+  return b;
+}
+
+function updSteps(){
+  for(let i=0;i<9;i++){
+    const el=document.getElementById('st-'+i); if(!el) continue;
+    el.className='step'+(i<djStep?' done':i===djStep?' active':'');
+  }
+  document.getElementById('prog-fill').style.width=Math.round((djStep/9)*100)+'%';
+}
+
+function showErr(msg){ const e=document.getElementById('chat-err'); e.textContent=msg; e.classList.add('show'); }
+function hideErr(){ document.getElementById('chat-err').classList.remove('show'); }
+
+async function sendChoice(choice){
+  addMsg(choice,'user');
+  djStep=Math.min(djStep+1,9); updSteps();
+  const t=addMsg('Pensando','dj',true);
+  djBusy=true; document.getElementById('send-btn').disabled=true;
+  try{
+    const r=await callDJ(choice,false);
+    t.parentElement.remove();
+    if(r.includes('|||EVALUACION_COMPLETA|||')) await finishEval();
+    else{ addMsg(r,'dj'); document.getElementById('send-btn').disabled=false; document.getElementById('chat-inp').disabled=false; }
+  }catch(e){ t.parentElement.remove(); showErr('Error: '+e.message); document.getElementById('send-btn').disabled=false; djStep--; updSteps(); }
+  djBusy=false;
+}
+
+async function initDJ(){
+  const p=proj();
+  if(p.djStarted && p.djMsgs && p.djMsgs.length>0){
+    djMsgs=p.djMsgs; djStep=p.djStep||0; djStarted=true; updSteps();
+    document.getElementById('chat-msgs').innerHTML='';
+    const n=document.createElement('div');
+    n.style.cssText='text-align:center;font-size:12px;color:var(--text3);padding:8px';
+    n.innerHTML='🔄 Conversación restaurada · <button onclick="resetDJ()" style="background:none;border:none;color:var(--gold);font-size:12px;cursor:pointer;text-decoration:underline">Reiniciar</button>';
+    document.getElementById('chat-msgs').appendChild(n);
+    const last=djMsgs.slice(-6);
+    last.forEach(m=>addMsg(m.content,m.role==='user'?'user':'dj'));
+    document.getElementById('chat-inp').disabled=false;
+    document.getElementById('send-btn').disabled=false;
+    if(p.memo) document.getElementById('ptab-memo').textContent='📄 Memo ✓';
+    return;
+  }
+  if(djStarted) return;
+  djStarted=true; djMsgs=[]; djStep=0;
+  document.getElementById('chat-inp').disabled=true;
+  document.getElementById('send-btn').disabled=true;
+  updSteps();
+  const t=addMsg('Leyendo tu formulario','dj',true);
+  try{
+    const r=await callDJ(null,true);
+    t.parentElement.remove();
+    addMsg(r,'dj');
+    djStep=1; updSteps();
+    document.getElementById('chat-inp').disabled=false;
+    document.getElementById('send-btn').disabled=false;
+    document.getElementById('chat-inp').focus();
+    const d=db(); d.projects[projId].status='evaluacion'; saveDB(d);
+  }catch(e){
+    t.parentElement?t.parentElement.remove():null;
+    showErr('No se pudo conectar: '+e.message);
+    djStarted=false;
+  }
+}
+
+function resetDJ(){
+  djMsgs=[]; djStep=0; djStarted=false;
+  document.getElementById('chat-msgs').innerHTML='';
+  const d=db(); d.projects[projId].djMsgs=[]; d.projects[projId].djStep=0; d.projects[projId].djStarted=false; saveDB(d);
+  initDJ();
+}
+
+async function sendMsg(){
+  const inp=document.getElementById('chat-inp');
+  const txt=inp.value.trim();
+  if(!txt||djBusy) return;
+  djBusy=true; document.getElementById('send-btn').disabled=true;
+  inp.value=''; inp.style.height='auto'; hideErr();
+  addMsg(txt,'user');
+  djStep=Math.min(djStep+1,9); updSteps();
+  const t=addMsg('Pensando','dj',true);
+  try{
+    const r=await callDJ(txt,false);
+    t.parentElement.remove();
+    if(r.includes('|||EVALUACION_COMPLETA|||')) await finishEval();
+    else{ addMsg(r,'dj'); document.getElementById('send-btn').disabled=false; inp.disabled=false; inp.focus(); }
+  }catch(e){ t.parentElement.remove(); showErr('Error: '+e.message); document.getElementById('send-btn').disabled=false; djStep--; updSteps(); }
+  djBusy=false;
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  const inp=document.getElementById('chat-inp');
+  if(inp){
+    inp.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();} });
+    inp.addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px';});
+  }
+});
+
+async function finishEval(){
+  addMsg('Bien. Ya tengo todo. Generando el memo para el consejo...','dj');
+  document.getElementById('chat-inp').disabled=true;
+  djStep=9; updSteps();
+  const memo=await generateMemo();
+  if(memo){
+    const d=db();
+    d.projects[projId].memo=memo;
+    d.projects[projId].status=memo.recomendacion&&memo.recomendacion.includes('PITCH')?'listo':'evaluacion';
+    if(memo.tareas&&memo.tareas.length){
+      const tasks=d.projects[projId].tasks||[];
+      memo.tareas.forEach(t=>tasks.push({id:Date.now()+Math.random(),text:t,done:false,createdAt:Date.now(),createdBy:'Don Juan'}));
+      d.projects[projId].tasks=tasks;
+    }
+    d.projects[projId].updatedAt=Date.now();
+    saveDB(d);
+    renderMemo(memo);
+    document.getElementById('ptab-memo').textContent='📄 Memo ✓';
+    switchTab('memo');
+  }
+}
+
+async function generateMemo(){
+  const history=djMsgs.map(m=>m.role.toUpperCase()+': '+m.content).join('\n\n');
+  const p=proj();
+  const prompt=`Eres analista de Murguía Emprende. Con base en esta conversación genera un memo en JSON puro (sin backticks):
+{"emprendedor":"${user.name}","proyecto":"${p.f_proyecto||'—'}","industria":"${p.f_industria||'—'}","resumen":"2 oraciones del negocio","fortalezas":"2-3 fortalezas separadas por ;","riesgos":"2-3 riesgos separados por ;","preguntas_consejo":"2 preguntas para el consejo separadas por ;","ia_score":7,"mercado_score":7,"equipo_score":7,"recomendacion":"PITCH AL CONSEJO","siguiente_paso":"acción concreta","comentario_don_juan":"frase corta irónica de Don Juan","tareas":["tarea 1","tarea 2"]}
+Para recomendacion usa: PITCH AL CONSEJO / REVISAR ANTES DE PITCH / NO RECOMENDADO
+Conversación:\n${history}`;
+  const res=await fetch('/api/dj',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'memo',context:prompt})});
+  const data=await res.json();
+  if(!data||!data.memo) return null;
+  return data.memo;
+}
+
+function renderMemo(m){
+  const rec=m.recomendacion||'';
+  const vc=rec.includes('PITCH')?'v-pitch':rec.includes('REVISAR')?'v-rev':'v-no';
+  document.getElementById('memo-inner').innerHTML=`
+    <div><div class="memo-eyebrow">Veredicto de Don Juan — Murguía Emprende</div>
+    <div class="memo-title">${m.proyecto||'—'}</div>
+    <div class="memo-meta">${m.emprendedor||'—'} · ${m.industria||'—'} · ${new Date().toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric'})}</div></div>
+    <div class="memo-divider"></div>
+    <div class="verdict-row"><span class="verdict ${vc}">${rec}</span></div>
+    <div class="scores">
+      <div class="score-c"><div><span class="score-n">${m.ia_score||'—'}</span><span class="score-d">/10</span></div><div class="score-l">IA</div></div>
+      <div class="score-c"><div><span class="score-n">${m.mercado_score||'—'}</span><span class="score-d">/10</span></div><div class="score-l">Mercado</div></div>
+      <div class="score-c"><div><span class="score-n">${m.equipo_score||'—'}</span><span class="score-d">/10</span></div><div class="score-l">Equipo</div></div>
+    </div>
+    <div class="memo-card"><div class="memo-card-lbl">Resumen</div><p>${m.resumen||'—'}</p></div>
+    <div class="memo-card"><div class="memo-card-lbl">Fortalezas</div><p>${(m.fortalezas||'—').replace(/;/g,'<br>• ').replace(/^/,'• ')}</p></div>
+    <div class="memo-card"><div class="memo-card-lbl">Riesgos</div><p>${(m.riesgos||'—').replace(/;/g,'<br>• ').replace(/^/,'• ')}</p></div>
+    <div class="memo-card"><div class="memo-card-lbl">Preguntas para el consejo</div><p>${(m.preguntas_consejo||'—').replace(/;/g,'<br>• ').replace(/^/,'• ')}</p></div>
+    <div class="memo-card"><div class="memo-card-lbl">Siguiente paso</div><p>${m.siguiente_paso||'—'}</p></div>
+    <div class="memo-card" style="border-color:var(--gold-border);background:var(--gold-dim)">
+      <div class="memo-card-lbl" style="color:var(--gold)">Don Juan dice</div>
+      <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:15px">"${m.comentario_don_juan||'—'}"</p>
+    </div>`;
+}
+
+// ── TASKS ──
+function renderTasks(){
+  const p=proj(); if(!p) return;
+  const tasks=p.tasks||[];
+  const canAdd=isAdmin();
+  document.getElementById('add-task-row').style.display=canAdd?'flex':'none';
+  const list=document.getElementById('tasks-list');
+  if(!tasks.length){ list.innerHTML='<p style="color:var(--text3);font-size:14px">No hay tareas todavía. Don Juan las agregará al terminar la evaluación.</p>'; return; }
+  list.innerHTML=tasks.map((t,i)=>`
+    <div class="task-item">
+      <div class="task-check ${t.done?'done':''}" onclick="toggleTask(${i})">${t.done?'✓':''}</div>
+      <div><div class="task-text ${t.done?'done':''}">${t.text}</div>
+      <div class="task-date">De: ${t.createdBy||'Don Juan'} · ${new Date(t.createdAt).toLocaleDateString('es-MX')}</div></div>
+    </div>`).join('');
+}
+
+function toggleTask(i){
+  const d=db(); const tasks=d.projects[projId].tasks||[];
+  tasks[i].done=!tasks[i].done;
+  d.projects[projId].tasks=tasks;
+  d.projects[projId].updatedAt=Date.now();
+  saveDB(d);
+  renderTasks();
+}
+
+function addTask(){
+  const inp=document.getElementById('new-task-inp');
+  const txt=inp.value.trim(); if(!txt) return;
+  const d=db(); const tasks=d.projects[projId].tasks||[];
+  tasks.push({id:Date.now(),text:txt,done:false,createdAt:Date.now(),createdBy:user.name});
+  d.projects[projId].tasks=tasks;
+  d.projects[projId].status='tarea';
+  d.projects[projId].updatedAt=Date.now();
+  saveDB(d);
+  inp.value='';
+  renderTasks();
+}
+
+// ── ADMIN ──
+function renderAdmin(){
+  const d=db();
+  const projs=Object.values(d.projects);
+  const users=Object.values(d.users);
+  document.getElementById('admin-stats').innerHTML=`
+    <div class="stat-card"><div class="stat-n">${projs.length}</div><div class="stat-l">Proyectos totales</div></div>
+    <div class="stat-card"><div class="stat-n">${projs.filter(p=>p.status==='listo').length}</div><div class="stat-l">Listos para el consejo</div></div>
+    <div class="stat-card"><div class="stat-n">${users.length}</div><div class="stat-l">Emprendedores registrados</div></div>`;
+  document.getElementById('admin-users-body').innerHTML=users.map(u=>`
+    <tr>
+      <td>${u.name}</td>
+      <td>${u.email}</td>
+      <td>${new Date(u.createdAt).toLocaleDateString('es-MX')}</td>
+      <td>${projs.filter(p=>p.ownerEmail===u.email).length}</td>
+      <td><button class="btn-sm" onclick="openResetModal('${u.email}','${u.name}')">Resetear clave</button></td>
+    </tr>`).join('');
+  document.getElementById('admin-proj-body').innerHTML=projs.sort((a,b)=>b.updatedAt-a.updatedAt).map(p=>`
+    <tr>
+      <td>${p.nombre||'Sin nombre'}</td>
+      <td>${p.ownerName}</td>
+      <td><span class="status-badge ${statusClass(p.status)}">${statusLabel(p.status)}</span></td>
+      <td>${p.inversion||'—'}</td>
+      <td>${new Date(p.updatedAt).toLocaleDateString('es-MX')}</td>
+      <td><button class="btn-sm" onclick="openProj('${p.id}')">Ver</button></td>
+    </tr>`).join('');
+}
+
+// ── PASSWORD RESET ──
+function openResetModal(email, name){
+  resetTarget=email;
+  document.getElementById('reset-email-label').textContent=name+' ('+email+')';
+  document.getElementById('reset-pass').value='';
+  document.getElementById('modal-reset').classList.add('show');
+}
+function closeModal(){ document.getElementById('modal-reset').classList.remove('show'); resetTarget=null; }
+async function confirmReset(){
+  const pass=document.getElementById('reset-pass').value;
+  if(!pass||pass.length<4){ alert('Mínimo 4 caracteres.'); return; }
+  try {
+    const res=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'reset_password',target_email:resetTarget,new_password:pass})});
+    if(!res.ok){ const e=await res.json(); alert(e.error||'Error'); return; }
+    closeModal();
+    alert('Contraseña actualizada correctamente.');
+  } catch(e){ alert('Error de conexión.'); }
+}
+
+// ── DEMO ──
+function loadDemo(){
+  const demo = {
+    'f-proyecto': 'PULSE Nutrition Network',
+    'f-industria': 'Fitness / Nutrición / Retail inteligente',
+    'f-etapa': 'Ya investigué el mercado',
+    'f-problema': 'El usuario fitness sale del entrenamiento con necesidad inmediata de proteína, electrolitos y suplementos, pero no quiere ir a una tienda ni cargar producto. Los gimnasios no monetizan ese momento post-entreno y no tienen data real de consumo de sus socios. Las marcas venden a distribuidores sin saber cómo ni cuándo se consume su producto.',
+    'f-solucion': 'Red de vending machines inteligentes ubicadas en la salida de gimnasios, con productos listos para consumo inmediato (proteína líquida, creatina, pre/post-workout, electrolitos), pago sin fricción y oferta dinámica personalizada según hora, tipo de gimnasio y comportamiento histórico del usuario.',
+    'f-cliente': 'Personas que entrenan 3+ veces por semana en gimnasios de cadena, estudios boutique y centros de crossfit. Urbanos, 20-40 años, alto consumo recurrente de suplementos.',
+    'f-mercado': 'México tiene ~15,000 gimnasios registrados. LATAM supera 70,000. El mercado de suplementos fitness en México creció 18% en 2023 y supera $8,000 MDP anuales.',
+    'f-demanda': 'Entrevistas con 40 usuarios de gimnasio: 78% declaró haber querido comprar algo post-entreno sin tenerlo disponible. 3 gimnasios en CDMX han mostrado interés verbal.',
+    'f-modelo': 'Venta directa por producto (margen 45-55%). Suscripción mensual fitness con packs semanales. Revenue share con gimnasios (15% de ventas). En fase 2: datos de consumo para marcas.',
+    'f-precio': 'Ticket promedio: $120-180 MXN. Suscripción mensual: $699-999 MXN.',
+    'f-cac': 'Canal directo en gimnasio: estimado $80-120 MXN por usuario activo. Sin validar aún.',
+    'f-competencia': 'GNC y Walmart (retail tradicional, sin conveniencia inmediata). Máquinas de snacks genéricas (sin especialización fitness). No existe competidor directo con IA + vending + fitness en México.',
+    'f-ventaja': 'El software es la ventaja. No vendemos máquinas — vendemos infraestructura de consumo inteligente. El surtido se optimiza por IA según comportamiento real. Los datos de consumo post-entreno son el activo que ningún competidor tiene hoy.',
+    'f-ia': 'IA para surtido dinámico por rotación histórica, hora y tipo de entrenamiento. IA para pricing inteligente y bundles automáticos. IA para recomendación personalizada al usuario con historial de consumo. IA operativa para predicción de quiebres de stock y rutas de reposición.',
+    'f-sinia': 'Sin IA el negocio se convierte en un operador de máquinas con márgenes bajos, sin diferenciación y fácil de copiar. El proyecto pierde sentido económico sin el software.',
+    'f-equipo': 'Fon Arceo: responsable de ejecución, relación con gimnasios y expansión. Buscando co-fundador técnico (CTO). Sponsor: acompañamiento estratégico y gobierno financiero.',
+    'f-falta': 'CTO o desarrollador senior para el software de IA. Director comercial con red en cadenas de gimnasios.',
+    'f-inversion': '$200,000 USD (~3.5-4M MXN)',
+    'f-uso': '40% CAPEX máquinas (10-12 unidades). 25% Desarrollo software v1. 20% Inventario inicial y logística. 10% Marketing. 5% Capital de trabajo.',
+    'f-retorno': 'Break-even por máquina: mes 4-5. Break-even del proyecto: mes 14-18. Ronda siguiente proyectada en mes 12 para escalar a 50+ máquinas.',
+    'f-riesgo': 'Principal: que el gimnasio cancele el acuerdo. Mitigación: contratos 18-24 meses con penalidad y diversificar a 3+ gimnasios desde el inicio. Segundo riesgo: que el software no entregue valor y el negocio quede como vending clásico.',
+    'f-kpis': 'Ventas por máquina/día (meta: $1,200 MXN). Margen bruto (meta: >50%). % usuarios recurrentes (meta: >35%). Rotación inventario (<5 días). Uptime máquinas (>97%).'
+  };
+  Object.entries(demo).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.tagName === 'SELECT') {
+      Array.from(el.options).forEach(o => { if (o.value === val || o.text === val) o.selected = true; });
+    } else {
+      el.value = val;
+    }
+  });
+  setNotice('form-notice', '🎯 Proyecto PULSE cargado — revisa y da click en "Guardar y hablar con Don Juan"', 'info');
+}
+
+// ── INIT ──
+window.onload=()=>{
+  const s=localStorage.getItem('mv2_session');
+  if(s){ try{ user=JSON.parse(s); showApp(); return; }catch(e){} }
+};
+</script>
+</body>
+</html>

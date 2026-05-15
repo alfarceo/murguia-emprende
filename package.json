@@ -1,0 +1,13 @@
+{
+  "name": "murguia-emprende",
+  "version": "1.0.0",
+  "description": "Murguía Emprende — Family Office Investment Platform",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'No build step required'"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.24.0",
+    "@supabase/supabase-js": "^2.43.0"
+  }
+}
