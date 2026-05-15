@@ -45,7 +45,7 @@ export default async function handler(req, res) {
   try {
     if (action === 'chat') {
       const response = await client.messages.create({
-        model: 'claude-sonnet-4-20250514',
+        model: model: 'claude-sonnet-4-6',
         max_tokens: 1024,
         system: DJ_SYSTEM,
         messages
@@ -57,7 +57,7 @@ export default async function handler(req, res) {
     if (action === 'memo') {
       const { context } = req.body;
       const response = await client.messages.create({
-        model: 'claude-sonnet-4-20250514',
+        model: model: 'claude-sonnet-4-6',
         max_tokens: 1024,
         messages: [{ role: 'user', content: context }]
       });
