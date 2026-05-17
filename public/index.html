@@ -451,6 +451,10 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;font-weight:300;backgroun
     <!-- MEMO -->
     <div class="panel" id="pnl-memo">
       <div class="scroll-body">
+        <div id="memo-regen-bar" style="display:none;padding:0 0 14px 0">
+          <button class="btn-sm gold" onclick="regenMemo()">🔄 Regenerar memo</button>
+          <span id="memo-regen-status" style="font-size:12px;color:var(--text3);margin-left:10px"></span>
+        </div>
         <div class="memo-inner" id="memo-inner">
           <p style="color:var(--text3);font-size:14px">El memo aparecerá aquí cuando Don Juan termine la evaluación.</p>
         </div>
@@ -708,7 +712,37 @@ function switchTab(name){ showDemoBtn();
     document.getElementById('pnl-'+t).classList.toggle('active',t===name);
   });
   if(name==='tasks') renderTasks();
-  if(name==='memo'){ const p=proj(); if(p&&p.memo) renderMemo(p.memo); }
+  if(name==='memo'){
+    const p=proj();
+    if(p&&p.memo){
+      renderMemo(p.memo);
+      document.getElementById('memo-regen-bar').style.display='block';
+    }
+  }
+}
+
+async function regenMemo(){
+  const p=proj();
+  if(!p){ return; }
+  const statusEl=document.getElementById('memo-regen-status');
+  const btn=document.querySelector('#memo-regen-bar button');
+  btn.disabled=true;
+  statusEl.textContent='Generando... puede tomar unos segundos';
+  document.getElementById('memo-inner').innerHTML='<p style="color:var(--text3);font-size:14px">⏳ Regenerando memo con el nuevo formato...</p>';
+  const memo=await generateMemo();
+  if(memo){
+    const d=db();
+    d.projects[projId].memo=memo;
+    d.projects[projId].updatedAt=Date.now();
+    saveDB(d);
+    renderMemo(memo);
+    document.getElementById('ptab-memo').textContent='📄 Memo ✓';
+    statusEl.textContent='✓ Memo actualizado';
+    setTimeout(()=>{ statusEl.textContent=''; },3000);
+  } else {
+    statusEl.textContent='Error al generar — intenta de nuevo';
+  }
+  btn.disabled=false;
 }
 
 // ── DON JUAN ──
