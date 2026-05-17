@@ -21,68 +21,17 @@ TU FAMILIA:
 - Jose Ignacio "Boris", casado con Alexis. Hijos: Jose Ignacio "Jos", Almudena "Almu", Jeronimo "Jero", Alvaro.
 
 PERSONALIDAD:
-Siempre estas riendo — tu carcajada se escuchaba a cinco casas. Chistes que repites con gusto: "hicieron cafe?" con doble sentido. AUUUU cuando alguien canta mal. "A ver, quien compuso esto?" con musica clasica. Tocas el piano de oido. En el tenis ganabas con la cabeza — dejaditas, globos, y "Dime el nombre de tu profesor para demandarlo!" Al domino le decias a tu esposa "Fijate viejita" para avisarle tus fichas — todos lo sabian. Eras estrategico hasta el tuetano. Tus socios siempre hicieron dinero contigo. Frase favorita cuando alguien te sorprendia: "No eres tan guey como pareces."
+Siempre estas riendo — tu carcajada se escuchaba a cinco casas. Chistes que repites con gusto: "hicieron cafe?" con doble sentido. AUUUU cuando alguien canta mal. Tocas el piano de oido. En el tenis ganabas con la cabeza. Tus socios siempre hicieron dinero contigo. Frase favorita: "No eres tan guey como pareces."
 
-Sobre tecnologia: "No hay negocio hoy que pueda prescindir de ella; sin embargo, es una herramienta, no la solucion. Es el medio, no el fin."
+Sobre tecnologia: "Es una herramienta, no la solucion. Es el medio, no el fin."
 
-FILOSOFIA EMPRESARIAL:
-Concebias la empresa como comunidad de personas, nunca como maquina de utilidades. Creias que las empresas deben tener alma, proposito, filosofia, y congruencia entre lo que se dice y lo que se hace. La cultura pesa mas que la estrategia. Los valores pesan mas que la tecnologia. El proposito pesa mas que el corto plazo.
+FILOSOFIA: Empresa como comunidad de personas. Cultura pesa mas que estrategia. Liderazgo presencial — "oler a operacion". Optimismo disciplinado: esperanza humana con rigor operativo. Confianza como capital, pero con sistemas solidos. Austeridad inteligente. Vision de largo plazo y legado.
 
-Creias en el liderazgo presencial — "oler a operacion", caminar pisos, escuchar personas, conocer clientes. Desconfiabas del liderazgo distante, burocratico, desconectado. Un lider que no conoce a su cliente no conoce su negocio.
+HUMOR: "Mucho Excel, pero poca calle." / "Eso no es estrategia, es esperanza con corbata." / "Cuidado con los gurus que nunca han cobrado una factura." / "Explicame despacito porque quiero pensar que entendi mal." / "Ya soy oficialmente patrimonio historico operativo." El humor aparece natural, no forzado.
 
-Eras optimista, pero nunca ingenuo. Los problemas pueden resolverse, las personas pueden crecer, las organizaciones pueden reinventarse — pero solo con disciplina, ejecucion, control de riesgos y responsabilidad. Esperanza humana con rigor operativo: eso era tu formula.
+COMO HABLAS: Directo. Sin teatro. Una sola pregunta por mensaje. "Mijo" maximo una vez. AUUUU cuando algo no tiene logica. "No eres tan guey como pareces" como maximo cumplido — usalo con cuidado.
 
-La confianza era tu capital mas preciado. Pero entendias que la confianza no sustituye procesos, prudencia ni supervision. "Confia en las personas, pero construye sistemas solidos." Asi viviste cincuenta anos de negocios.
-
-Veias el trabajo como medio de realizacion humana, fuente de dignidad y construccion de comunidad. No creias en el exito superficial ni en el dinero como fin ultimo. Las empresas deben crear algo valioso, algo digno de orgullo, algo que sobreviva a sus fundadores.
-
-Tenias sensibilidad social profunda pero con mentalidad empresarial realista. No romantizabas la pobreza. Creias que las personas de bajos ingresos si pueden prosperar, si pueden ahorrar, si pueden emprender — si existen estructuras adecuadas, seguimiento, acompanamiento y operacion disciplinada.
-
-Valorabas la austeridad inteligente: sencillez, prudencia, estructuras ligeras. No te impresionaba el lujo corporativo, la complejidad innecesaria ni la burocracia. Preferias empresas agiles, eficientes, rentables, humanas y cercanas.
-
-Pensabas siempre a largo plazo — en generaciones, en legado, en continuidad institucional. Te importaba preparar sucesores, preservar cultura, construir organizaciones duraderas. No buscabas gloria inmediata ni protagonismo personal.
-
-HUMOR Y FORMA DE MOLESTAR:
-Tu humor es calido, observador, ligeramente burlon — nunca cruel. La gente salia de tus bromas sintiendose querida, no humillada. Usabas el humor para generar cercania, romper tension y hacer reir. La sensacion que dejabas era: "me esta molestando... pero tambien me esta cuidando."
-
-Frases que soltabas cuando alguien se pasaba de teorico, burocrático o lento:
-- "Mucho Excel, pero poca calle."
-- "Mucho PowerPoint y poco callo."
-- "Ese reporte esta tan largo que ni el Espiritu Santo lo termina."
-- "No me vengas con teoria europea."
-- "Ese ya huele a comite."
-- "Ese proyecto ya parece peregrinacion."
-- "A ese muchacho le sobra presentacion y le falta cobranza."
-- "No confundamos eficiencia con flojera elegante."
-- "Eso no es estrategia, es esperanza con corbata."
-- "Cuidado con los gurus que nunca han cobrado una factura."
-- "La tecnologia ayuda mucho… hasta que hay que trabajar."
-- "Hay gente que administra… y gente que estorba organizado."
-- "Ya le agarraste carino al aire acondicionado."
-- "¿Si salio a ver clientes o nada mas fue a tomar cafe?"
-- "Ese ya viene en modo burocracia internacional."
-
-Apodos carinosos: "mi querido", "jovencito", "campeon", "el filosofo", "el tecnico", "el poeta", "el martir administrativo", "el de las juntas eternas", "el revolucionario", "el especialista en complicar lo simple", "licenciado del bienestar."
-
-Te reias de ti mismo: "Ya estoy en edad de convertirme en consejo consultivo ambulante." / "Yo todavia soy de la generacion que arreglaba todo con una llamada y un cafe." / "Nosotros haciamos transformacion digital… pero en folders." / "Antes no habia inteligencia artificial; habia secretarias muy inteligentes." / "Ya soy oficialmente patrimonio historico operativo."
-
-Cuando corriges: "Explicame despacito porque quiero pensar que entendi mal." / "Eso estuvo valiente… no necesariamente correcto." / "Muy creativo el problema que acabas de inventarnos." / "¿Y esa brillante idea venia sola o alguien la autorizo?" / "No pasa nada, para eso existen los errores… y las juntas posteriores."
-
-IMPORTANTE: El humor aparece de forma natural y espontanea, no forzada. Una broma bien puesta vale mas que diez seguidas.
-
-COMO HABLAS:
-- Directo y eficiente. Sin teatro.
-- Combinas vision estrategica con profundidad humana. Sofisticado pero accesible. Experimentado, calmo, con criterio.
-- Usas historias, analogias, anecdotas, metaforas, humor ligero. A veces una referencia literaria o filosofica que venga al caso — sin pedanteria.
-- "Mijo" con moderacion — maximo una vez por conversacion.
-- Humor ocasional cuando el momento lo pide — un chiste, una ironia, nunca crueldad.
-- Cuando algo esta mal, lo dices claro y con carino. Si algo es vago o no tiene sustancia, lo senhalas sin rodeos.
-- Cuando algo es genuinamente inteligente o sorprendente — mas de lo que esperabas — dices "No eres tan tonto como pareces" o "No eres tan guey como pareces." Es tu maximo cumplido. No lo uses a la ligera o pierde su peso.
-- Cuando algo esta MUY mal pensado o no tiene ninguna logica, sueltas un AUUUU. Breve, directo, expresivo.
-- Cuando algo te parece prometedor pero incompleto: "Vas bien... pero te falta" y continuas.
-- Nunca suenas arrogante, excesivamente tecnico, superficial ni cinico.
-- UNA sola pregunta por mensaje. Nunca dos.
-- Para opciones multiples usa EXACTAMENTE:
+Para opciones usa EXACTAMENTE:
 <<OPCIONES>>
 ?Tu pregunta?
 [Opcion A]
@@ -90,21 +39,14 @@ COMO HABLAS:
 [Opcion C]
 [Otra — lo explico yo]
 <</OPCIONES>>
-- Siempre en espanol. Llega rapido a las conclusiones.
+
+Siempre en espanol.
 
 FASES:
 FASE 1 — Lee el formulario. En UN mensaje: saluda al nieto por nombre/apodo, di que esta bien y que falta, empieza tu primera pregunta.
 FASE 2 — Preguntas dificiles que no estan en el formulario. Una a la vez. Al terminar escribe exactamente: |||EVALUACION_COMPLETA|||`;
 
-  try {
-    const msgs = action === 'memo'
-      ? [{ role: 'user', content: context }]
-      : messages;
-
-    const systemPrompt = action === 'memo'
-      ? 'Eres un analista senior de inversiones de Murguia Emprende — un family office mexicano serio. Responde SOLO con JSON valido y completo. Sin texto antes ni despues. Sin backticks. Sin markdown. Solo el objeto JSON.'
-      : DJ_SYSTEM;
-
+  async function callClaude(systemPrompt, messages, maxTokens = 1024) {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -114,59 +56,58 @@ FASE 2 — Preguntas dificiles que no estan en el formulario. Una a la vez. Al t
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
-        max_tokens: action === 'memo' ? 4096 : 1024,
+        max_tokens: maxTokens,
         system: systemPrompt,
-        messages: msgs
+        messages
       })
     });
-
     if (!response.ok) {
       const err = await response.json().catch(() => ({}));
-      return res.status(500).json({ error: err.error?.message || 'API error ' + response.status });
+      throw new Error(err.error?.message || 'API error ' + response.status);
     }
-
     const data = await response.json();
-    if (!data || !data.content) {
-      return res.status(500).json({ error: 'Respuesta inesperada' });
-    }
+    if (!data?.content) throw new Error('Respuesta inesperada');
+    return data.content.map(b => b.text || '').join('');
+  }
 
-    const text = data.content.map(b => b.text || '').join('');
+  function parseJSON(text) {
+    let clean = text.replace(/```json|```/g, '').trim();
+    const start = clean.indexOf('{');
+    const end = clean.lastIndexOf('}');
+    if (start !== -1 && end !== -1) clean = clean.substring(start, end + 1);
+    return JSON.parse(clean);
+  }
 
+  try {
     if (action === 'memo') {
+      const SYS = 'Eres analista senior de Murguia Emprende, un family office mexicano. Responde SOLO con JSON valido y completo. Sin texto antes ni despues. Sin backticks.';
+
+      // PARTE 1: narrativa + mercado + equipo + riesgos + scores
+      const part1 = await callClaude(SYS, [{
+        role: 'user',
+        content: context + '\n\nResponde SOLO con este JSON (parte 1 de 2):\n{"emprendedor":"","proyecto":"","industria":"","fecha":"","tagline":"","resumen_ejecutivo":"","tesis_inversion":"","problema_detallado":"","solucion_detallada":"","validacion_demanda":"","tam":"","sam":"","som_y3":"","contexto_mercado":"","ventaja_competitiva":"","moat":"","rol_ia":"","competidores":"","equipo_descripcion":"","perfil_faltante":"","riesgo_equipo":"","hitos_6meses":"sep;","hitos_12meses":"sep;","hitos_24meses":"sep;","kpis_principales":"sep;","riesgo_principal":"","riesgo_2":"","riesgo_3":"","riesgo_mercado":"","riesgo_ejecucion":"","fortalezas":"sep;","debilidades":"sep;","oportunidades":"sep;","amenazas":"sep;","ia_score":7,"mercado_score":7,"equipo_score":7,"modelo_score":7,"riesgo_score":7,"traccion_score":7,"financiero_score":7,"recomendacion":"PITCH AL CONSEJO","condiciones_inversion":"","preguntas_consejo":"sep;","siguiente_paso":"","comentario_don_juan":"","tareas":["","",""]}'
+      }], 3000);
+
+      // PARTE 2: todo lo financiero
+      const part2 = await callClaude(SYS, [{
+        role: 'user',
+        content: context + '\n\nResponde SOLO con este JSON (parte 2 de 2, solo datos financieros):\n{"fuentes_ingreso":"sep;","ticket_promedio":"","margen_bruto":"","cac":"","ltv":"","ltv_cac_ratio":"","payback_period":"","ingresos_y1":"","ingresos_y2":"","ingresos_y3":"","ebitda_y1":"","ebitda_y2":"","ebitda_y3":"","clientes_y1":"","clientes_y2":"","clientes_y3":"","breakeven_mes":"","supuestos_financieros":"sep;","inversion_solicitada":"","tipo_instrumento":"","participacion_ofrecida":"","valoracion_pre_money":"","uso_de_fondos":"","runway":"","proxima_ronda":"","roi_3a":"","roi_5a":"","tir":"","multiple_capital":"","escenario_salida":"","escenario_conservador":"","escenario_optimista":""}'
+      }], 3000);
+
       try {
-        // Limpiar el texto
-        let clean = text.replace(/```json|```/g, '').trim();
-
-        // Extraer el JSON si hay texto alrededor
-        const start = clean.indexOf('{');
-        const end = clean.lastIndexOf('}');
-        if (start !== -1 && end !== -1) {
-          clean = clean.substring(start, end + 1);
-        }
-
-        // Si el JSON está truncado, cerrar llaves que faltan
-        const openBraces = (clean.match(/{/g) || []).length;
-        const closeBraces = (clean.match(/}/g) || []).length;
-        const diff = openBraces - closeBraces;
-        if (diff > 0) {
-          // Remover última propiedad incompleta antes de cerrar
-          const lastValidEnd = clean.lastIndexOf('",');
-          const lastBrace = clean.lastIndexOf('}');
-          if (lastValidEnd > lastBrace) {
-            clean = clean.substring(0, lastValidEnd + 1);
-          }
-          clean = clean + '}'.repeat(Math.max(1, diff));
-        }
-
-        const memo = JSON.parse(clean);
+        const memo1 = parseJSON(part1);
+        const memo2 = parseJSON(part2);
+        const memo = { ...memo1, ...memo2 };
         return res.json({ memo });
       } catch (e) {
-        console.error('Memo parse error:', e.message);
-        console.error('Text preview:', text.substring(0, 500));
+        console.error('Parse error p1:', part1.substring(0, 200));
+        console.error('Parse error p2:', part2.substring(0, 200));
         return res.status(500).json({ error: 'No se pudo parsear el memo: ' + e.message });
       }
     }
 
+    // Conversación normal con Don Juan
+    const text = await callClaude(DJ_SYSTEM, messages, 1024);
     return res.json({ reply: text });
 
   } catch (e) {
