@@ -974,72 +974,127 @@ async function finishEval(){
 async function generateMemo(){
   const history=djMsgs.map(m=>m.role.toUpperCase()+': '+m.content).join('\n\n');
   const p=proj();
-  const prompt=`Eres el analista senior de Murguía Emprende, el family office de inversión de la familia Murguía en México. Basándote en el formulario y la conversación completa con Don Juan, genera un análisis exhaustivo en JSON puro (sin backticks, sin markdown).
+  const prompt=`Eres el analista senior de Murguía Emprende, el family office de inversión de la familia Murguía en México. Con 50 años de experiencia evaluando negocios. Basándote en el formulario y la conversación completa con Don Juan, genera un análisis exhaustivo digno de un family office serio. Responde SOLO con JSON puro, sin backticks, sin markdown, sin texto antes o después.
 
 FORMULARIO DEL PROYECTO:
 Proyecto: ${p.f_proyecto||'—'} | Emprendedor: ${user.name} | Industria: ${p.f_industria||'—'} | Etapa: ${p.f_etapa||'—'}
 Problema: ${p.f_problema||'—'}
 Solución: ${p.f_solucion||'—'}
-Cliente: ${p.f_cliente||'—'} | Mercado: ${p.f_mercado||'—'}
+Cliente: ${p.f_cliente||'—'} | Mercado: ${p.f_mercado||'—'} | Demanda validada: ${p.f_demanda||'—'}
 Modelo: ${p.f_modelo||'—'} | Precio: ${p.f_precio||'—'} | CAC: ${p.f_cac||'—'}
 Competencia: ${p.f_competencia||'—'} | Ventaja: ${p.f_ventaja||'—'}
-IA: ${p.f_ia||'—'}
+IA: ${p.f_ia||'—'} | Sin IA: ${p.f_sinia||'—'}
 Equipo: ${p.f_equipo||'—'} | Falta: ${p.f_falta||'—'}
-Inversión: ${p.f_inversion||'—'} | Uso: ${p.f_uso||'—'} | Retorno: ${p.f_retorno||'—'}
+Inversión: ${p.f_inversion||'—'} | Uso: ${p.f_uso||'—'} | Retorno proyectado: ${p.f_retorno||'—'}
 Riesgo: ${p.f_riesgo||'—'} | KPIs: ${p.f_kpis||'—'}
 
 CONVERSACIÓN CON DON JUAN:
 ${history}
 
-Genera este JSON con TODOS los campos completos y detallados:
+INSTRUCCIONES CRÍTICAS:
+- Todos los campos financieros deben tener números reales y específicos basados en los datos del proyecto. No pongas "—" en campos financieros, calcula estimaciones razonables.
+- Las proyecciones deben ser conservadoras pero creíbles. Usa los datos de precio, CAC, mercado y uso de fondos para construirlas.
+- TIR y ROI deben calcularse con base en la inversión, proyecciones de flujo y horizonte de salida a 5 años.
+- El memo debe sentirse como un documento real de inversión, no un resumen genérico.
+
+Genera exactamente este JSON:
 {
   "emprendedor": "${user.name}",
   "proyecto": "${p.f_proyecto||'—'}",
   "industria": "${p.f_industria||'—'}",
-  "fecha": "fecha actual en formato DD/MM/YYYY",
-  "tagline": "frase de una línea que capture la esencia del negocio",
-  "resumen_ejecutivo": "3-4 oraciones que describan el negocio, el problema que resuelve y por qué importa",
-  "problema_detallado": "descripción del problema con contexto de mercado",
-  "solucion_detallada": "descripción clara de la solución y cómo funciona",
-  "mercado_total": "estimación del mercado total (TAM) con números",
-  "mercado_objetivo": "mercado objetivo inicial (SAM) con números",
-  "mercado_obtenible": "mercado obtenible realista en 3 años (SOM) con números",
-  "modelo_negocio_detallado": "descripción completa del modelo con fuentes de ingreso",
-  "unit_economics": "ticket promedio, CAC, LTV estimado, margen bruto",
-  "proyeccion_y1": "proyección conservadora año 1: ingresos y unidades",
-  "proyeccion_y2": "proyección año 2",
-  "proyeccion_y3": "proyección año 3",
-  "breakeven": "cuándo se estima el punto de equilibrio",
-  "uso_de_fondos": "desglose detallado del uso de la inversión con porcentajes",
-  "ventaja_competitiva": "qué hace único a este negocio vs competidores",
-  "rol_ia": "cómo la IA crea ventaja competitiva real y sostenible",
-  "equipo_descripcion": "descripción del equipo y sus capacidades clave",
-  "perfil_faltante": "qué perfil crítico necesitan conseguir",
-  "hitos_6meses": "3 hitos concretos a 6 meses",
-  "hitos_12meses": "3 hitos concretos a 12 meses",
-  "hitos_24meses": "3 hitos concretos a 24 meses",
-  "kpis_principales": "5 KPIs clave con metas específicas separados por ;",
-  "riesgo_principal": "el riesgo más importante y cómo mitigarlo",
-  "riesgos_adicionales": "2 riesgos secundarios separados por ;",
+  "fecha": "fecha actual DD/MM/YYYY",
+  "tagline": "frase de una línea que capture la esencia y propuesta de valor del negocio",
+  "resumen_ejecutivo": "4-5 oraciones: qué es el negocio, qué problema resuelve, por qué ahora, por qué este equipo, qué se solicita",
+
+  "problema_detallado": "descripción del problema con contexto de mercado y datos concretos",
+  "solucion_detallada": "descripción clara de la solución, cómo funciona y qué la hace diferente",
+  "validacion_demanda": "evidencia concreta de demanda: entrevistas, pilotos, cartas de intención, métricas tempranas",
+
+  "tam": "Mercado Total Direccionable con número en USD o MXN y metodología de cálculo",
+  "sam": "Mercado Direccionable Servible — segmento al que pueden llegar realísticamente con número",
+  "som_y3": "Mercado Obtenible en 3 años — participación realista con número y % del SAM",
+  "contexto_mercado": "tendencias del sector, vientos de cola, por qué el momento es ahora",
+
+  "fuentes_ingreso": "lista de todas las fuentes de ingreso separadas por ;",
+  "ticket_promedio": "valor del ticket promedio con unidad (MXN/USD por transacción o mes)",
+  "margen_bruto": "margen bruto estimado en % con justificación",
+  "cac": "costo de adquisición de cliente con metodología",
+  "ltv": "valor de vida del cliente estimado con supuestos",
+  "ltv_cac_ratio": "ratio LTV/CAC con interpretación",
+  "payback_period": "meses para recuperar el CAC",
+
+  "ingresos_y1": "ingresos totales año 1 en MXN con desglose por fuente",
+  "ingresos_y2": "ingresos totales año 2 en MXN",
+  "ingresos_y3": "ingresos totales año 3 en MXN",
+  "ebitda_y1": "EBITDA año 1 en MXN (puede ser negativo)",
+  "ebitda_y2": "EBITDA año 2 en MXN",
+  "ebitda_y3": "EBITDA año 3 en MXN",
+  "clientes_y1": "número de clientes/unidades activas al cierre del año 1",
+  "clientes_y2": "número de clientes/unidades activas al cierre del año 2",
+  "clientes_y3": "número de clientes/unidades activas al cierre del año 3",
+  "breakeven_mes": "mes exacto estimado en que el negocio alcanza punto de equilibrio operativo",
+  "supuestos_financieros": "3-4 supuestos clave detrás de las proyecciones separados por ;",
+
   "inversion_solicitada": "${p.f_inversion||'—'}",
-  "participacion_ofrecida": "porcentaje estimado de participación a ofrecer",
-  "valoracion_implicita": "valuación implícita del negocio",
-  "fortalezas": "3 fortalezas principales separadas por ;",
+  "tipo_instrumento": "tipo de instrumento propuesto: SAFE, deuda convertible, equity directo, etc.",
+  "participacion_ofrecida": "porcentaje de equity ofrecido o equivalente",
+  "valoracion_pre_money": "valuación pre-money implícita con metodología usada",
+  "uso_de_fondos": "desglose detallado del uso de la inversión con porcentajes y montos absolutos",
+  "runway": "meses de runway que da esta inversión antes de necesitar siguiente ronda",
+  "proxima_ronda": "cuándo y cuánto se espera levantar en la siguiente ronda y a qué valuación",
+
+  "roi_3a": "ROI estimado a 3 años para el inversionista en % con cálculo explícito",
+  "roi_5a": "ROI estimado a 5 años para el inversionista en % con escenario de salida",
+  "tir": "TIR estimada del proyecto a 5 años en % con supuestos de salida",
+  "multiple_capital": "múltiplo del capital esperado (ej: 3x, 5x) con escenario base y optimista",
+  "escenario_salida": "escenario de salida más probable: adquisición estratégica, siguiente ronda, dividendos, IPO — con valuación objetivo",
+  "escenario_conservador": "si las cosas van 50% peor de lo esperado, qué pasa con el retorno",
+  "escenario_optimista": "si todo sale bien, cuál es el upside máximo razonable",
+
+  "ventaja_competitiva": "qué hace único a este negocio y por qué es difícil de copiar",
+  "moat": "foso competitivo a largo plazo: datos, red, marca, costos de cambio, regulación",
+  "rol_ia": "cómo la IA crea ventaja competitiva real, sostenible y difícil de replicar",
+  "competidores": "principales competidores directos e indirectos con comparativa",
+
+  "equipo_descripcion": "descripción del equipo fundador con trayectorias relevantes",
+  "perfil_faltante": "perfil crítico que necesitan conseguir y por qué es urgente",
+  "riesgo_equipo": "evaluación honesta de las brechas del equipo actual",
+
+  "hitos_6meses": "3 hitos concretos y medibles a 6 meses separados por ;",
+  "hitos_12meses": "3 hitos concretos y medibles a 12 meses separados por ;",
+  "hitos_24meses": "3 hitos concretos y medibles a 24 meses separados por ;",
+  "kpis_principales": "5 KPIs clave con metas numéricas específicas separados por ;",
+
+  "riesgo_principal": "el riesgo más importante, probabilidad estimada y plan de mitigación",
+  "riesgo_2": "segundo riesgo relevante con mitigación",
+  "riesgo_3": "tercer riesgo relevante con mitigación",
+  "riesgo_mercado": "riesgo de que el mercado no responda como se espera",
+  "riesgo_ejecucion": "riesgo de ejecución del equipo",
+
+  "fortalezas": "3 fortalezas principales del proyecto separadas por ;",
+  "debilidades": "3 debilidades o gaps importantes separadas por ;",
+  "oportunidades": "2-3 oportunidades de expansión o upside no evidente separadas por ;",
+  "amenazas": "2-3 amenazas externas relevantes separadas por ;",
+
   "ia_score": 7,
   "mercado_score": 7,
   "equipo_score": 7,
   "modelo_score": 7,
   "riesgo_score": 7,
+  "traccion_score": 7,
+  "financiero_score": 7,
+
   "recomendacion": "PITCH AL CONSEJO",
-  "condiciones_inversion": "condiciones o hitos que debería cumplir antes o durante la inversión",
-  "preguntas_consejo": "3 preguntas clave que el consejo debe hacerle, separadas por ;",
-  "siguiente_paso": "acción concreta e inmediata que debe hacer el emprendedor",
-  "comentario_don_juan": "frase memorable al estilo de Don Juan — irónica, honesta, que la familia reconozca",
-  "tareas": ["tarea concreta 1", "tarea concreta 2", "tarea concreta 3"]
+  "tesis_inversion": "en 2-3 oraciones, por qué Murguía Emprende debería (o no) invertir — la tesis central",
+  "condiciones_inversion": "condiciones o hitos que el emprendedor debe cumplir antes o durante la inversión",
+  "preguntas_consejo": "4 preguntas clave que el consejo debe hacerle al emprendedor, separadas por ;",
+  "siguiente_paso": "acción concreta e inmediata que debe hacer el emprendedor esta semana",
+  "comentario_don_juan": "frase memorable al estilo de Don Juan — con su humor, su ironía, su sabiduría — que la familia reconozca como suya",
+  "tareas": ["tarea concreta 1 con fecha", "tarea concreta 2 con fecha", "tarea concreta 3 con fecha", "tarea concreta 4 con fecha"]
 }
 
-Para recomendacion usa exactamente: PITCH AL CONSEJO / REVISAR ANTES DE PITCH / NO RECOMENDADO
-Los scores son del 1 al 10. Sé honesto y específico en cada campo.`;
+Para recomendacion usa exactamente una de estas tres: PITCH AL CONSEJO / REVISAR ANTES DE PITCH / NO RECOMENDADO
+Los scores son del 1 al 10. Sé honesto, específico y exigente — esto es dinero de familia.`;
 
   const res=await fetch('/api/dj',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'memo',context:prompt})});
   const data=await res.json();
@@ -1060,181 +1115,297 @@ function renderMemo(m){
   const vc=rec.includes('PITCH')?'v-pitch':rec.includes('REVISAR')?'v-rev':'v-no';
   const fecha=m.fecha||new Date().toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric'});
 
-  // Switch memo tab to show two sub-tabs: Deck and Scorecard
   document.getElementById('memo-inner').innerHTML=`
     <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
-      <button class="btn-sm gold" onclick="showMemoView('deck')">📊 Presentación completa</button>
-      <button class="btn-sm" onclick="showMemoView('scorecard')">📋 Scorecard del comité</button>
+      <button class="btn-sm gold" onclick="showMemoView('deck')">📊 Investment Memo</button>
+      <button class="btn-sm" onclick="showMemoView('scorecard')">📋 Scorecard del Comité</button>
       <button class="btn-sm" onclick="window.print()">🖨 Imprimir</button>
     </div>
+
+    <!-- ═══ DECK ═══ -->
     <div id="memo-deck" class="deck-wrap">
+
       <!-- PORTADA -->
       <div class="deck-cover">
         <div class="deck-cover-seal">MV</div>
+        <div style="font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:8px">Murguía Emprende · Investment Memo</div>
         <div class="deck-cover-title">${m.proyecto||'—'}</div>
-        <div class="deck-cover-sub">${m.tagline||m.industria||'—'}</div>
+        <div class="deck-cover-sub">${m.tagline||'—'}</div>
         <span class="deck-cover-badge ${vc}">${rec}</span>
-        <div style="margin-top:20px;font-size:12px;color:var(--text3)">${m.emprendedor||'—'} · Murguía Emprende · ${fecha}</div>
+        <div style="margin-top:24px;display:flex;justify-content:center;gap:32px;flex-wrap:wrap">
+          <div style="text-align:center"><div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--gold)">${m.inversion_solicitada||'—'}</div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-top:3px">Inversión solicitada</div></div>
+          <div style="text-align:center"><div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--gold)">${m.tir||'—'}</div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-top:3px">TIR estimada</div></div>
+          <div style="text-align:center"><div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--gold)">${m.multiple_capital||'—'}</div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-top:3px">Múltiplo esperado</div></div>
+          <div style="text-align:center"><div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--gold)">${m.participacion_ofrecida||'—'}</div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-top:3px">Participación</div></div>
+        </div>
+        <div style="margin-top:20px;font-size:12px;color:var(--text3)">${m.emprendedor||'—'} · ${fecha} · Confidencial</div>
       </div>
 
-      <!-- RESUMEN EJECUTIVO -->
+      <!-- 1. RESUMEN EJECUTIVO -->
       <div class="deck-slide">
         <div class="deck-slide-header"><div class="slide-num">1</div><div class="slide-title">Resumen Ejecutivo</div></div>
         <div class="deck-slide-body">
-          <p>${m.resumen_ejecutivo||m.resumen||'—'}</p>
-          <div class="deck-metrics">
-            <div class="deck-metric"><div class="deck-metric-n">${m.inversion_solicitada||'—'}</div><div class="deck-metric-l">Inversión solicitada</div></div>
-            <div class="deck-metric"><div class="deck-metric-n">${m.participacion_ofrecida||'—'}</div><div class="deck-metric-l">Participación ofrecida</div></div>
-            <div class="deck-metric"><div class="deck-metric-n">${m.valoracion_implicita||'—'}</div><div class="deck-metric-l">Valuación implícita</div></div>
+          <p>${m.resumen_ejecutivo||'—'}</p>
+          <div style="margin-top:14px;padding:12px 16px;background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:var(--r-sm)">
+            <div style="font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:8px">Tesis de inversión</div>
+            <p style="color:var(--text);font-size:14px;line-height:1.7;margin:0">${m.tesis_inversion||'—'}</p>
           </div>
         </div>
       </div>
 
-      <!-- PROBLEMA Y SOLUCIÓN -->
+      <!-- 2. PROBLEMA Y SOLUCIÓN -->
       <div class="deck-slide">
-        <div class="deck-slide-header"><div class="slide-num">2</div><div class="slide-title">El problema y la solución</div></div>
+        <div class="deck-slide-header"><div class="slide-num">2</div><div class="slide-title">Problema y Solución</div></div>
         <div class="deck-slide-body">
           <p><strong>El problema:</strong> ${m.problema_detallado||'—'}</p>
           <p><strong>La solución:</strong> ${m.solucion_detallada||'—'}</p>
-          <div class="upload-hint-box">📸 Espacio para imágenes del producto / prototipo / demo</div>
+          <p><strong>Validación de demanda:</strong> ${m.validacion_demanda||'—'}</p>
         </div>
       </div>
 
-      <!-- MERCADO -->
+      <!-- 3. MERCADO -->
       <div class="deck-slide">
-        <div class="deck-slide-header"><div class="slide-num">3</div><div class="slide-title">Mercado objetivo</div></div>
+        <div class="deck-slide-header"><div class="slide-num">3</div><div class="slide-title">Análisis de Mercado</div></div>
         <div class="deck-slide-body">
           <table class="deck-table">
-            <thead><tr><th>Nivel</th><th>Descripción</th><th>Tamaño estimado</th></tr></thead>
+            <thead><tr><th>Nivel</th><th>Definición</th><th>Tamaño estimado</th></tr></thead>
             <tbody>
-              <tr><td>TAM</td><td>Mercado total</td><td>${m.mercado_total||'—'}</td></tr>
-              <tr><td>SAM</td><td>Mercado objetivo</td><td>${m.mercado_objetivo||'—'}</td></tr>
-              <tr><td>SOM</td><td>Mercado obtenible (3 años)</td><td>${m.mercado_obtenible||'—'}</td></tr>
+              <tr><td><strong>TAM</strong></td><td>Mercado Total Direccionable</td><td>${m.tam||'—'}</td></tr>
+              <tr><td><strong>SAM</strong></td><td>Mercado Direccionable Servible</td><td>${m.sam||'—'}</td></tr>
+              <tr><td><strong>SOM</strong></td><td>Mercado Obtenible (3 años)</td><td>${m.som_y3||'—'}</td></tr>
             </tbody>
           </table>
-          <div class="upload-hint-box" style="margin-top:10px">📸 Espacio para logos de clientes potenciales / partners</div>
+          <p style="margin-top:10px"><strong>Contexto y tendencias:</strong> ${m.contexto_mercado||'—'}</p>
         </div>
       </div>
 
-      <!-- MODELO DE NEGOCIO -->
+      <!-- 4. MODELO DE NEGOCIO Y UNIT ECONOMICS -->
       <div class="deck-slide">
-        <div class="deck-slide-header"><div class="slide-num">4</div><div class="slide-title">Modelo de negocio</div></div>
+        <div class="deck-slide-header"><div class="slide-num">4</div><div class="slide-title">Modelo de Negocio y Unit Economics</div></div>
         <div class="deck-slide-body">
-          <p>${m.modelo_negocio_detallado||'—'}</p>
-          <p><strong>Unit Economics:</strong> ${m.unit_economics||'—'}</p>
+          <p><strong>Fuentes de ingreso:</strong></p><ul>${bullets(m.fuentes_ingreso)}</ul>
+          <div class="deck-metrics" style="margin-top:14px">
+            <div class="deck-metric"><div class="deck-metric-n">${m.ticket_promedio||'—'}</div><div class="deck-metric-l">Ticket promedio</div></div>
+            <div class="deck-metric"><div class="deck-metric-n">${m.margen_bruto||'—'}</div><div class="deck-metric-l">Margen bruto</div></div>
+            <div class="deck-metric"><div class="deck-metric-n">${m.cac||'—'}</div><div class="deck-metric-l">CAC</div></div>
+            <div class="deck-metric"><div class="deck-metric-n">${m.ltv||'—'}</div><div class="deck-metric-l">LTV</div></div>
+            <div class="deck-metric"><div class="deck-metric-n">${m.ltv_cac_ratio||'—'}</div><div class="deck-metric-l">LTV/CAC</div></div>
+            <div class="deck-metric"><div class="deck-metric-n">${m.payback_period||'—'}</div><div class="deck-metric-l">Payback (meses)</div></div>
+          </div>
         </div>
       </div>
 
-      <!-- PROYECCIONES FINANCIERAS -->
+      <!-- 5. PROYECCIONES FINANCIERAS -->
       <div class="deck-slide">
-        <div class="deck-slide-header"><div class="slide-num">5</div><div class="slide-title">Proyecciones financieras</div></div>
+        <div class="deck-slide-header"><div class="slide-num">5</div><div class="slide-title">Proyecciones Financieras</div></div>
         <div class="deck-slide-body">
           <table class="deck-table">
-            <thead><tr><th>Período</th><th>Proyección</th></tr></thead>
+            <thead><tr><th>Métrica</th><th>Año 1</th><th>Año 2</th><th>Año 3</th></tr></thead>
             <tbody>
-              <tr><td>Año 1</td><td>${m.proyeccion_y1||'—'}</td></tr>
-              <tr><td>Año 2</td><td>${m.proyeccion_y2||'—'}</td></tr>
-              <tr><td>Año 3</td><td>${m.proyeccion_y3||'—'}</td></tr>
-              <tr><td>Breakeven</td><td>${m.breakeven||'—'}</td></tr>
+              <tr><td>Ingresos</td><td>${m.ingresos_y1||'—'}</td><td>${m.ingresos_y2||'—'}</td><td>${m.ingresos_y3||'—'}</td></tr>
+              <tr><td>EBITDA</td><td>${m.ebitda_y1||'—'}</td><td>${m.ebitda_y2||'—'}</td><td>${m.ebitda_y3||'—'}</td></tr>
+              <tr><td>Clientes / Unidades</td><td>${m.clientes_y1||'—'}</td><td>${m.clientes_y2||'—'}</td><td>${m.clientes_y3||'—'}</td></tr>
             </tbody>
           </table>
-          <p style="margin-top:10px"><strong>Uso de fondos:</strong> ${m.uso_de_fondos||'—'}</p>
+          <div style="margin-top:12px;padding:10px 14px;background:var(--surface2);border-radius:var(--r-sm);border:1px solid var(--border)">
+            <strong>Breakeven operativo:</strong> ${m.breakeven_mes||'—'}
+          </div>
+          <p style="margin-top:10px"><strong>Supuestos clave:</strong></p><ul>${bullets(m.supuestos_financieros)}</ul>
         </div>
       </div>
 
-      <!-- IA Y TECNOLOGÍA -->
+      <!-- 6. ESTRUCTURA DE LA INVERSIÓN Y RETORNOS -->
       <div class="deck-slide">
-        <div class="deck-slide-header"><div class="slide-num">6</div><div class="slide-title">Ventaja tecnológica e IA</div></div>
+        <div class="deck-slide-header"><div class="slide-num">6</div><div class="slide-title">Estructura de la Inversión y Retornos</div></div>
         <div class="deck-slide-body">
-          <p>${m.rol_ia||'—'}</p>
+          <table class="deck-table">
+            <thead><tr><th>Concepto</th><th>Detalle</th></tr></thead>
+            <tbody>
+              <tr><td>Inversión solicitada</td><td>${m.inversion_solicitada||'—'}</td></tr>
+              <tr><td>Instrumento</td><td>${m.tipo_instrumento||'—'}</td></tr>
+              <tr><td>Participación ofrecida</td><td>${m.participacion_ofrecida||'—'}</td></tr>
+              <tr><td>Valuación pre-money</td><td>${m.valoracion_pre_money||'—'}</td></tr>
+              <tr><td>Runway</td><td>${m.runway||'—'}</td></tr>
+              <tr><td>Siguiente ronda proyectada</td><td>${m.proxima_ronda||'—'}</td></tr>
+            </tbody>
+          </table>
+          <div class="deck-metrics" style="margin-top:14px">
+            <div class="deck-metric"><div class="deck-metric-n" style="color:var(--green)">${m.tir||'—'}</div><div class="deck-metric-l">TIR estimada (5a)</div></div>
+            <div class="deck-metric"><div class="deck-metric-n" style="color:var(--green)">${m.roi_3a||'—'}</div><div class="deck-metric-l">ROI a 3 años</div></div>
+            <div class="deck-metric"><div class="deck-metric-n" style="color:var(--green)">${m.roi_5a||'—'}</div><div class="deck-metric-l">ROI a 5 años</div></div>
+          </div>
+          <p style="margin-top:12px"><strong>Uso de fondos:</strong> ${m.uso_de_fondos||'—'}</p>
+        </div>
+      </div>
+
+      <!-- 7. ESCENARIOS DE RETORNO -->
+      <div class="deck-slide">
+        <div class="deck-slide-header"><div class="slide-num">7</div><div class="slide-title">Escenarios de Retorno</div></div>
+        <div class="deck-slide-body">
+          <table class="deck-table">
+            <thead><tr><th>Escenario</th><th>Descripción</th><th>Múltiplo esperado</th></tr></thead>
+            <tbody>
+              <tr><td>🟢 Optimista</td><td>${m.escenario_optimista||'—'}</td><td style="color:var(--green);font-weight:500">${m.multiple_capital||'—'}</td></tr>
+              <tr><td>🟡 Base</td><td>${m.escenario_salida||'—'}</td><td>${m.roi_5a||'—'}</td></tr>
+              <tr><td>🔴 Conservador</td><td>${m.escenario_conservador||'—'}</td><td style="color:var(--text3)">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 8. VENTAJA COMPETITIVA E IA -->
+      <div class="deck-slide">
+        <div class="deck-slide-header"><div class="slide-num">8</div><div class="slide-title">Ventaja Competitiva e Inteligencia Artificial</div></div>
+        <div class="deck-slide-body">
           <p><strong>Ventaja competitiva:</strong> ${m.ventaja_competitiva||'—'}</p>
+          <p><strong>Foso defensivo (moat):</strong> ${m.moat||'—'}</p>
+          <p><strong>Rol de la IA:</strong> ${m.rol_ia||'—'}</p>
+          <p><strong>Panorama competitivo:</strong> ${m.competidores||'—'}</p>
         </div>
       </div>
 
-      <!-- EQUIPO -->
+      <!-- 9. EQUIPO -->
       <div class="deck-slide">
-        <div class="deck-slide-header"><div class="slide-num">7</div><div class="slide-title">El equipo</div></div>
+        <div class="deck-slide-header"><div class="slide-num">9</div><div class="slide-title">El Equipo</div></div>
         <div class="deck-slide-body">
           <p>${m.equipo_descripcion||'—'}</p>
-          <p><strong>Perfil que están buscando:</strong> ${m.perfil_faltante||'—'}</p>
-          <div class="upload-hint-box">📸 Espacio para fotos y perfiles del equipo</div>
+          <p><strong>Perfil crítico que buscan:</strong> ${m.perfil_faltante||'—'}</p>
+          <p><strong>Evaluación honesta del equipo:</strong> ${m.riesgo_equipo||'—'}</p>
         </div>
       </div>
 
-      <!-- HITOS Y ROADMAP -->
+      <!-- 10. ROADMAP E HITOS -->
       <div class="deck-slide">
-        <div class="deck-slide-header"><div class="slide-num">8</div><div class="slide-title">Roadmap e hitos</div></div>
+        <div class="deck-slide-header"><div class="slide-num">10</div><div class="slide-title">Roadmap e Hitos</div></div>
         <div class="deck-slide-body">
           <table class="deck-table">
             <thead><tr><th>Horizonte</th><th>Hitos comprometidos</th></tr></thead>
             <tbody>
-              <tr><td>6 meses</td><td>${m.hitos_6meses||'—'}</td></tr>
-              <tr><td>12 meses</td><td>${m.hitos_12meses||'—'}</td></tr>
-              <tr><td>24 meses</td><td>${m.hitos_24meses||'—'}</td></tr>
+              <tr><td>6 meses</td><td><ul style="margin:4px 0;padding-left:14px">${bullets(m.hitos_6meses)}</ul></td></tr>
+              <tr><td>12 meses</td><td><ul style="margin:4px 0;padding-left:14px">${bullets(m.hitos_12meses)}</ul></td></tr>
+              <tr><td>24 meses</td><td><ul style="margin:4px 0;padding-left:14px">${bullets(m.hitos_24meses)}</ul></td></tr>
             </tbody>
           </table>
-          <p style="margin-top:10px"><strong>KPIs que mediremos:</strong></p>
+          <p style="margin-top:12px"><strong>KPIs que mediremos:</strong></p>
           <ul>${bullets(m.kpis_principales)}</ul>
         </div>
       </div>
 
-      <!-- RIESGOS -->
+      <!-- 11. ANÁLISIS FODA -->
       <div class="deck-slide">
-        <div class="deck-slide-header"><div class="slide-num">9</div><div class="slide-title">Riesgos y mitigación</div></div>
+        <div class="deck-slide-header"><div class="slide-num">11</div><div class="slide-title">Análisis FODA</div></div>
         <div class="deck-slide-body">
-          <p><strong>Riesgo principal:</strong> ${m.riesgo_principal||'—'}</p>
-          <p><strong>Riesgos adicionales:</strong></p>
-          <ul>${bullets(m.riesgos_adicionales)}</ul>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div style="background:var(--green-dim);border:1px solid var(--green-border);border-radius:var(--r-sm);padding:12px">
+              <div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:8px">✓ Fortalezas</div>
+              <ul style="padding-left:14px;margin:0">${bullets(m.fortalezas)}</ul>
+            </div>
+            <div style="background:var(--red-dim);border:1px solid var(--red-border);border-radius:var(--r-sm);padding:12px">
+              <div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--red);margin-bottom:8px">⚠ Debilidades</div>
+              <ul style="padding-left:14px;margin:0">${bullets(m.debilidades)}</ul>
+            </div>
+            <div style="background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:var(--r-sm);padding:12px">
+              <div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:8px">↗ Oportunidades</div>
+              <ul style="padding-left:14px;margin:0">${bullets(m.oportunidades)}</ul>
+            </div>
+            <div style="background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:12px">
+              <div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:8px">⚡ Amenazas</div>
+              <ul style="padding-left:14px;margin:0">${bullets(m.amenazas)}</ul>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- DON JUAN DICE -->
+      <!-- 12. RIESGOS -->
+      <div class="deck-slide">
+        <div class="deck-slide-header"><div class="slide-num">12</div><div class="slide-title">Riesgos y Mitigación</div></div>
+        <div class="deck-slide-body">
+          <table class="deck-table">
+            <thead><tr><th>#</th><th>Riesgo</th><th>Mitigación</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td colspan="2">${m.riesgo_principal||'—'}</td></tr>
+              <tr><td>2</td><td colspan="2">${m.riesgo_2||'—'}</td></tr>
+              <tr><td>3</td><td colspan="2">${m.riesgo_3||'—'}</td></tr>
+              <tr><td>Mercado</td><td colspan="2">${m.riesgo_mercado||'—'}</td></tr>
+              <tr><td>Ejecución</td><td colspan="2">${m.riesgo_ejecucion||'—'}</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 13. DON JUAN DICE -->
       <div class="deck-slide" style="border-color:var(--gold-border)">
         <div class="deck-slide-header" style="background:var(--gold-dim)"><div class="slide-num">★</div><div class="slide-title" style="color:var(--gold)">Don Juan dice</div></div>
         <div class="deck-slide-body">
-          <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:16px;color:var(--text)">"${m.comentario_don_juan||'—'}"</p>
-          <p style="margin-top:12px"><strong>Siguiente paso obligatorio:</strong> ${m.siguiente_paso||'—'}</p>
+          <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:17px;color:var(--text);line-height:1.7">"${m.comentario_don_juan||'—'}"</p>
+          <div style="margin-top:16px;padding:12px 16px;background:var(--surface2);border-radius:var(--r-sm);border-left:3px solid var(--gold)">
+            <strong>Siguiente paso obligatorio:</strong> ${m.siguiente_paso||'—'}
+          </div>
+          <div style="margin-top:10px;padding:12px 16px;background:var(--surface2);border-radius:var(--r-sm);border-left:3px solid var(--amber)">
+            <strong>Condiciones de inversión:</strong> ${m.condiciones_inversion||'—'}
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- SCORECARD -->
+    <!-- ═══ SCORECARD ═══ -->
     <div id="memo-scorecard" class="scorecard" style="display:none">
       <div class="scorecard-header">
         <div class="scorecard-title">${m.proyecto||'—'} — Scorecard del Consejo</div>
-        <div class="scorecard-sub">Murguía Emprende · ${m.emprendedor||'—'} · ${fecha}</div>
+        <div class="scorecard-sub">Murguía Emprende · ${m.emprendedor||'—'} · ${fecha} · Confidencial</div>
       </div>
       <div class="scorecard-body">
-        <!-- SEMÁFORO -->
+
+        <!-- SEMÁFORO Y VEREDICTO -->
         <div class="sc-semaforo">
           ${semaforo(rec)}
           <div>
             <div class="sc-verdict-text">${rec}</div>
-            <div style="font-size:12px;color:var(--text3);margin-top:2px">${m.condiciones_inversion||''}</div>
+            <div style="font-size:12px;color:var(--text3);margin-top:2px">${m.tesis_inversion||''}</div>
           </div>
         </div>
 
         <!-- MATRIZ DE SCORES -->
         <div>
-          <div class="memo-card-lbl" style="margin-bottom:8px">Matriz de evaluación</div>
+          <div class="memo-card-lbl" style="margin-bottom:8px">Matriz de evaluación (1–10)</div>
           <div class="sc-matrix">
             <div class="sc-cell"><div class="sc-cell-score ${scoreColor(m.mercado_score)}">${m.mercado_score||'—'}</div><div class="sc-cell-label">Mercado</div></div>
             <div class="sc-cell"><div class="sc-cell-score ${scoreColor(m.modelo_score)}">${m.modelo_score||'—'}</div><div class="sc-cell-label">Modelo</div></div>
             <div class="sc-cell"><div class="sc-cell-score ${scoreColor(m.equipo_score)}">${m.equipo_score||'—'}</div><div class="sc-cell-label">Equipo</div></div>
             <div class="sc-cell"><div class="sc-cell-score ${scoreColor(m.ia_score)}">${m.ia_score||'—'}</div><div class="sc-cell-label">IA</div></div>
             <div class="sc-cell"><div class="sc-cell-score ${scoreColor(m.riesgo_score)}">${m.riesgo_score||'—'}</div><div class="sc-cell-label">Riesgo</div></div>
+            <div class="sc-cell"><div class="sc-cell-score ${scoreColor(m.traccion_score)}">${m.traccion_score||'—'}</div><div class="sc-cell-label">Tracción</div></div>
+            <div class="sc-cell"><div class="sc-cell-score ${scoreColor(m.financiero_score)}">${m.financiero_score||'—'}</div><div class="sc-cell-label">Financiero</div></div>
           </div>
         </div>
 
-        <!-- DATOS CLAVE -->
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <div class="sc-row"><div class="sc-row-label">Inversión solicitada</div><div class="sc-row-value">${m.inversion_solicitada||'—'}</div></div>
-          <div class="sc-row"><div class="sc-row-label">Participación ofrecida</div><div class="sc-row-value">${m.participacion_ofrecida||'—'}</div></div>
-          <div class="sc-row"><div class="sc-row-label">Valuación implícita</div><div class="sc-row-value">${m.valoracion_implicita||'—'}</div></div>
-          <div class="sc-row"><div class="sc-row-label">Breakeven estimado</div><div class="sc-row-value">${m.breakeven||'—'}</div></div>
-          <div class="sc-row"><div class="sc-row-label">Fortalezas clave</div><div class="sc-row-value"><ul style="margin:0;padding-left:14px">${bullets(m.fortalezas)}</ul></div></div>
-          <div class="sc-row"><div class="sc-row-label">Riesgo principal</div><div class="sc-row-value">${m.riesgo_principal||'—'}</div></div>
-          <div class="sc-row"><div class="sc-row-label">Siguiente paso</div><div class="sc-row-value">${m.siguiente_paso||'—'}</div></div>
+        <!-- DATOS FINANCIEROS CLAVE -->
+        <div>
+          <div class="memo-card-lbl" style="margin-bottom:8px">Datos financieros clave</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div class="sc-row"><div class="sc-row-label">Inversión solicitada</div><div class="sc-row-value">${m.inversion_solicitada||'—'}</div></div>
+            <div class="sc-row"><div class="sc-row-label">Instrumento</div><div class="sc-row-value">${m.tipo_instrumento||'—'}</div></div>
+            <div class="sc-row"><div class="sc-row-label">Participación ofrecida</div><div class="sc-row-value">${m.participacion_ofrecida||'—'}</div></div>
+            <div class="sc-row"><div class="sc-row-label">Valuación pre-money</div><div class="sc-row-value">${m.valoracion_pre_money||'—'}</div></div>
+            <div class="sc-row"><div class="sc-row-label">TIR estimada (5 años)</div><div class="sc-row-value" style="color:var(--green)">${m.tir||'—'}</div></div>
+            <div class="sc-row"><div class="sc-row-label">ROI a 3 años</div><div class="sc-row-value" style="color:var(--green)">${m.roi_3a||'—'}</div></div>
+            <div class="sc-row"><div class="sc-row-label">ROI a 5 años</div><div class="sc-row-value" style="color:var(--green)">${m.roi_5a||'—'}</div></div>
+            <div class="sc-row"><div class="sc-row-label">Múltiplo esperado</div><div class="sc-row-value" style="color:var(--green)">${m.multiple_capital||'—'}</div></div>
+            <div class="sc-row"><div class="sc-row-label">Breakeven operativo</div><div class="sc-row-value">${m.breakeven_mes||'—'}</div></div>
+            <div class="sc-row"><div class="sc-row-label">Runway</div><div class="sc-row-value">${m.runway||'—'}</div></div>
+            <div class="sc-row"><div class="sc-row-label">Siguiente ronda</div><div class="sc-row-value">${m.proxima_ronda||'—'}</div></div>
+            <div class="sc-row"><div class="sc-row-label">TAM / SAM / SOM</div><div class="sc-row-value">${m.tam||'—'} / ${m.sam||'—'} / ${m.som_y3||'—'}</div></div>
+          </div>
+        </div>
+
+        <!-- ESCENARIOS -->
+        <div>
+          <div class="memo-card-lbl" style="margin-bottom:8px">Escenarios de retorno</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div class="sc-row"><div class="sc-row-label">🟢 Optimista</div><div class="sc-row-value">${m.escenario_optimista||'—'}</div></div>
+            <div class="sc-row"><div class="sc-row-label">🟡 Base</div><div class="sc-row-value">${m.escenario_salida||'—'}</div></div>
+            <div class="sc-row"><div class="sc-row-label">🔴 Conservador</div><div class="sc-row-value">${m.escenario_conservador||'—'}</div></div>
+          </div>
         </div>
 
         <!-- PREGUNTAS PARA EL COMITÉ -->
@@ -1243,8 +1414,14 @@ function renderMemo(m){
           <ul style="padding-left:16px">${bullets(m.preguntas_consejo)}</ul>
         </div>
 
+        <!-- CONDICIONES DE INVERSIÓN -->
+        <div style="padding:14px 16px;background:var(--amber-dim);border:1px solid var(--amber-border);border-radius:var(--r-sm)">
+          <div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);margin-bottom:6px">Condiciones de inversión</div>
+          <p style="font-size:13px;color:var(--text);margin:0">${m.condiciones_inversion||'—'}</p>
+        </div>
+
         <!-- DON JUAN -->
-        <div class="sc-dj-quote">"${m.comentario_don_juan||'—'}"<div style="font-size:11px;color:var(--text3);margin-top:8px;font-style:normal;font-family:'DM Sans',sans-serif">— Don Juan</div></div>
+        <div class="sc-dj-quote">"${m.comentario_don_juan||'—'}"<div style="font-size:11px;color:var(--text3);margin-top:8px;font-style:normal;font-family:'DM Sans',sans-serif">— Don Juan Murguía Pozzi</div></div>
       </div>
     </div>`;
 
