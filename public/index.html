@@ -162,6 +162,31 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;font-weight:300;backgroun
 .send-btn:disabled svg{fill:var(--text3);}
 .chat-hint{font-size:11px;color:var(--text3);margin-top:5px;text-align:center;}
 
+
+/* HOME PANEL */
+.home-wrap{display:flex;flex-direction:column;gap:0;height:100%;overflow-y:auto;}
+.home-hero{padding:28px 28px 20px;border-bottom:1px solid var(--border);background:linear-gradient(135deg,#0d1117 0%,#161b22 100%);}
+.home-hero-title{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:4px;}
+.home-hero-title em{color:var(--gold);font-style:normal;}
+.home-hero-sub{font-size:13px;color:var(--text3);}
+.home-hero-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;}
+.home-section{padding:20px 28px;}
+.home-section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.home-section-title{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);}
+.home-empty{padding:20px;background:var(--surface);border:1px dashed var(--border2);border-radius:var(--r);text-align:center;color:var(--text3);font-size:13px;}
+.home-proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;}
+.home-conv-list{display:flex;flex-direction:column;gap:8px;}
+.home-conv-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;cursor:pointer;transition:border-color .2s;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.home-conv-card:hover{border-color:var(--gold-border);}
+.home-conv-info{display:flex;align-items:center;gap:10px;min-width:0;}
+.home-conv-av{width:32px;height:32px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:12px;color:var(--gold);flex-shrink:0;}
+.home-conv-name{font-size:13px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.home-conv-date{font-size:11px;color:var(--text3);margin-top:2px;}
+.home-conv-actions{display:flex;gap:6px;flex-shrink:0;}
+.home-del-btn{background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:4px 6px;border-radius:4px;transition:color .2s;}
+.home-del-btn:hover{color:var(--red);}
+@media(max-width:700px){.home-section{padding:16px;}.home-hero{padding:20px 16px 16px;}.home-proj-grid{grid-template-columns:1fr;}}
+
 /* CHAT LIBRE */
 .cl-layout{display:flex;flex-direction:column;height:100%;overflow:hidden;}
 .cl-header{padding:13px 20px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:12px;}
@@ -292,6 +317,31 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;font-weight:300;backgroun
 .modal h3{font-size:16px;font-weight:500;margin-bottom:16px;}
 .modal-actions{display:flex;gap:8px;margin-top:16px;}
 
+
+/* HOME PANEL */
+.home-wrap{display:flex;flex-direction:column;gap:0;height:100%;overflow-y:auto;}
+.home-hero{padding:28px 28px 20px;border-bottom:1px solid var(--border);background:linear-gradient(135deg,#0d1117 0%,#161b22 100%);}
+.home-hero-title{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:4px;}
+.home-hero-title em{color:var(--gold);font-style:normal;}
+.home-hero-sub{font-size:13px;color:var(--text3);}
+.home-hero-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;}
+.home-section{padding:20px 28px;}
+.home-section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.home-section-title{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);}
+.home-empty{padding:20px;background:var(--surface);border:1px dashed var(--border2);border-radius:var(--r);text-align:center;color:var(--text3);font-size:13px;}
+.home-proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;}
+.home-conv-list{display:flex;flex-direction:column;gap:8px;}
+.home-conv-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;cursor:pointer;transition:border-color .2s;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.home-conv-card:hover{border-color:var(--gold-border);}
+.home-conv-info{display:flex;align-items:center;gap:10px;min-width:0;}
+.home-conv-av{width:32px;height:32px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:12px;color:var(--gold);flex-shrink:0;}
+.home-conv-name{font-size:13px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.home-conv-date{font-size:11px;color:var(--text3);margin-top:2px;}
+.home-conv-actions{display:flex;gap:6px;flex-shrink:0;}
+.home-del-btn{background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:4px 6px;border-radius:4px;transition:color .2s;}
+.home-del-btn:hover{color:var(--red);}
+@media(max-width:700px){.home-section{padding:16px;}.home-hero{padding:20px 16px 16px;}.home-proj-grid{grid-template-columns:1fr;}}
+
 /* CHAT LIBRE */
 .chat-libre-wrap{display:flex;flex-direction:column;height:100%;overflow:hidden;}
 .chat-libre-header{padding:14px 20px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;}
@@ -372,25 +422,47 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;font-weight:300;backgroun
 <div class="screen" id="screen-app">
   <header class="app-header">
     <div class="hdr-left">
-      <div class="hdr-seal">MV</div>
-      <div class="hdr-brand">Murguía <em>Emprende</em></div>
+      <div class="hdr-seal" onclick="showDash()" style="cursor:pointer">MV</div>
+      <div class="hdr-brand" onclick="showDash()" style="cursor:pointer">Murguía <em>Emprende</em></div>
     </div>
     <div class="hdr-right">
       <span class="hdr-user" id="hdr-user"></span>
+      <button class="btn-sm" onclick="showDash()" id="btn-home">⌂ Inicio</button>
       <button class="btn-sm gold" id="btn-admin" onclick="showAdmin()" style="display:none">⚙ Admin</button>
-      <button class="btn-sm gold" onclick="newProject()">+ Nuevo proyecto</button>
       <button class="btn-sm" onclick="doLogout()">Salir</button>
     </div>
   </header>
 
   <!-- DASHBOARD -->
   <div class="panel active" id="panel-dash">
-    <div class="scroll-body">
-      <div class="section-hdr">
-        <div class="section-title" id="dash-title">Mis proyectos</div>
-        <button class="btn-sm" onclick="showChatLibre()">💬 Platicar con el abuelo</button>
+    <div class="home-wrap">
+      <!-- Hero -->
+      <div class="home-hero">
+        <div class="home-hero-title">Murguía <em>Emprende</em></div>
+        <div class="home-hero-sub" id="home-sub">Family Office · Panel central</div>
+        <div class="home-hero-actions">
+          <button class="btn-sm gold" onclick="newProject()">+ Nuevo proyecto</button>
+          <button class="btn-sm" onclick="showChatLibre()">💬 Platicar con el abuelo</button>
+          <button class="btn-sm gold" id="btn-admin-home" onclick="showAdmin()" style="display:none">⚙ Admin</button>
+        </div>
       </div>
-      <div class="projects-grid" id="projects-grid"></div>
+
+      <!-- Proyectos -->
+      <div class="home-section">
+        <div class="home-section-hdr">
+          <div class="home-section-title" id="dash-title">Proyectos</div>
+        </div>
+        <div class="home-proj-grid" id="projects-grid"></div>
+      </div>
+
+      <!-- Pláticas -->
+      <div class="home-section" style="border-top:1px solid var(--border)">
+        <div class="home-section-hdr">
+          <div class="home-section-title">Pláticas con el abuelo</div>
+          <button class="btn-sm" onclick="showChatLibre()">Ver todas</button>
+        </div>
+        <div id="home-convs"></div>
+      </div>
     </div>
   </div>
 
@@ -718,12 +790,12 @@ function showDemoBtn(){
 
 // ── PANELS ──
 function showPanel(id){
-  ['panel-dash','panel-proj','panel-admin'].forEach(p=>{
+  ['panel-dash','panel-proj','panel-admin','panel-chat-libre'].forEach(p=>{
     document.getElementById(p).classList.toggle('active', p===id);
   });
 }
 
-function showDash(){ showPanel('panel-dash'); renderDash(); }
+function showDash(){ showPanel('panel-dash'); renderDash(); renderHomeConvs(); if(isAdmin()){ document.getElementById('btn-admin-home').style.display=''; } }
 function showAdmin(){ showPanel('panel-admin'); renderAdmin(); }
 
 // ── DASHBOARD ──
@@ -1597,13 +1669,7 @@ function clDB(){
 function clSaveDB(d){ localStorage.setItem('cl_db', JSON.stringify(d)); }
 
 function showChatLibre(){
-  ['panel-dash','panel-proj','panel-admin','panel-chat-libre'].forEach(p=>{
-    const el=document.getElementById(p);
-    if(el){ el.classList.remove('active'); el.style.display='none'; }
-  });
-  const panel = document.getElementById('panel-chat-libre');
-  panel.style.display='flex';
-  panel.classList.add('active');
+  showPanel('panel-chat-libre');
   clRenderSidebar();
   // Abrir la conversación más reciente o crear una nueva
   const d = clDB();
