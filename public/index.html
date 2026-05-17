@@ -1006,8 +1006,10 @@ async function finishEval(){
 }
 
 async function generateMemo(){
-  const history=djMsgs.map(m=>m.role.toUpperCase()+': '+m.content).join('\n\n');
   const p=proj();
+  // Si djMsgs está vacío en memoria (recarga de página), leerlo del localStorage
+  const msgs = djMsgs.length > 0 ? djMsgs : (p.djMsgs || []);
+  const history=msgs.map(m=>m.role.toUpperCase()+': '+m.content).join('\n\n');
   const prompt=`Eres el analista senior de Murguía Emprende, el family office de inversión de la familia Murguía en México. Con 50 años de experiencia evaluando negocios. Basándote en el formulario y la conversación completa con Don Juan, genera un análisis exhaustivo digno de un family office serio. Responde SOLO con JSON puro, sin backticks, sin markdown, sin texto antes o después.
 
 FORMULARIO DEL PROYECTO:
@@ -1132,7 +1134,8 @@ Los scores son del 1 al 10. Sé honesto, específico y exigente — esto es dine
 
   const res=await fetch('/api/dj',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'memo',context:prompt})});
   const data=await res.json();
-  if(!data||!data.memo) return null;
+  if(data&&data.error){ console.error('Memo API error:',data.error); return null; }
+  if(!data||!data.memo){ console.error('Memo bad response:',JSON.stringify(data).substring(0,300)); return null; }
   return data.memo;
 }
 
