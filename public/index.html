@@ -459,9 +459,18 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;font-weight:300;backgroun
       <div class="home-section" style="border-top:1px solid var(--border)">
         <div class="home-section-hdr">
           <div class="home-section-title">Pláticas con el abuelo</div>
-          <button class="btn-sm" onclick="showChatLibre()">Ver todas</button>
+          <button class="btn-sm" onclick="showChatLibre()">Ver todas →</button>
         </div>
         <div id="home-convs"></div>
+      </div>
+
+      <!-- Papelera (solo admin) -->
+      <div class="home-section" id="home-papelera" style="border-top:1px solid var(--border);display:none">
+        <div class="home-section-hdr">
+          <div class="home-section-title" style="color:var(--text3)">🗑 Papelera — proyectos borrados</div>
+          <div style="font-size:11px;color:var(--text3)">Solo visible para el administrador · Se eliminan a los 30 días</div>
+        </div>
+        <div id="home-papelera-list"></div>
       </div>
     </div>
   </div>
@@ -801,27 +810,125 @@ function showAdmin(){ showPanel('panel-admin'); renderAdmin(); }
 // ── DASHBOARD ──
 function renderDash(){
   const d = db();
+  const now = Date.now();
+  const DAYS30 = 30*24*60*60*1000;
   const all = Object.values(d.projects);
-  const projs = isAdmin() ? all : all.filter(p=>p.ownerEmail===user.email);
+
+  // Limpiar proyectos borrados hace más de 30 días (solo admin ve papelera)
+  let changed = false;
+  all.forEach(p=>{
+    if(p.deletedAt && (now - p.deletedAt) > DAYS30){
+      delete d.projects[p.id]; changed = true;
+    }
+  });
+  if(changed) saveDB(d);
+
+  // Proyectos activos (no borrados) del usuario
+  const projs = isAdmin()
+    ? Object.values(d.projects).filter(p=>!p.deletedAt)
+    : Object.values(d.projects).filter(p=>!p.deletedAt && p.ownerEmail===user.email);
+
   document.getElementById('dash-title').textContent = isAdmin() ? 'Todos los proyectos' : 'Mis proyectos';
+  document.getElementById('home-sub').textContent = user.name + ' · Family Office · ' + projs.length + ' proyecto(s)';
+
   const grid = document.getElementById('projects-grid');
   if(!projs.length){
-    grid.innerHTML = '<div class="empty-state"><p>Aún no hay proyectos.</p><button class="btn-sm gold" onclick="newProject()">+ Presentar mi primera idea</button><button class="btn-sm" style="margin-left:8px" onclick="showChatLibre()">💬 Platicar con el abuelo</button></div>';
+    grid.innerHTML = '<div class="home-empty">Aún no hay proyectos. Empieza platicando con el abuelo o crea uno directamente.</div>';
+  } else {
+    grid.innerHTML = projs.sort((a,b)=>b.updatedAt-a.updatedAt).map(p=>`
+      <div class="proj-card" style="position:relative" onclick="openProj('${p.id}')">
+        <div class="proj-card-top">
+          <div><div class="proj-name">${p.nombre||'Sin nombre'}</div><div class="proj-owner">${p.ownerName}</div></div>
+          <span class="status-badge ${statusClass(p.status)}">${statusLabel(p.status)}</span>
+        </div>
+        <div class="proj-desc">${p.problema ? p.problema.slice(0,90)+'...' : 'Sin descripción aún'}</div>
+        <div class="proj-meta">
+          <span>📅 ${new Date(p.updatedAt).toLocaleDateString('es-MX')}</span>
+          ${p.inversion?'<span>💰 '+p.inversion+'</span>':''}
+          ${(p.tasks||[]).filter(t=>!t.done).length>0?'<span style="color:var(--red)">⚠ '+(p.tasks.filter(t=>!t.done).length)+' tarea(s)</span>':''}
+        </div>
+        <button onclick="event.stopPropagation();borrarProyecto('${p.id}')"
+          style="position:absolute;top:10px;right:10px;background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:4px;border-radius:4px;line-height:1"
+          title="Borrar proyecto">🗑</button>
+      </div>`).join('');
+  }
+
+  // Papelera — solo admin ve proyectos borrados en los últimos 30 días
+  if(isAdmin()){
+    const papelera = Object.values(d.projects).filter(p=>p.deletedAt);
+    const papeleraEl = document.getElementById('home-papelera');
+    if(papelera.length && papeleraEl){
+      papeleraEl.style.display='block';
+      document.getElementById('home-papelera-list').innerHTML = papelera.map(p=>{
+        const diasRestantes = Math.ceil((DAYS30-(now-p.deletedAt))/(24*60*60*1000));
+        return `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);margin-bottom:6px">
+          <div>
+            <div style="font-size:13px;color:var(--text2)">${p.nombre||'Sin nombre'} <span style="color:var(--text3);font-size:11px">— ${p.ownerName}</span></div>
+            <div style="font-size:11px;color:var(--text3);margin-top:2px">Borrado el ${new Date(p.deletedAt).toLocaleDateString('es-MX')} · Se elimina en ${diasRestantes} día(s)</div>
+          </div>
+          <button class="btn-sm" onclick="restaurarProyecto('${p.id}')">↩ Restaurar</button>
+        </div>`;
+      }).join('');
+    } else if(papeleraEl) papeleraEl.style.display='none';
+  }
+}
+
+function borrarProyecto(id){
+  if(!confirm('¿Mover este proyecto a la papelera? El administrador podrá recuperarlo por 30 días.')) return;
+  const d = db();
+  d.projects[id].deletedAt = Date.now();
+  d.projects[id].status = 'borrado';
+  saveDB(d);
+  renderDash();
+}
+
+function restaurarProyecto(id){
+  const d = db();
+  delete d.projects[id].deletedAt;
+  d.projects[id].status = d.projects[id].status==='borrado'?'nuevo':d.projects[id].status;
+  saveDB(d);
+  renderDash();
+}
+
+function renderHomeConvs(){
+  const container = document.getElementById('home-convs');
+  if(!container) return;
+  let d; try{ d = clDB(); }catch(e){ d = {convs:{}}; }
+  const convs = Object.values(d.convs).sort((a,b)=>b.updatedAt-a.updatedAt).slice(0,6);
+  if(!convs.length){
+    container.innerHTML = '<div class="home-empty">Las conversaciones con el abuelo se graban automáticamente y puedes borrarlas cuando quieras.</div>';
     return;
   }
-  grid.innerHTML = projs.sort((a,b)=>b.updatedAt-a.updatedAt).map(p=>`
-    <div class="proj-card" onclick="openProj('${p.id}')">
-      <div class="proj-card-top">
-        <div><div class="proj-name">${p.nombre||'Sin nombre'}</div><div class="proj-owner">${p.ownerName}</div></div>
-        <span class="status-badge ${statusClass(p.status)}">${statusLabel(p.status)}</span>
+  container.innerHTML = '<div class="home-conv-list">' + convs.map(c=>{
+    const djMsgsArr = c.msgs.filter(m=>m.role==='assistant'&&!m.thinking);
+    const lastDJ = djMsgsArr.length ? djMsgsArr[djMsgsArr.length-1].content.replace(/<<OPCIONES>>[\s\S]*?<<\/OPCIONES>>/g,'').substring(0,70) : '';
+    return `<div class="home-conv-card" onclick="showChatLibreConv('${c.id}')">
+      <div class="home-conv-info" style="flex:1;min-width:0">
+        <div class="home-conv-av">DJ</div>
+        <div style="min-width:0;flex:1">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+            <div class="home-conv-name">${c.nombre}</div>
+            <div class="home-conv-date" style="flex-shrink:0">${new Date(c.updatedAt).toLocaleDateString('es-MX')}</div>
+          </div>
+          <div class="home-conv-date" style="margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${lastDJ}</div>
+        </div>
       </div>
-      <div class="proj-desc">${p.problema ? p.problema.slice(0,90)+'...' : 'Sin descripción aún'}</div>
-      <div class="proj-meta">
-        <span>📅 ${new Date(p.updatedAt).toLocaleDateString('es-MX')}</span>
-        ${p.inversion?'<span>💰 '+p.inversion+'</span>':''}
-        ${(p.tasks||[]).filter(t=>!t.done).length>0?'<span style="color:var(--red)">⚠ '+(p.tasks.filter(t=>!t.done).length)+' tarea(s)</span>':''}
-      </div>
-    </div>`).join('');
+      <button class="home-del-btn" onclick="event.stopPropagation();clBorrarHome('${c.id}')" title="Borrar plática" style="margin-left:10px">🗑</button>
+    </div>`;
+  }).join('') + '</div>';
+}
+
+function clBorrarHome(id){
+  if(!confirm('¿Borrar esta plática? No se puede recuperar.')) return;
+  const d = clDB();
+  delete d.convs[id];
+  clSaveDB(d);
+  renderHomeConvs();
+}
+
+function showChatLibreConv(id){
+  showChatLibre();
+  clOpenConv(id);
 }
 
 // ── PROJECT ──
