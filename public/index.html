@@ -262,6 +262,29 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;font-weight:300;backgroun
 .modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px;width:100%;max-width:380px;}
 .modal h3{font-size:16px;font-weight:500;margin-bottom:16px;}
 .modal-actions{display:flex;gap:8px;margin-top:16px;}
+
+/* CHAT LIBRE */
+.chat-libre-wrap{display:flex;flex-direction:column;height:100%;}
+.chat-libre-header{padding:16px 22px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;}
+.chat-libre-title{font-family:'Playfair Display',serif;font-size:17px;}
+.chat-libre-sub{font-size:12px;color:var(--text3);margin-top:2px;}
+.chat-libre-msgs{flex:1;overflow-y:auto;padding:20px 22px;display:flex;flex-direction:column;gap:14px;}
+.chat-libre-msg{max-width:80%;display:flex;flex-direction:column;gap:4px;}
+.chat-libre-msg.user{align-self:flex-end;align-items:flex-end;}
+.chat-libre-msg.dj{align-self:flex-start;align-items:flex-start;}
+.chat-libre-bubble{padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.65;}
+.chat-libre-msg.user .chat-libre-bubble{background:var(--gold);color:#0a0a0a;border-bottom-right-radius:3px;}
+.chat-libre-msg.dj .chat-libre-bubble{background:var(--surface2);border:1px solid var(--border);color:var(--text);border-bottom-left-radius:3px;}
+.chat-libre-meta{font-size:11px;color:var(--text3);}
+.chat-libre-footer{padding:14px 22px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0;}
+.chat-libre-input-row{display:flex;gap:8px;align-items:flex-end;}
+.chat-libre-inp{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;resize:none;min-height:42px;max-height:120px;outline:none;line-height:1.5;}
+.chat-libre-inp:focus{border-color:var(--gold-border);}
+.chat-libre-ideas{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.chat-libre-idea{font-size:12px;padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);transition:border-color .2s;}
+.chat-libre-idea:hover{border-color:var(--gold-border);color:var(--gold);}
+.chat-libre-formalizar{padding:14px 22px;background:var(--gold-dim);border-top:1px solid var(--gold-border);display:none;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;}
+.chat-libre-formalizar p{font-size:13px;color:var(--text2);margin:0;}
 </style>
 </head>
 <body>
@@ -329,8 +352,39 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;font-weight:300;backgroun
     <div class="scroll-body">
       <div class="section-hdr">
         <div class="section-title" id="dash-title">Mis proyectos</div>
+        <button class="btn-sm" onclick="showChatLibre()">💬 Platicar con el abuelo</button>
       </div>
       <div class="projects-grid" id="projects-grid"></div>
+    </div>
+  </div>
+
+  <!-- CHAT LIBRE -->
+  <div class="panel" id="panel-chat-libre">
+    <div class="chat-libre-wrap">
+      <div class="chat-libre-header">
+        <div>
+          <div class="chat-libre-title">💬 Plática con el abuelo</div>
+          <div class="chat-libre-sub">Antes de formalizar — explora tu idea con Don Juan</div>
+        </div>
+        <button class="btn-sm" onclick="showDash()">← Volver</button>
+      </div>
+      <div class="chat-libre-msgs" id="cl-msgs"></div>
+      <div class="chat-libre-formalizar" id="cl-formalizar">
+        <p>💡 <strong>Don Juan cree que tu idea ya tiene forma.</strong> ¿Quieres formalizarla como proyecto?</p>
+        <button class="btn-sm gold" onclick="formalizarIdea()">Crear proyecto con esta idea →</button>
+      </div>
+      <div class="chat-libre-footer">
+        <div class="chat-libre-ideas" id="cl-ideas">
+          <span class="chat-libre-idea" onclick="clIdea(this)">💡 Tengo una idea de negocio</span>
+          <span class="chat-libre-idea" onclick="clIdea(this)">🤔 No sé si mi idea es buena</span>
+          <span class="chat-libre-idea" onclick="clIdea(this)">📊 ¿Cómo sé si hay mercado?</span>
+          <span class="chat-libre-idea" onclick="clIdea(this)">💰 ¿Cuánto debería pedir?</span>
+        </div>
+        <div class="chat-libre-input-row">
+          <textarea class="chat-libre-inp" id="cl-inp" placeholder="Cuéntale tu idea al abuelo..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();clSend();}"></textarea>
+          <button class="btn-sm gold" onclick="clSend()" id="cl-btn">Enviar</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -626,7 +680,7 @@ function renderDash(){
   document.getElementById('dash-title').textContent = isAdmin() ? 'Todos los proyectos' : 'Mis proyectos';
   const grid = document.getElementById('projects-grid');
   if(!projs.length){
-    grid.innerHTML = '<div class="empty-state"><p>Aún no hay proyectos.</p><button class="btn-sm gold" onclick="newProject()">+ Presentar mi primera idea</button></div>';
+    grid.innerHTML = '<div class="empty-state"><p>Aún no hay proyectos.</p><button class="btn-sm gold" onclick="newProject()">+ Presentar mi primera idea</button><button class="btn-sm" style="margin-left:8px" onclick="showChatLibre()">💬 Platicar con el abuelo</button></div>';
     return;
   }
   grid.innerHTML = projs.sort((a,b)=>b.updatedAt-a.updatedAt).map(p=>`
@@ -1477,6 +1531,129 @@ function loadDemo(){
     }
   });
   setNotice('form-notice', '🎯 Proyecto PULSE cargado — revisa y da click en "Guardar y hablar con Don Juan"', 'info');
+}
+
+
+// ── CHAT LIBRE ──
+let clMsgs = [];
+let clThinking = false;
+let clIdeaResumen = '';
+
+function showChatLibre(){
+  ['panel-dash','panel-proj','panel-admin','panel-chat-libre'].forEach(p=>{
+    const el=document.getElementById(p);
+    if(el){ el.classList.remove('active'); el.style.display='none'; }
+  });
+  const panel = document.getElementById('panel-chat-libre');
+  panel.style.display='flex';
+  panel.classList.add('active');
+  if(clMsgs.length===0) clInit();
+}
+
+function clInit(){
+  const nombre = user.name.split(' ')[0];
+  const bienvenida = `${nombre}, ¿en qué andas pensando? Cuéntame la idea, aunque esté a medio cocer. Para eso estoy.`;
+  clMsgs = [{ role:'assistant', content: bienvenida }];
+  clRender();
+}
+
+function clIdea(el){
+  document.getElementById('cl-inp').value = el.textContent.trim();
+  document.getElementById('cl-inp').focus();
+}
+
+function clRender(){
+  const container = document.getElementById('cl-msgs');
+  container.innerHTML = clMsgs.map(m=>`
+    <div class="chat-libre-msg ${m.role==='user'?'user':'dj'}">
+      ${m.role==='assistant'?'<div style="font-size:11px;color:var(--gold);margin-bottom:3px;font-weight:500">Don Juan</div>':''}
+      <div class="chat-libre-bubble">${m.content.replace(/\n/g,'<br>')}</div>
+    </div>`).join('');
+  container.scrollTop = container.scrollHeight;
+}
+
+async function clSend(){
+  const inp = document.getElementById('cl-inp');
+  const txt = inp.value.trim();
+  if(!txt || clThinking) return;
+  inp.value='';
+  document.getElementById('cl-ideas').style.display='none';
+
+  clMsgs.push({ role:'user', content: txt });
+  clRender();
+  clThinking = true;
+  document.getElementById('cl-btn').disabled = true;
+
+  // Placeholder de "pensando"
+  clMsgs.push({ role:'assistant', content:'...' });
+  clRender();
+
+  try {
+    const res = await fetch('/api/dj', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        action:'chat-libre',
+        messages: clMsgs.filter(m=>m.content!=='...').map(m=>({role:m.role==='assistant'?'assistant':'user', content:m.content}))
+      })
+    });
+    const data = await res.json();
+    clMsgs.pop(); // quitar placeholder
+    if(data.reply){
+      clMsgs.push({ role:'assistant', content: data.reply });
+      clIdeaResumen = data.reply;
+      // Mostrar botón formalizar si Don Juan dice que está lista
+      if(data.reply.includes('|||LISTA_PARA_FORMALIZAR|||')){
+        clMsgs[clMsgs.length-1].content = data.reply.replace('|||LISTA_PARA_FORMALIZAR|||','').trim();
+        document.getElementById('cl-formalizar').style.display='flex';
+      }
+    }
+  } catch(e){
+    clMsgs.pop();
+    clMsgs.push({ role:'assistant', content:'Perdona, tuve un problema de conexión. Intenta de nuevo.' });
+  }
+
+  clRender();
+  clThinking = false;
+  document.getElementById('cl-btn').disabled = false;
+}
+
+async function formalizarIdea(){
+  // Pedir a la IA que extraiga los datos del formulario de la conversación
+  const historial = clMsgs.map(m=>(m.role==='user'?'NIETO':'DON JUAN')+': '+m.content).join('\n\n');
+  try {
+    const res = await fetch('/api/dj', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'extraer-idea', messages:[{role:'user', content: historial}] })
+    });
+    const data = await res.json();
+    // Crear nuevo proyecto y pre-llenar con los datos extraídos
+    const d = db();
+    const id = 'p' + Date.now();
+    d.projects[id] = {
+      id, ownerEmail: user.email, ownerName: user.name,
+      nombre: data.proyecto||'Mi proyecto', status:'nuevo',
+      createdAt:Date.now(), updatedAt:Date.now(),
+      tasks:[], djMsgs:[], djStep:0, djStarted:false, memo:null,
+      f_proyecto: data.proyecto||'',
+      f_industria: data.industria||'',
+      f_problema: data.problema||'',
+      f_solucion: data.solucion||'',
+      f_mercado: data.mercado||'',
+      f_modelo: data.modelo||'',
+      f_precio: data.precio||'',
+      f_ventaja: data.ventaja||'',
+      f_ia: data.ia||'',
+      f_inversion: data.inversion||'',
+    };
+    saveDB(d);
+    openProj(id);
+    setNotice('form-notice','✨ Pre-llenado con tu plática — revisa y completa los campos que faltan','info');
+  } catch(e){
+    // Si falla la extracción, crear proyecto vacío de todas formas
+    newProject();
+  }
 }
 
 // ── INIT ──

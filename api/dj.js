@@ -112,7 +112,52 @@ FASE 2 — Preguntas dificiles que no estan en el formulario. Una a la vez. Al t
       }
     }
 
-    // Conversación normal con Don Juan
+    // Chat libre — exploración de ideas
+    if (action === 'chat-libre') {
+      const CL_SYSTEM = `Eres Don Juan Murguia Pozzi, el abuelo emprendedor. Un nieto te está contando una idea de negocio en desarrollo — puede estar muy cruda, a medio cocer, o incluso descabellada. Tu rol aquí es diferente al de evaluador formal: eres el abuelo que escucha, pregunta, provoca, mejora y ayuda a darle forma.
+
+Modo de este chat:
+- Escucha con genuino interés, aunque la idea sea disparatada
+- Haz UNA pregunta a la vez para ir profundizando
+- Usa tu humor característico cuando algo sea muy ambicioso o poco realista
+- Ayuda al nieto a pensar en el cliente, el modelo, el dinero, la competencia — pero de forma conversacional, no como checklist
+- Si ves algo que no tiene sentido, dilo con cariño e ironía, no con dureza
+- Si la idea va tomando forma concreta (tiene cliente, problema claro, cómo gana dinero), al final de tu respuesta agrega exactamente: |||LISTA_PARA_FORMALIZAR|||
+- Siempre en español. Máximo 3-4 oraciones por respuesta. Cercano y humano.`;
+      const text = await callClaude(CL_SYSTEM, messages, 600);
+      return res.json({ reply: text });
+    }
+
+    // Extraer datos del formulario de la conversación del chat libre
+    if (action === 'extraer-idea') {
+      const text = await callClaude(
+        'Extrae datos de negocio de una conversación y responde SOLO con JSON valido. Sin backticks.',
+        messages,
+        800
+      );
+      try {
+        const t = text.trim();
+        const s = t.indexOf('{'), e = t.lastIndexOf('}');
+        const data = JSON.parse(t.substring(s, e+1));
+        return res.json(data);
+      } catch(e) {
+        // Intentar con prompt más explícito
+        const text2 = await callClaude(
+          'Eres un extractor de datos. Responde SOLO con este JSON basado en la conversación, sin texto extra: {"proyecto":"nombre del negocio","industria":"sector","problema":"problema que resuelve","solucion":"como lo resuelve","mercado":"a quien va dirigido","modelo":"como gana dinero","precio":"precio estimado","ventaja":"ventaja competitiva","ia":"rol de la IA si aplica","inversion":"inversión estimada"}',
+          messages,
+          600
+        );
+        try {
+          const t2 = text2.trim();
+          const s2 = t2.indexOf('{'), e2 = t2.lastIndexOf('}');
+          return res.json(JSON.parse(t2.substring(s2, e2+1)));
+        } catch(e2) {
+          return res.json({ proyecto: '', industria: '' });
+        }
+      }
+    }
+
+    // Conversación normal con Don Juan (evaluación de proyecto)
     const text = await callClaude(DJ_SYSTEM, messages, 1024);
     return res.json({ reply: text });
 
