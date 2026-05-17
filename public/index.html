@@ -162,6 +162,35 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;font-weight:300;backgroun
 .send-btn:disabled svg{fill:var(--text3);}
 .chat-hint{font-size:11px;color:var(--text3);margin-top:5px;text-align:center;}
 
+/* CHAT LIBRE */
+.cl-layout{display:flex;flex-direction:column;height:100%;overflow:hidden;}
+.cl-header{padding:13px 20px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.cl-header-left{display:flex;align-items:center;gap:10px;}
+.cl-av{width:34px;height:34px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:13px;color:var(--gold);flex-shrink:0;}
+.cl-title{font-size:14px;font-weight:500;}
+.cl-sub{font-size:11px;color:var(--text3);margin-top:1px;}
+.cl-conv-list{width:200px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;}
+.cl-conv-hdr{padding:12px 12px 8px;font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);display:flex;align-items:center;justify-content:space-between;}
+.cl-conv-items{flex:1;overflow-y:auto;padding:4px 8px;}
+.cl-conv-item{padding:8px 10px;border-radius:var(--r-sm);cursor:pointer;margin-bottom:2px;border:1px solid transparent;}
+.cl-conv-item.active{background:var(--gold-dim);border-color:var(--gold-border);}
+.cl-conv-item:hover:not(.active){background:var(--surface2);}
+.cl-conv-name{font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cl-conv-date{font-size:10px;color:var(--text3);margin-top:2px;}
+.cl-body{display:flex;flex:1;overflow:hidden;}
+.cl-chat-area{display:flex;flex-direction:column;flex:1;overflow:hidden;}
+.cl-msgs{flex:1;overflow-y:auto;padding:18px 22px;display:flex;flex-direction:column;gap:13px;}
+.cl-msgs::-webkit-scrollbar{width:4px;}
+.cl-msgs::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+.cl-formalizar{padding:12px 20px;background:var(--gold-dim);border-top:1px solid var(--gold-border);display:none;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;flex-wrap:wrap;}
+.cl-formalizar p{font-size:13px;color:var(--text2);margin:0;}
+.cl-input-area{padding:12px 18px 14px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0;}
+.cl-inp-wrap{display:flex;gap:8px;align-items:flex-end;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:8px 12px;transition:border-color .2s;}
+.cl-inp-wrap:focus-within{border-color:var(--gold-border);}
+.cl-inp-wrap textarea{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;resize:none;min-height:20px;max-height:100px;line-height:1.6;}
+.cl-inp-wrap textarea::placeholder{color:var(--text3);}
+.cl-hint{font-size:11px;color:var(--text3);margin-top:5px;text-align:center;}
+
 /* MEMO */
 .memo-inner{max-width:680px;display:flex;flex-direction:column;gap:14px;}
 .memo-eyebrow{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:500;}
@@ -367,31 +396,47 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;font-weight:300;backgroun
 
   <!-- CHAT LIBRE -->
   <div class="panel" id="panel-chat-libre">
-    <div class="chat-libre-wrap">
-      <div class="chat-libre-header">
-        <div>
-          <div class="chat-libre-title">💬 Plática con el abuelo</div>
-          <div class="chat-libre-sub">Antes de formalizar — explora tu idea con Don Juan</div>
+    <div class="cl-layout">
+      <!-- Header -->
+      <div class="cl-header">
+        <div class="cl-header-left">
+          <div class="cl-av">DJ</div>
+          <div>
+            <div class="cl-title">Don Juan Murguía</div>
+            <div class="cl-sub">Plática libre — antes de formalizar</div>
+          </div>
         </div>
-        <button class="btn-sm" onclick="showDash()">← Volver</button>
-      </div>
-      <div class="chat-libre-msgs" id="cl-msgs"></div>
-      <div class="chat-libre-formalizar" id="cl-formalizar">
-        <p>💡 <strong>Don Juan cree que tu idea ya tiene forma.</strong> ¿Quieres formalizarla como proyecto?</p>
-        <button class="btn-sm gold" onclick="formalizarIdea()">Crear proyecto con esta idea →</button>
-      </div>
-      <div class="chat-libre-footer">
-        <div class="chat-libre-ideas" id="cl-ideas">
-          <span class="chat-libre-idea" onclick="clIdea(this)">💡 Tengo una idea de negocio</span>
-          <span class="chat-libre-idea" onclick="clIdea(this)">🤔 No sé si mi idea es buena</span>
-          <span class="chat-libre-idea" onclick="clIdea(this)">📊 ¿Cómo sé si hay mercado?</span>
-          <span class="chat-libre-idea" onclick="clIdea(this)">💰 ¿Cuánto debería pedir?</span>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn-sm gold" onclick="clNueva()">+ Nueva plática</button>
+          <button class="btn-sm" onclick="showDash()">← Volver</button>
         </div>
-        <div class="chat-libre-input-row">
-          <textarea class="chat-libre-inp" id="cl-inp" placeholder="Escríbele al abuelo..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();clSend();}"></textarea>
-          <button class="cl-send-btn" onclick="clSend()" id="cl-btn">
-            <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-          </button>
+      </div>
+      <!-- Body: sidebar de conversaciones + chat -->
+      <div class="cl-body">
+        <!-- Sidebar conversaciones -->
+        <div class="cl-conv-list">
+          <div class="cl-conv-hdr">
+            <span>Pláticas</span>
+          </div>
+          <div class="cl-conv-items" id="cl-conv-items"></div>
+        </div>
+        <!-- Chat area -->
+        <div class="cl-chat-area">
+          <div class="cl-msgs" id="cl-msgs"></div>
+          <div class="cl-formalizar" id="cl-formalizar">
+            <p>💡 <strong>Don Juan cree que ya tiene forma.</strong> ¿Formalizamos como proyecto?</p>
+            <button class="btn-sm gold" onclick="formalizarIdea()">Crear proyecto con esta idea →</button>
+          </div>
+          <div class="cl-input-area">
+            <div class="cl-inp-wrap">
+              <textarea id="cl-inp" placeholder="Escríbele al abuelo..." rows="1"
+                onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();clSend();}"></textarea>
+              <button class="send-btn" onclick="clSend()" id="cl-btn">
+                <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+              </button>
+            </div>
+            <div class="cl-hint">Enter para enviar · Shift+Enter para nueva línea</div>
+          </div>
         </div>
       </div>
     </div>
@@ -1544,9 +1589,12 @@ function loadDemo(){
 
 
 // ── CHAT LIBRE ──
-let clMsgs = [];
-let clThinking = false;
-let clIdeaResumen = '';
+let clConvId = null;  // conversación activa
+
+function clDB(){
+  try{ return JSON.parse(localStorage.getItem('cl_db')||'{"convs":{}}'); }catch(e){ return {convs:{}}; }
+}
+function clSaveDB(d){ localStorage.setItem('cl_db', JSON.stringify(d)); }
 
 function showChatLibre(){
   ['panel-dash','panel-proj','panel-admin','panel-chat-libre'].forEach(p=>{
@@ -1556,114 +1604,227 @@ function showChatLibre(){
   const panel = document.getElementById('panel-chat-libre');
   panel.style.display='flex';
   panel.classList.add('active');
-  if(clMsgs.length===0) clInit();
+  clRenderSidebar();
+  // Abrir la conversación más reciente o crear una nueva
+  const d = clDB();
+  const convs = Object.values(d.convs).sort((a,b)=>b.updatedAt-a.updatedAt);
+  if(convs.length > 0) clOpenConv(convs[0].id);
+  else clNueva();
 }
 
-function clInit(){
+function clNueva(){
+  const d = clDB();
+  const id = 'cl' + Date.now();
   const nombre = user.name.split(' ')[0];
-  const bienvenida = `${nombre}, ¿en qué andas pensando? Cuéntame la idea, aunque esté a medio cocer. Para eso estoy.`;
-  clMsgs = [{ role:'assistant', content: bienvenida }];
-  clRender();
+  d.convs[id] = {
+    id, nombre: 'Nueva plática',
+    createdAt: Date.now(), updatedAt: Date.now(),
+    msgs: [{ role:'assistant', content: nombre + ', ¿en qué andas pensando? Cuéntame la idea, aunque esté a medio cocer. Para eso estoy.' }],
+    formalizar: false
+  };
+  clSaveDB(d);
+  clOpenConv(id);
+  clRenderSidebar();
 }
 
-function clIdea(el){
-  document.getElementById('cl-inp').value = el.textContent.trim();
+function clOpenConv(id){
+  clConvId = id;
+  document.getElementById('cl-formalizar').style.display='none';
+  const d = clDB();
+  const conv = d.convs[id];
+  if(conv && conv.formalizar) document.getElementById('cl-formalizar').style.display='flex';
+  clRenderMsgs();
+  clRenderSidebar();
   document.getElementById('cl-inp').focus();
 }
 
-function clRender(){
-  const container = document.getElementById('cl-msgs');
-  container.innerHTML = clMsgs.map(m=>`
-    <div class="chat-libre-msg ${m.role==='user'?'user':'dj'}">
-      ${m.role==='assistant'?'<div class="chat-libre-dj-name">Don Juan</div>':''}
-      <div class="chat-libre-bubble">${m.content.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/\n/g,'<br>')}</div>
+function clRenderSidebar(){
+  const d = clDB();
+  const convs = Object.values(d.convs).sort((a,b)=>b.updatedAt-a.updatedAt);
+  const container = document.getElementById('cl-conv-items');
+  if(!convs.length){
+    container.innerHTML = '<div style="font-size:12px;color:var(--text3);padding:8px">Sin pláticas aún</div>';
+    return;
+  }
+  container.innerHTML = convs.map(c=>`
+    <div class="cl-conv-item ${c.id===clConvId?'active':''}" onclick="clOpenConv('${c.id}')">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:4px">
+        <div class="cl-conv-name">${c.nombre}</div>
+        <button onclick="event.stopPropagation();clBorrar('${c.id}')" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:11px;padding:0;flex-shrink:0" title="Borrar">✕</button>
+      </div>
+      <div class="cl-conv-date">${new Date(c.updatedAt).toLocaleDateString('es-MX')}</div>
     </div>`).join('');
+}
+
+function clBorrar(id){
+  const d = clDB();
+  delete d.convs[id];
+  clSaveDB(d);
+  if(clConvId === id){
+    clConvId = null;
+    const remaining = Object.values(d.convs).sort((a,b)=>b.updatedAt-a.updatedAt);
+    if(remaining.length) clOpenConv(remaining[0].id);
+    else clNueva();
+  } else {
+    clRenderSidebar();
+  }
+}
+
+function clRenderMsgs(){
+  const d = clDB();
+  const conv = d.convs[clConvId];
+  if(!conv) return;
+  const container = document.getElementById('cl-msgs');
+  container.innerHTML = conv.msgs.map((m,i)=>{
+    if(m.role === 'user'){
+      return `<div class="msg-row user">
+        <div class="av usr">${user.name.charAt(0)}</div>
+        <div class="bubble usr">${m.content.replace(/\n/g,'<br>')}</div>
+      </div>`;
+    }
+    // Parsear opciones <<OPCIONES>>...</OPCIONES>>
+    let html = m.content;
+    let optsHtml = '';
+    const optsMatch = html.match(/<<OPCIONES>>([\s\S]*?)<\/OPCIONES>>/);
+    if(optsMatch){
+      const block = optsMatch[1];
+      const pregunta = (block.match(/\?([^?]+)\?/) || [])[1]?.trim() || '';
+      const opciones = [...block.matchAll(/\[([^\]]+)\]/g)].map(x=>x[1]);
+      html = html.replace(/<<OPCIONES>>[\s\S]*?<<\/OPCIONES>>/, '').trim();
+      const disabled = i < conv.msgs.length - 1 ? 'disabled' : '';
+      const selIdx = m.selOpt !== undefined ? m.selOpt : -1;
+      optsHtml = `<div class="opts-wrap">
+        ${pregunta ? `<div style="font-size:13px;color:var(--text2);margin-bottom:4px">${pregunta}</div>` : ''}
+        ${opciones.map((o,oi)=>`<button class="opt-btn ${selIdx===oi?'sel':''}" ${disabled} onclick="clOptSel(${i},${oi},'${o.replace(/'/g,"\'")}',this)">${o}</button>`).join('')}
+      </div>`;
+    }
+    return `<div class="msg-row">
+      <div class="av dj">DJ</div>
+      <div style="display:flex;flex-direction:column;gap:6px;max-width:78%">
+        <div class="bubble dj">${html.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>')}</div>
+        ${optsHtml}
+      </div>
+    </div>`;
+  }).join('');
   container.scrollTop = container.scrollHeight;
+}
+
+function clOptSel(msgIdx, optIdx, texto, btn){
+  const d = clDB();
+  const conv = d.convs[clConvId];
+  conv.msgs[msgIdx].selOpt = optIdx;
+  // Deshabilitar todos los botones de ese grupo
+  btn.closest('.opts-wrap').querySelectorAll('.opt-btn').forEach(b=>{ b.disabled=true; b.classList.remove('sel'); });
+  btn.classList.add('sel');
+  clSaveDB(d);
+  // Enviar como si fuera un mensaje del usuario
+  clEnviar(texto);
 }
 
 async function clSend(){
   const inp = document.getElementById('cl-inp');
   const txt = inp.value.trim();
-  if(!txt || clThinking) return;
-  inp.value='';
-  document.getElementById('cl-ideas').style.display='none';
+  if(!txt) return;
+  inp.value = ''; inp.style.height='';
+  clEnviar(txt);
+}
 
-  clMsgs.push({ role:'user', content: txt });
-  clRender();
-  clThinking = true;
+async function clEnviar(txt){
+  if(!clConvId) return;
+  const d = clDB();
+  const conv = d.convs[clConvId];
+  if(!conv) return;
+
+  // Si tiene solo 1 mensaje (bienvenida), usar las primeras palabras como nombre
+  if(conv.msgs.length === 1 && conv.nombre === 'Nueva plática'){
+    conv.nombre = txt.substring(0, 35) + (txt.length > 35 ? '...' : '');
+  }
+
+  conv.msgs.push({ role:'user', content: txt });
+  conv.updatedAt = Date.now();
+  clSaveDB(d);
+  clRenderMsgs();
+  clRenderSidebar();
+
+  // Placeholder pensando
   document.getElementById('cl-btn').disabled = true;
-
-  // Placeholder de "pensando"
-  clMsgs.push({ role:'assistant', content:'...' });
-  clRender();
+  conv.msgs.push({ role:'assistant', content:'...', thinking:true });
+  clSaveDB(d);
+  clRenderMsgs();
 
   try {
+    const apiMsgs = conv.msgs
+      .filter(m=>!m.thinking)
+      .map(m=>({ role: m.role==='assistant'?'assistant':'user', content: m.content.replace(/<<OPCIONES>>[\s\S]*?<<\/OPCIONES>>/g,'').trim() }));
+
     const res = await fetch('/api/dj', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        action:'chat-libre',
-        messages: clMsgs.filter(m=>m.content!=='...').map(m=>({role:m.role==='assistant'?'assistant':'user', content:m.content}))
-      })
+      body: JSON.stringify({ action:'chat-libre', messages: apiMsgs })
     });
     const data = await res.json();
-    clMsgs.pop(); // quitar placeholder
-    if(data.reply){
-      clMsgs.push({ role:'assistant', content: data.reply });
-      clIdeaResumen = data.reply;
-      // Mostrar botón formalizar si Don Juan dice que está lista
-      if(data.reply.includes('|||LISTA_PARA_FORMALIZAR|||')){
-        clMsgs[clMsgs.length-1].content = data.reply.replace('|||LISTA_PARA_FORMALIZAR|||','').trim();
-        document.getElementById('cl-formalizar').style.display='flex';
-      }
-    }
-  } catch(e){
-    clMsgs.pop();
-    clMsgs.push({ role:'assistant', content:'Perdona, tuve un problema de conexión. Intenta de nuevo.' });
-  }
 
-  clRender();
-  clThinking = false;
+    // Quitar placeholder
+    const d2 = clDB();
+    const conv2 = d2.convs[clConvId];
+    conv2.msgs = conv2.msgs.filter(m=>!m.thinking);
+
+    let reply = data.reply || 'Perdona, tuve un problema. Intenta de nuevo.';
+    let formalizar = false;
+    if(reply.includes('|||LISTA_PARA_FORMALIZAR|||')){
+      reply = reply.replace('|||LISTA_PARA_FORMALIZAR|||','').trim();
+      formalizar = true;
+      conv2.formalizar = true;
+      document.getElementById('cl-formalizar').style.display='flex';
+    }
+
+    conv2.msgs.push({ role:'assistant', content: reply });
+    conv2.updatedAt = Date.now();
+    clSaveDB(d2);
+    clRenderMsgs();
+    clRenderSidebar();
+  } catch(e){
+    const d2 = clDB();
+    const conv2 = d2.convs[clConvId];
+    conv2.msgs = conv2.msgs.filter(m=>!m.thinking);
+    conv2.msgs.push({ role:'assistant', content:'Perdona, tuve un problema de conexión. Intenta de nuevo.' });
+    clSaveDB(d2);
+    clRenderMsgs();
+  }
   document.getElementById('cl-btn').disabled = false;
+  document.getElementById('cl-inp').focus();
 }
 
 async function formalizarIdea(){
-  // Pedir a la IA que extraiga los datos del formulario de la conversación
-  const historial = clMsgs.map(m=>(m.role==='user'?'NIETO':'DON JUAN')+': '+m.content).join('\n\n');
+  const d = clDB();
+  const conv = d.convs[clConvId];
+  if(!conv) return;
+  const historial = conv.msgs.map(m=>(m.role==='user'?'NIETO':'DON JUAN')+': '+m.content).join('\n\n');
   try {
     const res = await fetch('/api/dj', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
+      method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ action:'extraer-idea', messages:[{role:'user', content: historial}] })
     });
     const data = await res.json();
-    // Crear nuevo proyecto y pre-llenar con los datos extraídos
-    const d = db();
+    const db2 = db();
     const id = 'p' + Date.now();
-    d.projects[id] = {
+    db2.projects[id] = {
       id, ownerEmail: user.email, ownerName: user.name,
       nombre: data.proyecto||'Mi proyecto', status:'nuevo',
       createdAt:Date.now(), updatedAt:Date.now(),
       tasks:[], djMsgs:[], djStep:0, djStarted:false, memo:null,
-      f_proyecto: data.proyecto||'',
-      f_industria: data.industria||'',
-      f_problema: data.problema||'',
-      f_solucion: data.solucion||'',
-      f_mercado: data.mercado||'',
-      f_modelo: data.modelo||'',
-      f_precio: data.precio||'',
-      f_ventaja: data.ventaja||'',
-      f_ia: data.ia||'',
-      f_inversion: data.inversion||'',
+      f_proyecto: data.proyecto||'', f_industria: data.industria||'',
+      f_problema: data.problema||'', f_solucion: data.solucion||'',
+      f_mercado: data.mercado||'', f_modelo: data.modelo||'',
+      f_precio: data.precio||'', f_ventaja: data.ventaja||'',
+      f_ia: data.ia||'', f_inversion: data.inversion||''
     };
-    saveDB(d);
+    saveDB(db2);
     openProj(id);
-    setNotice('form-notice','✨ Pre-llenado con tu plática — revisa y completa los campos que faltan','info');
-  } catch(e){
-    // Si falla la extracción, crear proyecto vacío de todas formas
-    newProject();
-  }
+    setNotice('form-notice','✨ Pre-llenado con tu plática con el abuelo — revisa y completa los campos que faltan','info');
+  } catch(e){ newProject(); }
 }
+
 
 // ── INIT ──
 window.onload=()=>{
