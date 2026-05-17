@@ -1801,9 +1801,9 @@ async function clEnviar(txt){
   const conv = d.convs[clConvId];
   if(!conv) return;
 
-  // Si tiene solo 1 mensaje (bienvenida), usar las primeras palabras como nombre
-  if(conv.msgs.length === 1 && conv.nombre === 'Nueva plática'){
-    conv.nombre = txt.substring(0, 35) + (txt.length > 35 ? '...' : '');
+  // Título automático: primeras palabras del primer mensaje del nieto
+  if(conv.msgs.filter(m=>m.role==='user').length === 0){
+    conv.nombre = txt.substring(0, 40) + (txt.length > 40 ? '...' : '');
   }
 
   conv.msgs.push({ role:'user', content: txt });
