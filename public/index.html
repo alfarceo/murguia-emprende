@@ -491,25 +491,6 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;font-weight:300;backgroun
     </div>
   </div>
 
-  <!-- PASSWORD RESET MODAL -->
-  <div class="modal-overlay" id="modal-reset">
-  <div class="modal">
-    <h3>Restablecer contraseña</h3>
-    <p style="font-size:13px;color:var(--text2);margin-bottom:14px">Nueva contraseña para: <strong id="reset-email-label"></strong></p>
-    <div class="field">
-      <label>Nueva contraseña</label>
-      <div class="pass-wrap">
-        <input type="password" id="reset-pass" placeholder="Mínimo 4 caracteres">
-        <button class="pass-eye" onclick="togglePass('reset-pass',this)" tabindex="-1">👁</button>
-      </div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-sm gold" onclick="confirmReset()">Confirmar</button>
-      <button class="btn-sm" onclick="closeModal()">Cancelar</button>
-    </div>
-  </div>
-  </div>
-
 </div><!-- /screen-app -->
 
 <script>
@@ -1346,9 +1327,9 @@ function openResetModal(email, name){
   resetTarget=email;
   document.getElementById('reset-email-label').textContent=name+' ('+email+')';
   document.getElementById('reset-pass').value='';
-  document.getElementById('modal-reset').classList.add('show');
+  document.getElementById('modal-reset').style.display='flex';
 }
-function closeModal(){ document.getElementById('modal-reset').classList.remove('show'); resetTarget=null; }
+function closeModal(){ const m=document.getElementById('modal-reset'); m.style.display='none'; resetTarget=null; }
 async function confirmReset(){
   const pass=document.getElementById('reset-pass').value;
   if(!pass||pass.length<4){ alert('Mínimo 4 caracteres.'); return; }
@@ -1404,5 +1385,25 @@ window.onload=()=>{
   if(s){ try{ user=JSON.parse(s); showApp(); return; }catch(e){} }
 };
 </script>
+
+<!-- PASSWORD RESET MODAL — fuera de todo para que position:fixed funcione bien -->
+<div class="modal-overlay" id="modal-reset" style="position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:99999;">
+  <div class="modal" style="background:#1c1c1c;border:1px solid #2c2c2c;border-radius:10px;padding:24px;width:100%;max-width:380px;">
+    <h3 style="font-size:16px;font-weight:500;margin-bottom:16px;color:#f0ece4;">Restablecer contraseña</h3>
+    <p style="font-size:13px;color:#b0aca4;margin-bottom:14px">Nueva contraseña para: <strong id="reset-email-label"></strong></p>
+    <div class="field">
+      <label>Nueva contraseña</label>
+      <div class="pass-wrap">
+        <input type="password" id="reset-pass" placeholder="Mínimo 4 caracteres">
+        <button class="pass-eye" onclick="togglePass('reset-pass',this)" tabindex="-1">👁</button>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-sm gold" onclick="confirmReset()">Confirmar</button>
+      <button class="btn-sm" onclick="closeModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
