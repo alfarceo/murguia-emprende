@@ -1030,7 +1030,7 @@ Genera este JSON completo con valores reales basados en los datos (no uses "—"
 
 recomendacion: exactamente PITCH AL CONSEJO o REVISAR ANTES DE PITCH o NO RECOMENDADO. Scores 1-10.`;
 
-  const res=await fetch('/api/dj',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'memo',context:prompt})});
+  const res=await fetch('/api/memo',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({context:prompt})});
   const data=await res.json();
   if(data&&data.error){ console.error('Memo API error:',data.error); return null; }
   if(!data||!data.memo){ console.error('Memo bad response:',JSON.stringify(data).substring(0,300)); return null; }
