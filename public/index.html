@@ -1007,30 +1007,18 @@ async function finishEval(){
 
 async function generateMemo(){
   const p=proj();
-  // Si djMsgs está vacío en memoria (recarga de página), leerlo del localStorage
   const msgs = djMsgs.length > 0 ? djMsgs : (p.djMsgs || []);
-  const history=msgs.map(m=>m.role.toUpperCase()+': '+m.content).join('\n\n');
-  const prompt=`Analista senior de Murguía Emprende (family office mexicano). Basándote en los datos del proyecto y la conversación con Don Juan, genera JSON de inversión completo. SOLO JSON, sin texto extra, sin backticks.
-
-DATOS:
-Proyecto: ${p.f_proyecto||'—'} | Emprendedor: ${user.name} | Industria: ${p.f_industria||'—'} | Etapa: ${p.f_etapa||'—'}
-Problema: ${p.f_problema||'—'} | Solución: ${p.f_solucion||'—'}
-Mercado: ${p.f_mercado||'—'} | Demanda: ${p.f_demanda||'—'}
-Modelo: ${p.f_modelo||'—'} | Precio: ${p.f_precio||'—'} | CAC: ${p.f_cac||'—'}
-Competencia: ${p.f_competencia||'—'} | Ventaja: ${p.f_ventaja||'—'}
-IA: ${p.f_ia||'—'} | Equipo: ${p.f_equipo||'—'} | Falta: ${p.f_falta||'—'}
-Inversión: ${p.f_inversion||'—'} | Uso: ${p.f_uso||'—'} | Retorno: ${p.f_retorno||'—'}
-Riesgo: ${p.f_riesgo||'—'} | KPIs: ${p.f_kpis||'—'}
-
-CONVERSACIÓN DON JUAN:
-${history}
-
-Genera este JSON completo con valores reales basados en los datos (no uses "—" en campos financieros, estima con los datos disponibles):
-{"emprendedor":"${user.name}","proyecto":"${p.f_proyecto||'—'}","industria":"${p.f_industria||'—'}","fecha":"${new Date().toLocaleDateString('es-MX')}","tagline":"","resumen_ejecutivo":"","problema_detallado":"","solucion_detallada":"","validacion_demanda":"","tam":"","sam":"","som_y3":"","contexto_mercado":"","fuentes_ingreso":"sep por ;","ticket_promedio":"","margen_bruto":"","cac":"","ltv":"","ltv_cac_ratio":"","payback_period":"","ingresos_y1":"","ingresos_y2":"","ingresos_y3":"","ebitda_y1":"","ebitda_y2":"","ebitda_y3":"","clientes_y1":"","clientes_y2":"","clientes_y3":"","breakeven_mes":"","supuestos_financieros":"sep por ;","inversion_solicitada":"${p.f_inversion||'—'}","tipo_instrumento":"","participacion_ofrecida":"","valoracion_pre_money":"","uso_de_fondos":"","runway":"","proxima_ronda":"","roi_3a":"","roi_5a":"","tir":"","multiple_capital":"","escenario_salida":"","escenario_conservador":"","escenario_optimista":"","ventaja_competitiva":"","moat":"","rol_ia":"","competidores":"","equipo_descripcion":"","perfil_faltante":"","riesgo_equipo":"","hitos_6meses":"sep por ;","hitos_12meses":"sep por ;","hitos_24meses":"sep por ;","kpis_principales":"sep por ;","riesgo_principal":"","riesgo_2":"","riesgo_3":"","riesgo_mercado":"","riesgo_ejecucion":"","fortalezas":"sep por ;","debilidades":"sep por ;","oportunidades":"sep por ;","amenazas":"sep por ;","ia_score":7,"mercado_score":7,"equipo_score":7,"modelo_score":7,"riesgo_score":7,"traccion_score":7,"financiero_score":7,"recomendacion":"PITCH AL CONSEJO","tesis_inversion":"","condiciones_inversion":"","preguntas_consejo":"sep por ;","siguiente_paso":"","comentario_don_juan":"","tareas":["tarea 1","tarea 2","tarea 3"]}
-
-recomendacion: exactamente PITCH AL CONSEJO o REVISAR ANTES DE PITCH o NO RECOMENDADO. Scores 1-10.`;
-
-  const res=await fetch('/api/memo',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({context:prompt})});
+  const conversation = msgs.map(m=>m.role.toUpperCase()+': '+m.content).join('\n\n');
+  const formData = {
+    emprendedor: user.name, proyecto: p.f_proyecto||'', industria: p.f_industria||'',
+    problema: p.f_problema||'', solucion: p.f_solucion||'', mercado: p.f_mercado||'',
+    demanda: p.f_demanda||'', modelo: p.f_modelo||'', precio: p.f_precio||'',
+    cac: p.f_cac||'', ventaja: p.f_ventaja||'', competencia: p.f_competencia||'',
+    ia: p.f_ia||'', equipo: p.f_equipo||'', falta: p.f_falta||'',
+    inversion: p.f_inversion||'', uso: p.f_uso||'', retorno: p.f_retorno||'',
+    riesgo: p.f_riesgo||'', kpis: p.f_kpis||''
+  };
+  const res=await fetch('/api/memo',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({formData, conversation})});
   const data=await res.json();
   if(data&&data.error){ console.error('Memo API error:',data.error); return null; }
   if(!data||!data.memo){ console.error('Memo bad response:',JSON.stringify(data).substring(0,300)); return null; }
