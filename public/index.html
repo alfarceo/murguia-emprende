@@ -1010,127 +1010,25 @@ async function generateMemo(){
   // Si djMsgs está vacío en memoria (recarga de página), leerlo del localStorage
   const msgs = djMsgs.length > 0 ? djMsgs : (p.djMsgs || []);
   const history=msgs.map(m=>m.role.toUpperCase()+': '+m.content).join('\n\n');
-  const prompt=`Eres el analista senior de Murguía Emprende, el family office de inversión de la familia Murguía en México. Con 50 años de experiencia evaluando negocios. Basándote en el formulario y la conversación completa con Don Juan, genera un análisis exhaustivo digno de un family office serio. Responde SOLO con JSON puro, sin backticks, sin markdown, sin texto antes o después.
+  const prompt=`Analista senior de Murguía Emprende (family office mexicano). Basándote en los datos del proyecto y la conversación con Don Juan, genera JSON de inversión completo. SOLO JSON, sin texto extra, sin backticks.
 
-FORMULARIO DEL PROYECTO:
+DATOS:
 Proyecto: ${p.f_proyecto||'—'} | Emprendedor: ${user.name} | Industria: ${p.f_industria||'—'} | Etapa: ${p.f_etapa||'—'}
-Problema: ${p.f_problema||'—'}
-Solución: ${p.f_solucion||'—'}
-Cliente: ${p.f_cliente||'—'} | Mercado: ${p.f_mercado||'—'} | Demanda validada: ${p.f_demanda||'—'}
+Problema: ${p.f_problema||'—'} | Solución: ${p.f_solucion||'—'}
+Mercado: ${p.f_mercado||'—'} | Demanda: ${p.f_demanda||'—'}
 Modelo: ${p.f_modelo||'—'} | Precio: ${p.f_precio||'—'} | CAC: ${p.f_cac||'—'}
 Competencia: ${p.f_competencia||'—'} | Ventaja: ${p.f_ventaja||'—'}
-IA: ${p.f_ia||'—'} | Sin IA: ${p.f_sinia||'—'}
-Equipo: ${p.f_equipo||'—'} | Falta: ${p.f_falta||'—'}
-Inversión: ${p.f_inversion||'—'} | Uso: ${p.f_uso||'—'} | Retorno proyectado: ${p.f_retorno||'—'}
+IA: ${p.f_ia||'—'} | Equipo: ${p.f_equipo||'—'} | Falta: ${p.f_falta||'—'}
+Inversión: ${p.f_inversion||'—'} | Uso: ${p.f_uso||'—'} | Retorno: ${p.f_retorno||'—'}
 Riesgo: ${p.f_riesgo||'—'} | KPIs: ${p.f_kpis||'—'}
 
-CONVERSACIÓN CON DON JUAN:
+CONVERSACIÓN DON JUAN:
 ${history}
 
-INSTRUCCIONES CRÍTICAS:
-- Todos los campos financieros deben tener números reales y específicos basados en los datos del proyecto. No pongas "—" en campos financieros, calcula estimaciones razonables.
-- Las proyecciones deben ser conservadoras pero creíbles. Usa los datos de precio, CAC, mercado y uso de fondos para construirlas.
-- TIR y ROI deben calcularse con base en la inversión, proyecciones de flujo y horizonte de salida a 5 años.
-- El memo debe sentirse como un documento real de inversión, no un resumen genérico.
+Genera este JSON completo con valores reales basados en los datos (no uses "—" en campos financieros, estima con los datos disponibles):
+{"emprendedor":"${user.name}","proyecto":"${p.f_proyecto||'—'}","industria":"${p.f_industria||'—'}","fecha":"${new Date().toLocaleDateString('es-MX')}","tagline":"","resumen_ejecutivo":"","problema_detallado":"","solucion_detallada":"","validacion_demanda":"","tam":"","sam":"","som_y3":"","contexto_mercado":"","fuentes_ingreso":"sep por ;","ticket_promedio":"","margen_bruto":"","cac":"","ltv":"","ltv_cac_ratio":"","payback_period":"","ingresos_y1":"","ingresos_y2":"","ingresos_y3":"","ebitda_y1":"","ebitda_y2":"","ebitda_y3":"","clientes_y1":"","clientes_y2":"","clientes_y3":"","breakeven_mes":"","supuestos_financieros":"sep por ;","inversion_solicitada":"${p.f_inversion||'—'}","tipo_instrumento":"","participacion_ofrecida":"","valoracion_pre_money":"","uso_de_fondos":"","runway":"","proxima_ronda":"","roi_3a":"","roi_5a":"","tir":"","multiple_capital":"","escenario_salida":"","escenario_conservador":"","escenario_optimista":"","ventaja_competitiva":"","moat":"","rol_ia":"","competidores":"","equipo_descripcion":"","perfil_faltante":"","riesgo_equipo":"","hitos_6meses":"sep por ;","hitos_12meses":"sep por ;","hitos_24meses":"sep por ;","kpis_principales":"sep por ;","riesgo_principal":"","riesgo_2":"","riesgo_3":"","riesgo_mercado":"","riesgo_ejecucion":"","fortalezas":"sep por ;","debilidades":"sep por ;","oportunidades":"sep por ;","amenazas":"sep por ;","ia_score":7,"mercado_score":7,"equipo_score":7,"modelo_score":7,"riesgo_score":7,"traccion_score":7,"financiero_score":7,"recomendacion":"PITCH AL CONSEJO","tesis_inversion":"","condiciones_inversion":"","preguntas_consejo":"sep por ;","siguiente_paso":"","comentario_don_juan":"","tareas":["tarea 1","tarea 2","tarea 3"]}
 
-Genera exactamente este JSON:
-{
-  "emprendedor": "${user.name}",
-  "proyecto": "${p.f_proyecto||'—'}",
-  "industria": "${p.f_industria||'—'}",
-  "fecha": "fecha actual DD/MM/YYYY",
-  "tagline": "frase de una línea que capture la esencia y propuesta de valor del negocio",
-  "resumen_ejecutivo": "4-5 oraciones: qué es el negocio, qué problema resuelve, por qué ahora, por qué este equipo, qué se solicita",
-
-  "problema_detallado": "descripción del problema con contexto de mercado y datos concretos",
-  "solucion_detallada": "descripción clara de la solución, cómo funciona y qué la hace diferente",
-  "validacion_demanda": "evidencia concreta de demanda: entrevistas, pilotos, cartas de intención, métricas tempranas",
-
-  "tam": "Mercado Total Direccionable con número en USD o MXN y metodología de cálculo",
-  "sam": "Mercado Direccionable Servible — segmento al que pueden llegar realísticamente con número",
-  "som_y3": "Mercado Obtenible en 3 años — participación realista con número y % del SAM",
-  "contexto_mercado": "tendencias del sector, vientos de cola, por qué el momento es ahora",
-
-  "fuentes_ingreso": "lista de todas las fuentes de ingreso separadas por ;",
-  "ticket_promedio": "valor del ticket promedio con unidad (MXN/USD por transacción o mes)",
-  "margen_bruto": "margen bruto estimado en % con justificación",
-  "cac": "costo de adquisición de cliente con metodología",
-  "ltv": "valor de vida del cliente estimado con supuestos",
-  "ltv_cac_ratio": "ratio LTV/CAC con interpretación",
-  "payback_period": "meses para recuperar el CAC",
-
-  "ingresos_y1": "ingresos totales año 1 en MXN con desglose por fuente",
-  "ingresos_y2": "ingresos totales año 2 en MXN",
-  "ingresos_y3": "ingresos totales año 3 en MXN",
-  "ebitda_y1": "EBITDA año 1 en MXN (puede ser negativo)",
-  "ebitda_y2": "EBITDA año 2 en MXN",
-  "ebitda_y3": "EBITDA año 3 en MXN",
-  "clientes_y1": "número de clientes/unidades activas al cierre del año 1",
-  "clientes_y2": "número de clientes/unidades activas al cierre del año 2",
-  "clientes_y3": "número de clientes/unidades activas al cierre del año 3",
-  "breakeven_mes": "mes exacto estimado en que el negocio alcanza punto de equilibrio operativo",
-  "supuestos_financieros": "3-4 supuestos clave detrás de las proyecciones separados por ;",
-
-  "inversion_solicitada": "${p.f_inversion||'—'}",
-  "tipo_instrumento": "tipo de instrumento propuesto: SAFE, deuda convertible, equity directo, etc.",
-  "participacion_ofrecida": "porcentaje de equity ofrecido o equivalente",
-  "valoracion_pre_money": "valuación pre-money implícita con metodología usada",
-  "uso_de_fondos": "desglose detallado del uso de la inversión con porcentajes y montos absolutos",
-  "runway": "meses de runway que da esta inversión antes de necesitar siguiente ronda",
-  "proxima_ronda": "cuándo y cuánto se espera levantar en la siguiente ronda y a qué valuación",
-
-  "roi_3a": "ROI estimado a 3 años para el inversionista en % con cálculo explícito",
-  "roi_5a": "ROI estimado a 5 años para el inversionista en % con escenario de salida",
-  "tir": "TIR estimada del proyecto a 5 años en % con supuestos de salida",
-  "multiple_capital": "múltiplo del capital esperado (ej: 3x, 5x) con escenario base y optimista",
-  "escenario_salida": "escenario de salida más probable: adquisición estratégica, siguiente ronda, dividendos, IPO — con valuación objetivo",
-  "escenario_conservador": "si las cosas van 50% peor de lo esperado, qué pasa con el retorno",
-  "escenario_optimista": "si todo sale bien, cuál es el upside máximo razonable",
-
-  "ventaja_competitiva": "qué hace único a este negocio y por qué es difícil de copiar",
-  "moat": "foso competitivo a largo plazo: datos, red, marca, costos de cambio, regulación",
-  "rol_ia": "cómo la IA crea ventaja competitiva real, sostenible y difícil de replicar",
-  "competidores": "principales competidores directos e indirectos con comparativa",
-
-  "equipo_descripcion": "descripción del equipo fundador con trayectorias relevantes",
-  "perfil_faltante": "perfil crítico que necesitan conseguir y por qué es urgente",
-  "riesgo_equipo": "evaluación honesta de las brechas del equipo actual",
-
-  "hitos_6meses": "3 hitos concretos y medibles a 6 meses separados por ;",
-  "hitos_12meses": "3 hitos concretos y medibles a 12 meses separados por ;",
-  "hitos_24meses": "3 hitos concretos y medibles a 24 meses separados por ;",
-  "kpis_principales": "5 KPIs clave con metas numéricas específicas separados por ;",
-
-  "riesgo_principal": "el riesgo más importante, probabilidad estimada y plan de mitigación",
-  "riesgo_2": "segundo riesgo relevante con mitigación",
-  "riesgo_3": "tercer riesgo relevante con mitigación",
-  "riesgo_mercado": "riesgo de que el mercado no responda como se espera",
-  "riesgo_ejecucion": "riesgo de ejecución del equipo",
-
-  "fortalezas": "3 fortalezas principales del proyecto separadas por ;",
-  "debilidades": "3 debilidades o gaps importantes separadas por ;",
-  "oportunidades": "2-3 oportunidades de expansión o upside no evidente separadas por ;",
-  "amenazas": "2-3 amenazas externas relevantes separadas por ;",
-
-  "ia_score": 7,
-  "mercado_score": 7,
-  "equipo_score": 7,
-  "modelo_score": 7,
-  "riesgo_score": 7,
-  "traccion_score": 7,
-  "financiero_score": 7,
-
-  "recomendacion": "PITCH AL CONSEJO",
-  "tesis_inversion": "en 2-3 oraciones, por qué Murguía Emprende debería (o no) invertir — la tesis central",
-  "condiciones_inversion": "condiciones o hitos que el emprendedor debe cumplir antes o durante la inversión",
-  "preguntas_consejo": "4 preguntas clave que el consejo debe hacerle al emprendedor, separadas por ;",
-  "siguiente_paso": "acción concreta e inmediata que debe hacer el emprendedor esta semana",
-  "comentario_don_juan": "frase memorable al estilo de Don Juan — con su humor, su ironía, su sabiduría — que la familia reconozca como suya",
-  "tareas": ["tarea concreta 1 con fecha", "tarea concreta 2 con fecha", "tarea concreta 3 con fecha", "tarea concreta 4 con fecha"]
-}
-
-Para recomendacion usa exactamente una de estas tres: PITCH AL CONSEJO / REVISAR ANTES DE PITCH / NO RECOMENDADO
-Los scores son del 1 al 10. Sé honesto, específico y exigente — esto es dinero de familia.`;
+recomendacion: exactamente PITCH AL CONSEJO o REVISAR ANTES DE PITCH o NO RECOMENDADO. Scores 1-10.`;
 
   const res=await fetch('/api/dj',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'memo',context:prompt})});
   const data=await res.json();

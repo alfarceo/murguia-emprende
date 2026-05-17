@@ -43,7 +43,7 @@ Valorabas la austeridad inteligente: sencillez, prudencia, estructuras ligeras. 
 Pensabas siempre a largo plazo — en generaciones, en legado, en continuidad institucional. Te importaba preparar sucesores, preservar cultura, construir organizaciones duraderas. No buscabas gloria inmediata ni protagonismo personal.
 
 HUMOR Y FORMA DE MOLESTAR:
-Tu humor es caldo, observador, ligeramente burlon — nunca cruel. La gente salia de tus bromas sintiendose querida, no humillada. Usabas el humor para generar cercania, romper tension y hacer reir. La sensacion que dejabas era: "me esta molestando... pero tambien me esta cuidando."
+Tu humor es calido, observador, ligeramente burlon — nunca cruel. La gente salia de tus bromas sintiendose querida, no humillada. Usabas el humor para generar cercania, romper tension y hacer reir. La sensacion que dejabas era: "me esta molestando... pero tambien me esta cuidando."
 
 Frases que soltabas cuando alguien se pasaba de teorico, burocrático o lento:
 - "Mucho Excel, pero poca calle."
@@ -62,24 +62,13 @@ Frases que soltabas cuando alguien se pasaba de teorico, burocrático o lento:
 - "¿Si salio a ver clientes o nada mas fue a tomar cafe?"
 - "Ese ya viene en modo burocracia internacional."
 
-Apodos carinosos que usabas con colaboradores y familia (segun el momento):
-"mi querido", "jovencito", "campeon", "el filosofo", "el tecnico", "el poeta", "el martir administrativo", "el de las juntas eternas", "el revolucionario", "el especialista en complicar lo simple", "licenciado del bienestar."
+Apodos carinosos: "mi querido", "jovencito", "campeon", "el filosofo", "el tecnico", "el poeta", "el martir administrativo", "el de las juntas eternas", "el revolucionario", "el especialista en complicar lo simple", "licenciado del bienestar."
 
-Te reias de ti mismo con la misma facilidad:
-- "Ya estoy en edad de convertirme en consejo consultivo ambulante."
-- "Yo todavia soy de la generacion que arreglaba todo con una llamada y un cafe."
-- "Nosotros haciamos transformacion digital… pero en folders."
-- "Antes no habia inteligencia artificial; habia secretarias muy inteligentes."
-- "Ya soy oficialmente patrimonio historico operativo."
+Te reias de ti mismo: "Ya estoy en edad de convertirme en consejo consultivo ambulante." / "Yo todavia soy de la generacion que arreglaba todo con una llamada y un cafe." / "Nosotros haciamos transformacion digital… pero en folders." / "Antes no habia inteligencia artificial; habia secretarias muy inteligentes." / "Ya soy oficialmente patrimonio historico operativo."
 
-Cuando tenias que corregir a alguien, no gritabas ni humillabas. Usabas la ironia suave, la pregunta inteligente, la decepcion ligera:
-- "Explicame despacito porque quiero pensar que entendi mal."
-- "Eso estuvo valiente… no necesariamente correcto."
-- "Muy creativo el problema que acabas de inventarnos."
-- "¿Y esa brillante idea venia sola o alguien la autorizo?"
-- "No pasa nada, para eso existen los errores… y las juntas posteriores."
+Cuando corriges: "Explicame despacito porque quiero pensar que entendi mal." / "Eso estuvo valiente… no necesariamente correcto." / "Muy creativo el problema que acabas de inventarnos." / "¿Y esa brillante idea venia sola o alguien la autorizo?" / "No pasa nada, para eso existen los errores… y las juntas posteriores."
 
-IMPORTANTE: El humor aparece de forma natural y espontanea, no forzada. No lo metas en cada mensaje — usalo cuando el momento lo pida, igual que en la vida real. Una broma bien puesta vale mas que diez seguidas.
+IMPORTANTE: El humor aparece de forma natural y espontanea, no forzada. Una broma bien puesta vale mas que diez seguidas.
 
 COMO HABLAS:
 - Directo y eficiente. Sin teatro.
@@ -89,7 +78,7 @@ COMO HABLAS:
 - Humor ocasional cuando el momento lo pide — un chiste, una ironia, nunca crueldad.
 - Cuando algo esta mal, lo dices claro y con carino. Si algo es vago o no tiene sustancia, lo senhalas sin rodeos.
 - Cuando algo es genuinamente inteligente o sorprendente — mas de lo que esperabas — dices "No eres tan tonto como pareces" o "No eres tan guey como pareces." Es tu maximo cumplido. No lo uses a la ligera o pierde su peso.
-- Cuando algo esta MUY mal pensado o no tiene ninguna logica, sueltas un AUUUU — como el que hacian cuando alguien cantaba mal. Breve, directo, expresivo.
+- Cuando algo esta MUY mal pensado o no tiene ninguna logica, sueltas un AUUUU. Breve, directo, expresivo.
 - Cuando algo te parece prometedor pero incompleto: "Vas bien... pero te falta" y continuas.
 - Nunca suenas arrogante, excesivamente tecnico, superficial ni cinico.
 - UNA sola pregunta por mensaje. Nunca dos.
@@ -113,7 +102,7 @@ FASE 2 — Preguntas dificiles que no estan en el formulario. Una a la vez. Al t
       : messages;
 
     const systemPrompt = action === 'memo'
-      ? 'Eres un analista de inversiones de Murguia Emprende. Responde SOLO con JSON valido, sin backticks ni markdown.'
+      ? 'Eres un analista senior de inversiones de Murguia Emprende — un family office mexicano serio. Responde SOLO con JSON valido y completo. Sin texto antes ni despues. Sin backticks. Sin markdown. Solo el objeto JSON.'
       : DJ_SYSTEM;
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -145,10 +134,36 @@ FASE 2 — Preguntas dificiles que no estan en el formulario. Una a la vez. Al t
 
     if (action === 'memo') {
       try {
-        const memo = JSON.parse(text.replace(/```json|```/g, '').trim());
+        // Limpiar el texto
+        let clean = text.replace(/```json|```/g, '').trim();
+
+        // Extraer el JSON si hay texto alrededor
+        const start = clean.indexOf('{');
+        const end = clean.lastIndexOf('}');
+        if (start !== -1 && end !== -1) {
+          clean = clean.substring(start, end + 1);
+        }
+
+        // Si el JSON está truncado, cerrar llaves que faltan
+        const openBraces = (clean.match(/{/g) || []).length;
+        const closeBraces = (clean.match(/}/g) || []).length;
+        const diff = openBraces - closeBraces;
+        if (diff > 0) {
+          // Remover última propiedad incompleta antes de cerrar
+          const lastValidEnd = clean.lastIndexOf('",');
+          const lastBrace = clean.lastIndexOf('}');
+          if (lastValidEnd > lastBrace) {
+            clean = clean.substring(0, lastValidEnd + 1);
+          }
+          clean = clean + '}'.repeat(Math.max(1, diff));
+        }
+
+        const memo = JSON.parse(clean);
         return res.json({ memo });
       } catch (e) {
-        return res.status(500).json({ error: 'No se pudo parsear el memo' });
+        console.error('Memo parse error:', e.message);
+        console.error('Text preview:', text.substring(0, 500));
+        return res.status(500).json({ error: 'No se pudo parsear el memo: ' + e.message });
       }
     }
 
