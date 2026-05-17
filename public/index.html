@@ -1063,7 +1063,8 @@ function addMsg(text, role, thinking){
   } else { b.textContent=text; }
   row.appendChild(av); row.appendChild(b);
   document.getElementById('chat-msgs').appendChild(row);
-  document.getElementById('chat-msgs').scrollTop=9999;
+  const cm=document.getElementById('chat-msgs'); cm.scrollTop=cm.scrollHeight;
+  setTimeout(()=>{ cm.scrollTop=cm.scrollHeight; },50);
   return b;
 }
 
@@ -1772,7 +1773,8 @@ function clRenderMsgs(){
       </div>
     </div>`;
   }).join('');
-  container.scrollTop = container.scrollHeight;
+  // Scroll al último mensaje con pequeño delay para esperar render del DOM
+  setTimeout(()=>{ container.scrollTop = container.scrollHeight; }, 50);
 }
 
 function clOptSel(msgIdx, optIdx, texto, btn){
