@@ -2128,9 +2128,17 @@ function renderConsejo(){
   const memo = p.memo || {};
   const body = document.getElementById('consejo-body');
 
-  // Calcular prima para esta ronda
-  const prima = consejoRondaActiva === 1 ? 0 : 30 * (consejoRondaActiva - 1);
+  // Calcular prima según tiempo desde ronda anterior
   const rondaAnterior = rondas.find(r=>r.numero === consejoRondaActiva-1);
+  let prima = 0;
+  let primaLabel = '';
+  if(consejoRondaActiva > 1 && rondaAnterior){
+    const meses = (Date.now() - rondaAnterior.cerradaEn) / (1000*60*60*24*30);
+    if(meses <= 6)       { prima = 10;  primaLabel = `${meses.toFixed(0)} meses desde ronda anterior`; }
+    else if(meses <= 12) { prima = 20;  primaLabel = `${meses.toFixed(0)} meses desde ronda anterior`; }
+    else if(meses <= 24) { prima = 35;  primaLabel = `${(meses/12).toFixed(1)} años desde ronda anterior`; }
+    else                 { prima = 50;  primaLabel = `${(meses/12).toFixed(1)} años desde ronda anterior`; }
+  }
   const valuacionBase = rondaAnterior ? rondaAnterior.valuacionPost : (memo.valoracion_pre_money || '—');
 
   body.innerHTML = `
@@ -2344,7 +2352,7 @@ async function cerrarRonda(){
       if(!consejoData.project.votacion['ronda'+consejoRondaActiva]) 
         consejoData.project.votacion['ronda'+consejoRondaActiva] = {};
       renderConsejo();
-      alert(`✓ Ronda ${consejoRondaActiva-1} cerrada. Se abre la Ronda ${consejoRondaActiva} con prima del ${(consejoRondaActiva-1)*30}%.`);
+      alert(`✓ Ronda ${consejoRondaActiva-1} cerrada. La prima de la siguiente ronda dependerá del tiempo que tome llegar a ella.`);
     }
   } catch(e) { alert('Error al cerrar ronda: '+e.message); }
 }

@@ -80,13 +80,19 @@ export default async function handler(req, res) {
         .filter(v => v.voto === 'si' || v.voto === 'condicional')
         .reduce((sum, v) => sum + (v.monto || 0), 0);
 
-      // Calcular prima según ronda (0% ronda1, +30% ronda2, +60% ronda3, etc.)
-      const primaBase = 0.30;
-      const prima = ronda === 1 ? 0 : primaBase * (ronda - 1);
-
-      // Obtener valuación de ronda anterior para calcular la nueva
+      // Calcular prima según tiempo transcurrido desde ronda anterior
       const rondas = proj.rondas || [];
       const rondaAnterior = rondas.find(r => r.numero === ronda - 1);
+      
+      let prima = 0;
+      if (ronda > 1 && rondaAnterior) {
+        const mesesTranscurridos = (Date.now() - rondaAnterior.cerradaEn) / (1000 * 60 * 60 * 24 * 30);
+        if (mesesTranscurridos <= 6)       prima = 0.10;  // hasta 6 meses: +10%
+        else if (mesesTranscurridos <= 12) prima = 0.20;  // 6-12 meses: +20%
+        else if (mesesTranscurridos <= 24) prima = 0.35;  // 1-2 años: +35%
+        else                               prima = 0.50;  // más de 2 años: +50%
+      }
+
       const valuacionBase = rondaAnterior ? rondaAnterior.valuacionPost : (proj.memo?.valoracion_pre_money ? 
         parseFloat(proj.memo.valoracion_pre_money.replace(/[^0-9.]/g,'')) : 1000000);
       const valuacionNueva = rondaAnterior ? valuacionBase * (1 + prima) : valuacionBase;
