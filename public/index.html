@@ -371,6 +371,45 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;font-weight:300;backgroun
 .cl-send-btn:hover{opacity:.85;}
 .cl-send-btn:disabled{opacity:.4;cursor:not-allowed;}
 .cl-send-btn svg{width:18px;height:18px;fill:#0a0a0a;}
+
+/* CONSEJO */
+.consejo-wrap{display:flex;flex-direction:column;gap:0;height:100%;overflow:hidden;}
+.consejo-header{padding:14px 22px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.consejo-body{flex:1;overflow-y:auto;padding:22px;}
+.consejo-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:16px;overflow:hidden;}
+.consejo-section-hdr{padding:12px 16px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between;}
+.consejo-section-title{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);}
+.consejo-section-body{padding:16px;}
+.voto-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;}
+.voto-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px;display:flex;flex-direction:column;gap:10px;}
+.voto-card.votado-si{border-color:var(--green-border);background:var(--green-dim);}
+.voto-card.votado-no{border-color:var(--red-border);background:var(--red-dim);}
+.voto-card.votado-condicional{border-color:var(--amber-border);background:var(--amber-dim);}
+.voto-av{width:36px;height:36px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:13px;color:var(--gold);flex-shrink:0;}
+.voto-nombre{font-size:13px;font-weight:500;}
+.voto-rol{font-size:11px;color:var(--text3);margin-top:1px;}
+.voto-btns{display:flex;gap:6px;flex-wrap:wrap;}
+.voto-btn{flex:1;padding:7px 4px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);color:var(--text2);font-size:12px;cursor:pointer;text-align:center;transition:all .15s;font-family:'DM Sans',sans-serif;}
+.voto-btn:hover{border-color:var(--gold-border);color:var(--gold);}
+.voto-btn.si{background:var(--green-dim);border-color:var(--green-border);color:#4caf50;}
+.voto-btn.no{background:var(--red-dim);border-color:var(--red-border);color:#f44336;}
+.voto-btn.cond{background:var(--amber-dim);border-color:var(--amber-border);color:#ff9800;}
+.voto-monto{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:7px 10px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;}
+.voto-monto:focus{border-color:var(--gold-border);}
+.voto-comentario{font-size:12px;color:var(--text3);font-style:italic;margin-top:4px;}
+.voto-resultado{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:500;}
+.semaforo-grande{width:18px;height:18px;border-radius:50%;flex-shrink:0;}
+.cap-table{width:100%;border-collapse:collapse;}
+.cap-table th{font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);padding:8px 10px;border-bottom:1px solid var(--border);text-align:left;}
+.cap-table td{font-size:13px;color:var(--text2);padding:10px 10px;border-bottom:1px solid var(--border);}
+.cap-table tr:last-child td{border-bottom:none;}
+.hito-edit{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);padding:8px 12px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;resize:vertical;min-height:60px;outline:none;}
+.hito-edit:focus{border-color:var(--gold-border);}
+.ronda-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:500;}
+.ronda-1{background:var(--gold-dim);color:var(--gold);border:1px solid var(--gold-border);}
+.ronda-2{background:var(--green-dim);color:#4caf50;border:1px solid var(--green-border);}
+.ronda-3{background:var(--amber-dim);color:#ff9800;border:1px solid var(--amber-border);}
+
 </style>
 </head>
 <body>
@@ -523,6 +562,27 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;font-weight:300;backgroun
     </div>
   </div>
 
+  <!-- CONSEJO -->
+  <div class="panel" id="panel-consejo">
+    <div class="consejo-wrap">
+      <div class="consejo-header">
+        <div>
+          <div style="font-family:'Playfair Display',serif;font-size:16px" id="consejo-proj-nombre">Proyecto</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:2px">Consejo de Inversión · Murguía Emprende</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <span id="consejo-ronda-badge" class="ronda-badge ronda-1">Ronda 1</span>
+          <button class="btn-sm gold" id="btn-toggle-votacion" onclick="toggleVotacion()">Abrir votación</button>
+          <button class="btn-sm" id="btn-cerrar-ronda" onclick="cerrarRonda()" style="display:none">✓ Cerrar ronda</button>
+          <button class="btn-sm" onclick="showDash()">← Inicio</button>
+        </div>
+      </div>
+      <div class="consejo-body" id="consejo-body">
+        <div style="color:var(--text3);font-size:14px;text-align:center;margin-top:40px">Cargando...</div>
+      </div>
+    </div>
+  </div>
+
   <!-- PROJECT -->
   <div class="panel" id="panel-proj">
     <div class="proj-tabs">
@@ -530,6 +590,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;font-weight:300;backgroun
       <div class="ptab" id="ptab-dj" onclick="switchTab('dj')">🎩 Don Juan</div>
       <div class="ptab" id="ptab-memo" onclick="switchTab('memo')">📄 Memo</div>
       <div class="ptab" id="ptab-tasks" onclick="switchTab('tasks')">✅ Tareas</div>
+      <div class="ptab" onclick="showConsejo(projId)" style="margin-left:auto">🏛 Consejo</div>
       <div style="margin-left:auto;display:flex;align-items:center;padding:0 8px;">
         <button class="btn-sm" onclick="showDash()">← Volver</button>
       </div>
@@ -799,7 +860,7 @@ function showDemoBtn(){
 
 // ── PANELS ──
 function showPanel(id){
-  ['panel-dash','panel-proj','panel-admin','panel-chat-libre'].forEach(p=>{
+  ['panel-dash','panel-proj','panel-admin','panel-chat-libre','panel-consejo'].forEach(p=>{
     document.getElementById(p).classList.toggle('active', p===id);
   });
 }
@@ -847,9 +908,14 @@ function renderDash(){
           ${p.inversion?'<span>💰 '+p.inversion+'</span>':''}
           ${(p.tasks||[]).filter(t=>!t.done).length>0?'<span style="color:var(--red)">⚠ '+(p.tasks.filter(t=>!t.done).length)+' tarea(s)</span>':''}
         </div>
-        <button onclick="event.stopPropagation();borrarProyecto('${p.id}')"
-          style="position:absolute;top:10px;right:10px;background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:4px;border-radius:4px;line-height:1"
-          title="Borrar proyecto">🗑</button>
+        <div style="position:absolute;top:10px;right:10px;display:flex;gap:4px">
+          <button onclick="event.stopPropagation();showConsejo('${p.id}')"
+            style="background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--gold);cursor:pointer;font-size:10px;padding:3px 7px;border-radius:4px;font-family:'DM Sans',sans-serif"
+            title="Consejo de inversión">Consejo</button>
+          <button onclick="event.stopPropagation();borrarProyecto('${p.id}')"
+            style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:4px;border-radius:4px;line-height:1"
+            title="Borrar proyecto">🗑</button>
+        </div>
       </div>`).join('');
   }
 
@@ -2004,6 +2070,284 @@ async function formalizarIdea(){
   } catch(e){ newProject(); }
 }
 
+
+
+// ── CONSEJO DE INVERSIÓN ──
+let consejoData = null;
+let consejoRondaActiva = 1;
+let consejoHitosEditados = '';
+
+const CONSEJEROS_INFO = {
+  'juanpablo@murguia.com': { nombre:'Juan Pablo Murguía', apodo:'Juan Pablo', rol:'Seguros & Fianzas · Red nacional', avatar:'JP' },
+  'boris@murguia.com':     { nombre:'José Ignacio Murguía', apodo:'Boris', rol:'Seguros & Fianzas · Capital privado', avatar:'BO' },
+  'lobas@murguia.com':     { nombre:'Francisco Lobatón', apodo:'Lobas', rol:'Marketing · Estructura fiscal', avatar:'LO' },
+  'alex@murguia.com':      { nombre:'Alejandro Bustamante', apodo:'Alex', rol:'Banca · Antilavado', avatar:'AL' },
+  'alfarceo@gmail.com':    { nombre:'Alfonso Arceo', apodo:'Alfonso', rol:'COO Fibra Uno · Inmuebles', avatar:'AA' },
+};
+
+async function showConsejo(pid){
+  projId = pid;
+  showPanel('panel-consejo');
+  const d = db();
+  const p = d.projects[pid];
+  if(!p) return;
+  document.getElementById('consejo-proj-nombre').textContent = p.nombre || p.f_proyecto || 'Proyecto';
+
+  // Cargar datos del servidor
+  try {
+    const res = await fetch('/api/consejo', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'get', projectId: pid })
+    });
+    const data = await res.json();
+    consejoData = data;
+    renderConsejo();
+  } catch(e) {
+    // Si falla el servidor, usar datos locales
+    consejoData = { project: p, consejeros: CONSEJEROS_INFO };
+    renderConsejo();
+  }
+}
+
+function renderConsejo(){
+  if(!consejoData) return;
+  const p = consejoData.project;
+  const votacion = p.votacion || { abierta:false, rondaActiva:1, ronda1:{} };
+  const rondas = p.rondas || [];
+  consejoRondaActiva = votacion.rondaActiva || 1;
+  const rondaKey = 'ronda' + consejoRondaActiva;
+  const votosRonda = votacion[rondaKey] || {};
+  const abierta = votacion.abierta;
+
+  // Header
+  document.getElementById('consejo-ronda-badge').textContent = 'Ronda ' + consejoRondaActiva;
+  document.getElementById('consejo-ronda-badge').className = 'ronda-badge ronda-' + Math.min(consejoRondaActiva, 3);
+  document.getElementById('btn-toggle-votacion').textContent = abierta ? '⏸ Pausar votación' : '▶ Abrir votación';
+  document.getElementById('btn-cerrar-ronda').style.display = abierta ? '' : 'none';
+
+  const memo = p.memo || {};
+  const body = document.getElementById('consejo-body');
+
+  // Calcular prima para esta ronda
+  const prima = consejoRondaActiva === 1 ? 0 : 30 * (consejoRondaActiva - 1);
+  const rondaAnterior = rondas.find(r=>r.numero === consejoRondaActiva-1);
+  const valuacionBase = rondaAnterior ? rondaAnterior.valuacionPost : (memo.valoracion_pre_money || '—');
+
+  body.innerHTML = `
+    ${rondas.length > 0 ? renderRondasAnteriores(rondas) : ''}
+
+    <!-- Resumen del proyecto -->
+    <div class="consejo-section">
+      <div class="consejo-section-hdr">
+        <div class="consejo-section-title">Resumen del proyecto</div>
+        ${memo.recomendacion ? `<span class="deck-cover-badge ${memo.recomendacion.includes('PITCH')?'v-pitch':memo.recomendacion.includes('REVISAR')?'v-rev':'v-no'}" style="font-size:11px;padding:3px 10px">${memo.recomendacion}</span>` : ''}
+      </div>
+      <div class="consejo-section-body" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px">
+        <div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">Inversión solicitada</div><div style="font-size:15px;font-family:'Playfair Display',serif;color:var(--gold);margin-top:3px">${memo.inversion_solicitada||p.f_inversion||'—'}</div></div>
+        <div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">Valuación pre-money</div><div style="font-size:15px;font-family:'Playfair Display',serif;margin-top:3px">${consejoRondaActiva>1?valuacionBase:memo.valoracion_pre_money||'—'}</div></div>
+        <div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">TIR estimada</div><div style="font-size:15px;font-family:'Playfair Display',serif;color:var(--green);margin-top:3px">${memo.tir||'—'}</div></div>
+        <div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">Múltiplo esperado</div><div style="font-size:15px;font-family:'Playfair Display',serif;margin-top:3px">${memo.multiple_capital||'—'}</div></div>
+        ${prima > 0 ? `<div style="grid-column:1/-1;padding:8px 12px;background:var(--amber-dim);border:1px solid var(--amber-border);border-radius:var(--r-sm)"><span style="font-size:12px;color:#ff9800">⚠ Ronda ${consejoRondaActiva} — Prima de entrada: +${prima}% sobre valuación de ronda anterior</span></div>` : ''}
+      </div>
+    </div>
+
+    <!-- Hitos para esta ronda — editables por el consejo -->
+    <div class="consejo-section">
+      <div class="consejo-section-hdr">
+        <div class="consejo-section-title">Hitos comprometidos para esta ronda</div>
+        <span style="font-size:11px;color:var(--text3)">Propuestos por Don Juan · Editables</span>
+      </div>
+      <div class="consejo-section-body">
+        <textarea class="hito-edit" id="hitos-edit" placeholder="Escribe los hitos comprometidos para esta ronda..."
+          onchange="consejoHitosEditados=this.value">${consejoHitosEditados || memo.hitos_12meses || ''}</textarea>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px">Estos hitos quedarán registrados al cerrar la ronda y son el criterio para abrir la siguiente.</div>
+      </div>
+    </div>
+
+    <!-- Votación -->
+    <div class="consejo-section">
+      <div class="consejo-section-hdr">
+        <div class="consejo-section-title">Votación · Ronda ${consejoRondaActiva}</div>
+        <div style="font-size:12px;color:var(--text3)">${abierta?'🟢 Votación abierta':'⏸ Votación cerrada'}</div>
+      </div>
+      <div class="consejo-section-body">
+        ${!abierta && Object.keys(votosRonda).length === 0 ? 
+          '<div style="color:var(--text3);font-size:13px;text-align:center;padding:20px">Abre la votación para que el consejo pueda votar.</div>' :
+          `<div class="voto-grid">${Object.entries(CONSEJEROS_INFO).map(([email, c])=>{
+            const v = votosRonda[email];
+            const cardClass = v ? 'voto-card votado-'+v.voto : 'voto-card';
+            return `<div class="${cardClass}" id="vcard-${email.replace('@','_').replace('.','_')}">
+              <div style="display:flex;align-items:center;gap:8px">
+                <div class="voto-av">${c.avatar}</div>
+                <div><div class="voto-nombre">${c.apodo}</div><div class="voto-rol">${c.rol}</div></div>
+              </div>
+              ${v ? `
+                <div class="voto-resultado">
+                  <div class="semaforo-grande" style="background:${v.voto==='si'?'#4caf50':v.voto==='no'?'#f44336':'#ff9800'}"></div>
+                  <span>${v.voto==='si'?'✓ Invierte':v.voto==='no'?'✗ No invierte':'~ Condicional'}</span>
+                </div>
+                ${v.monto>0?`<div style="font-size:13px;color:var(--gold)">$${v.monto.toLocaleString('es-MX')} MXN</div>`:''}
+                ${v.comentario?`<div class="voto-comentario">"${v.comentario}"</div>`:''}
+                ${abierta?`<button class="btn-sm" style="font-size:11px" onclick="resetVoto('${email}')">Cambiar voto</button>`:''}
+              ` : abierta ? `
+                <div class="voto-btns">
+                  <button class="voto-btn si" onclick="votarConsejero('${email}','si')">✓ Invierte</button>
+                  <button class="voto-btn no" onclick="votarConsejero('${email}','no')">✗ No</button>
+                  <button class="voto-btn cond" onclick="votarConsejero('${email}','condicional')">~ Condicional</button>
+                </div>
+                <input class="voto-monto" id="monto-${email.replace('@','_').replace('.','_')}" type="number" placeholder="Monto MXN (opcional)" min="0">
+                <input class="voto-monto" id="com-${email.replace('@','_').replace('.','_')}" placeholder="Comentario (opcional)" style="margin-top:4px">
+              ` : '<div style="font-size:12px;color:var(--text3)">Sin voto registrado</div>'}
+            </div>`;
+          }).join('')}</div>`
+        }
+        ${Object.keys(votosRonda).length > 0 ? renderResumenVotos(votosRonda) : ''}
+      </div>
+    </div>
+
+    ${rondas.length > 0 ? renderCapTable(rondas) : ''}
+  `;
+}
+
+function renderRondasAnteriores(rondas){
+  if(!rondas.length) return '';
+  return `<div class="consejo-section">
+    <div class="consejo-section-hdr"><div class="consejo-section-title">Historial de rondas</div></div>
+    <div class="consejo-section-body">
+      ${rondas.map(r=>`
+        <div style="padding:10px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+          <div>
+            <span class="ronda-badge ronda-${Math.min(r.numero,3)}" style="margin-right:8px">Ronda ${r.numero}</span>
+            <span style="font-size:13px;color:var(--text2)">${new Date(r.cerradaEn).toLocaleDateString('es-MX')}</span>
+            ${r.prima>0?`<span style="font-size:11px;color:#ff9800;margin-left:8px">Prima +${r.prima}%</span>`:''}
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:14px;color:var(--gold)">$${(r.totalComprometido||0).toLocaleString('es-MX')} MXN comprometidos</div>
+            <div style="font-size:11px;color:var(--text3)">Valuación post: ${r.valuacionPost?.toLocaleString('es-MX')||'—'}</div>
+          </div>
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function renderResumenVotos(votos){
+  const si = Object.values(votos).filter(v=>v.voto==='si');
+  const no = Object.values(votos).filter(v=>v.voto==='no');
+  const cond = Object.values(votos).filter(v=>v.voto==='condicional');
+  const total = si.reduce((s,v)=>s+(v.monto||0),0) + cond.reduce((s,v)=>s+(v.monto||0),0);
+  return `<div style="margin-top:16px;padding:14px 16px;background:var(--surface2);border-radius:var(--r-sm);border:1px solid var(--border);display:flex;gap:20px;flex-wrap:wrap">
+    <div><span style="font-size:20px;color:#4caf50;font-weight:600">${si.length + cond.length}</span><span style="font-size:11px;color:var(--text3);margin-left:5px">invierten</span></div>
+    <div><span style="font-size:20px;color:#f44336;font-weight:600">${no.length}</span><span style="font-size:11px;color:var(--text3);margin-left:5px">no invierten</span></div>
+    <div style="margin-left:auto;text-align:right"><div style="font-size:18px;color:var(--gold);font-family:'Playfair Display',serif">$${total.toLocaleString('es-MX')} MXN</div><div style="font-size:11px;color:var(--text3)">total comprometido</div></div>
+  </div>`;
+}
+
+function renderCapTable(rondas){
+  if(!rondas.length) return '';
+  // Consolidar inversores
+  const inv = {};
+  rondas.forEach(r=>{
+    (r.inversores||[]).forEach(i=>{
+      if(!inv[i.email]) inv[i.email]={nombre:i.nombre,total:0,rondas:[]};
+      inv[i.email].total += i.monto||0;
+      inv[i.email].rondas.push({n:r.numero,monto:i.monto,pct:i.porcentaje,prima:r.prima});
+    });
+  });
+  const rows = Object.values(inv);
+  if(!rows.length) return '';
+  return `<div class="consejo-section">
+    <div class="consejo-section-hdr"><div class="consejo-section-title">Cap Table consolidado</div></div>
+    <div class="consejo-section-body" style="overflow-x:auto">
+      <table class="cap-table">
+        <thead><tr><th>Consejero</th><th>Rondas</th><th>Total invertido</th><th>Participación</th></tr></thead>
+        <tbody>
+          ${rows.map(i=>`<tr>
+            <td><strong>${i.nombre}</strong></td>
+            <td>${i.rondas.map(r=>`<span class="ronda-badge ronda-${Math.min(r.n,3)}" style="margin-right:4px">R${r.n}${r.prima>0?' +'+r.prima+'%':''}</span>`).join('')}</td>
+            <td style="color:var(--gold)">$${i.total.toLocaleString('es-MX')} MXN</td>
+            <td>${i.rondas.map(r=>`${r.pct}%`).join(' + ')}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+async function votarConsejero(email, voto){
+  const emailKey = email.replace('@','_').replace('.','_');
+  const montoEl = document.getElementById('monto-'+emailKey);
+  const comEl = document.getElementById('com-'+emailKey);
+  const monto = montoEl ? parseFloat(montoEl.value)||0 : 0;
+  const comentario = comEl ? comEl.value : '';
+
+  try {
+    await fetch('/api/consejo', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'votar', projectId:projId, email, voto, monto, comentario, ronda:consejoRondaActiva })
+    });
+  } catch(e) { console.error('Error al votar:', e); }
+
+  // Actualizar datos locales y re-render
+  if(!consejoData.project.votacion) consejoData.project.votacion = {abierta:true,rondaActiva:1,ronda1:{}};
+  const rondaKey = 'ronda'+consejoRondaActiva;
+  if(!consejoData.project.votacion[rondaKey]) consejoData.project.votacion[rondaKey]={};
+  const c = CONSEJEROS_INFO[email];
+  consejoData.project.votacion[rondaKey][email] = { voto, monto, comentario, timestamp:Date.now(), consejero:c?.apodo||email };
+  renderConsejo();
+}
+
+function resetVoto(email){
+  if(!consejoData?.project?.votacion) return;
+  const rondaKey = 'ronda'+consejoRondaActiva;
+  delete consejoData.project.votacion[rondaKey][email];
+  renderConsejo();
+}
+
+async function toggleVotacion(){
+  try {
+    const res = await fetch('/api/consejo', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'toggle_votacion', projectId:projId, ronda:consejoRondaActiva })
+    });
+    const data = await res.json();
+    if(!consejoData.project.votacion) consejoData.project.votacion = {abierta:false,rondaActiva:1,ronda1:{}};
+    consejoData.project.votacion.abierta = data.abierta;
+  } catch(e) {
+    if(!consejoData.project.votacion) consejoData.project.votacion = {abierta:false,rondaActiva:1,ronda1:{}};
+    consejoData.project.votacion.abierta = !consejoData.project.votacion.abierta;
+  }
+  renderConsejo();
+}
+
+async function cerrarRonda(){
+  if(!confirm(`¿Cerrar Ronda ${consejoRondaActiva} y registrar los compromisos de inversión? Esta acción no se puede deshacer.`)) return;
+  const hitos = document.getElementById('hitos-edit')?.value || consejoHitosEditados;
+  try {
+    const res = await fetch('/api/consejo', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'cerrar_ronda', projectId:projId, ronda:consejoRondaActiva, hitosEditados:hitos })
+    });
+    const data = await res.json();
+    if(data.ok){
+      // Actualizar proyecto localmente
+      const d = db(); 
+      if(!d.projects[projId].rondas) d.projects[projId].rondas = [];
+      d.projects[projId].rondas.push(data.ronda);
+      d.projects[projId].status = 'financiado';
+      d.projects[projId].votacion = d.projects[projId].votacion || {};
+      d.projects[projId].votacion.abierta = false;
+      d.projects[projId].votacion.rondaActiva = consejoRondaActiva + 1;
+      saveDB(d);
+      // Preparar siguiente ronda
+      consejoRondaActiva++;
+      consejoData.project = d.projects[projId];
+      if(!consejoData.project.votacion['ronda'+consejoRondaActiva]) 
+        consejoData.project.votacion['ronda'+consejoRondaActiva] = {};
+      renderConsejo();
+      alert(`✓ Ronda ${consejoRondaActiva-1} cerrada. Se abre la Ronda ${consejoRondaActiva} con prima del ${(consejoRondaActiva-1)*30}%.`);
+    }
+  } catch(e) { alert('Error al cerrar ronda: '+e.message); }
+}
 
 // ── INIT ──
 window.onload=()=>{

@@ -124,3 +124,24 @@ create index if not exists idx_projects_owner_email on projects(owner_email);
 create index if not exists idx_projects_status on projects(status);
 create index if not exists idx_tasks_project_id on tasks(project_id);
 create index if not exists idx_users_email on users(email);
+
+-- ── MÓDULO CONSEJO DE INVERSIÓN ──
+-- Ejecutar este bloque en el SQL Editor de Supabase
+
+-- Columnas nuevas en projects
+alter table projects 
+  add column if not exists votacion jsonb default '{"abierta":false,"rondaActiva":1,"ronda1":{}}',
+  add column if not exists rondas jsonb default '[]',
+  add column if not exists deleted_at timestamptz default null;
+
+-- Rol sponsor en users
+alter table users
+  add column if not exists is_sponsor boolean default false,
+  add column if not exists sponsor_email text default null;
+
+-- Insertar consejeros (ejecutar después de que existan sus cuentas)
+-- update users set is_sponsor = true where email in (
+--   'juanpablo@murguia.com','boris@murguia.com','lobas@murguia.com','alex@murguia.com'
+-- );
+
+create index if not exists idx_projects_deleted on projects(deleted_at);
