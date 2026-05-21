@@ -1793,7 +1793,11 @@ function clNueva(){
   d.convs[id] = {
     id, nombre: 'Nueva plática',
     createdAt: Date.now(), updatedAt: Date.now(),
-    msgs: [{ role:'assistant', content: nombre + ', ¿en qué andas pensando? Cuéntame la idea, aunque esté a medio cocer. Para eso estoy.' }],
+    msgs: [{ role:'assistant', content: [
+      nombre + ', cuéntame. ¿Traes algo en mente o estás explorando por dónde podría ir un negocio?',
+      nombre + ', ¿en qué andas pensando? Puede ser una idea concreta o simplemente una inquietud — para eso estoy.',
+      'Dime, ' + nombre + '. ¿Tienes algo que llevas tiempo queriendo hacer, o todavía estás buscando la dirección?'
+    ][Math.floor(Math.random()*3)] }],
     formalizar: false
   };
   clSaveDB(d);
