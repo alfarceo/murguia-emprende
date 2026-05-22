@@ -1396,6 +1396,7 @@ function renderMemo(m){
     <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
       <button class="btn-sm gold" onclick="showMemoView('deck')">📊 Investment Memo</button>
       <button class="btn-sm" onclick="showMemoView('scorecard')">📋 Scorecard del Comité</button>
+      <button class="btn-sm gold" onclick="generarPitch()">🎯 Generar Pitch Deck</button>
       <button class="btn-sm" onclick="window.print()">🖨 Imprimir</button>
     </div>
 
@@ -2355,6 +2356,40 @@ async function cerrarRonda(){
       alert(`✓ Ronda ${consejoRondaActiva-1} cerrada. La prima de la siguiente ronda dependerá del tiempo que tome llegar a ella.`);
     }
   } catch(e) { alert('Error al cerrar ronda: '+e.message); }
+}
+
+
+// ── PITCH DECK ──
+async function generarPitch(){
+  const p = proj();
+  if(!p || !p.memo){ alert('Primero genera el memo con Don Juan.'); return; }
+  const btn = event.target;
+  btn.textContent = '⏳ Generando...';
+  btn.disabled = true;
+  try {
+    const res = await fetch('/api/pitch', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ memo: p.memo, formData: {
+        proyecto: p.f_proyecto||p.nombre, emprendedor: p.ownerName,
+        problema: p.f_problema, solucion: p.f_solucion,
+        ventaja: p.f_ventaja, ia: p.f_ia, equipo: p.f_equipo,
+        inversion: p.f_inversion, uso: p.f_uso
+      }})
+    });
+    const html = await res.text();
+    const blob = new Blob([html], {type:'text/html'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = (p.f_proyecto||p.nombre||'pitch').replace(/[^a-z0-9]/gi,'_') + '_pitch.html';
+    a.click();
+    URL.revokeObjectURL(url);
+    // También abrir en nueva pestaña para preview
+    window.open(url, '_blank');
+  } catch(e) { alert('Error al generar: ' + e.message); }
+  btn.textContent = '🎯 Generar Pitch Deck';
+  btn.disabled = false;
 }
 
 // ── INIT ──
