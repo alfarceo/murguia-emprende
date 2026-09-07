@@ -752,8 +752,30 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;font-weight:300;backgroun
 // Admin status comes from server
 
 // ── DB ──
-function db(){ try{ return JSON.parse(localStorage.getItem('mv2_db')||'{"users":{},"projects":{}}'); }catch(e){ return {users:{},projects:{}}; } }
-function saveDB(d){ localStorage.setItem('mv2_db', JSON.stringify(d)); }
+// ── API HELPERS ──
+async function apiPost(endpoint, body){
+  const res = await fetch(endpoint, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({...body, user_id: user?.id, user_email: user?.email, is_admin: user?.is_admin})
+  });
+  return res.json();
+}
+
+// Cache local para evitar llamadas repetidas en la misma sesión
+let _projectsCache = null;
+let _cacheTs = 0;
+
+async function loadProjects(force=false){
+  if(!force && _projectsCache && Date.now()-_cacheTs < 30000) return _projectsCache;
+  const res = await fetch(`/api/projects?action=list&user_email=${encodeURIComponent(user.email)}&is_admin=${user.is_admin}`);
+  const data = await res.json();
+  _projectsCache = data.projects || [];
+  _cacheTs = Date.now();
+  return _projectsCache;
+}
+
+function invalidateCache(){ _projectsCache = null; }
 
 // ── STATE ──
 let user = null;
@@ -939,20 +961,16 @@ function renderDash(){
   }
 }
 
-function borrarProyecto(id){
+async function borrarProyecto(id){
   if(!confirm('¿Mover este proyecto a la papelera? El administrador podrá recuperarlo por 30 días.')) return;
-  const d = db();
-  d.projects[id].deletedAt = Date.now();
-  d.projects[id].status = 'borrado';
-  saveDB(d);
+  await apiPost('/api/projects', {action:'save_form', project_id:id, fields:{deleted_at: new Date().toISOString(), status:'borrado'}});
+  invalidateCache();
   renderDash();
 }
 
-function restaurarProyecto(id){
-  const d = db();
-  delete d.projects[id].deletedAt;
-  d.projects[id].status = d.projects[id].status==='borrado'?'nuevo':d.projects[id].status;
-  saveDB(d);
+async function restaurarProyecto(id){
+  await apiPost('/api/projects', {action:'save_form', project_id:id, fields:{deleted_at: null, status:'nuevo'}});
+  invalidateCache();
   renderDash();
 }
 
@@ -998,22 +1016,13 @@ function showChatLibreConv(id){
 }
 
 // ── PROJECT ──
-function newProject(){
-  const d = db();
-  const id = 'p' + Date.now();
-  d.projects[id] = { id, ownerEmail: user.email, ownerName: user.name, nombre:'', status:'nuevo', createdAt:Date.now(), updatedAt:Date.now(), tasks:[], djMsgs:[], djStep:0, djStarted:false, memo:null };
-  saveDB(d);
-  openProj(id);
-}
 
-function openProj(id){
-  projId = id;
-  showPanel('panel-proj');
-  switchTab('form');
-  loadForm();
+function proj(){
+  if(!_projectsCache) return null;
+  const p = _projectsCache.find(p=>p.id===projId);
+  if(p && !p.ownerEmail){ p.ownerEmail=p.owner_email; p.ownerName=p.owner_name; p.djMsgs=p.dj_messages||[]; p.djStep=p.dj_step||0; p.djStarted=p.dj_started||false; p.tasks=p.tasks||[]; }
+  return p || null;
 }
-
-function proj(){ return db().projects[projId]; }
 
 function loadForm(){
   const p = proj(); if(!p) return;
@@ -1033,14 +1042,17 @@ function getForm(){
   return d;
 }
 
-function saveForm(silent){
-  const d = db(); const f = getForm();
-  Object.keys(f).forEach(k=>{ d.projects[projId]['f_'+k]=f[k]; });
-  d.projects[projId].nombre = f.proyecto||'Sin nombre';
-  d.projects[projId].problema = f.problema;
-  d.projects[projId].inversion = f.inversion;
-  d.projects[projId].updatedAt = Date.now();
-  saveDB(d);
+async function saveForm(silent){
+  const f = getForm();
+  const fields = {};
+  Object.keys(f).forEach(k=>{ fields['f_'+k]=f[k]; });
+  fields.nombre = f.proyecto||'Sin nombre';
+  await apiPost('/api/projects', {action:'save_form', project_id:projId, fields});
+  // Actualizar cache local
+  if(_projectsCache){
+    const p = _projectsCache.find(p=>p.id===projId);
+    if(p){ Object.keys(fields).forEach(k=>{ p[k]=fields[k]; }); }
+  }
   if(!silent) setNotice('form-notice','✓ Guardado correctamente','ok');
 }
 
@@ -1084,10 +1096,8 @@ async function regenMemo(){
   document.getElementById('memo-inner').innerHTML='<p style="color:var(--text3);font-size:14px">⏳ Regenerando memo con el nuevo formato...</p>';
   const memo=await generateMemo();
   if(memo){
-    const d=db();
-    d.projects[projId].memo=memo;
-    d.projects[projId].updatedAt=Date.now();
-    saveDB(d);
+    await apiPost('/api/projects', {action:'save_memo', project_id:projId, memo, status:'evaluacion'});
+    if(_projectsCache){ const p=_projectsCache.find(p=>p.id===projId); if(p) p.memo=memo; }
     renderMemo(memo);
     document.getElementById('ptab-memo').textContent='📄 Memo ✓';
     statusEl.textContent='✓ Memo actualizado';
@@ -1296,7 +1306,7 @@ async function initDJ(){
     document.getElementById('chat-inp').disabled=false;
     document.getElementById('send-btn').disabled=false;
     document.getElementById('chat-inp').focus();
-    const d=db(); d.projects[projId].status='evaluacion'; saveDB(d);
+    await apiPost('/api/projects', {action:'save_dj', project_id:projId, dj_messages:djMsgs, dj_step:djStep, dj_started:true, status:'evaluacion'});
   }catch(e){
     t.parentElement?t.parentElement.remove():null;
     showErr('No se pudo conectar: '+e.message);
@@ -1307,7 +1317,7 @@ async function initDJ(){
 function resetDJ(){
   djMsgs=[]; djStep=0; djStarted=false;
   document.getElementById('chat-msgs').innerHTML='';
-  const d=db(); d.projects[projId].djMsgs=[]; d.projects[projId].djStep=0; d.projects[projId].djStarted=false; saveDB(d);
+  await apiPost('/api/projects', {action:'save_dj', project_id:projId, dj_messages:[], dj_step:0, dj_started:false});
   initDJ();
 }
 
@@ -1343,16 +1353,14 @@ async function finishEval(){
   djStep=9; updSteps();
   const memo=await generateMemo();
   if(memo){
-    const d=db();
-    d.projects[projId].memo=memo;
-    d.projects[projId].status=memo.recomendacion&&memo.recomendacion.includes('PITCH')?'listo':'evaluacion';
+    const status = memo.recomendacion&&memo.recomendacion.includes('PITCH')?'listo':'evaluacion';
+    await apiPost('/api/projects', {action:'save_memo', project_id:projId, memo, status});
     if(memo.tareas&&memo.tareas.length){
-      const tasks=d.projects[projId].tasks||[];
-      memo.tareas.forEach(t=>tasks.push({id:Date.now()+Math.random(),text:t,done:false,createdAt:Date.now(),createdBy:'Don Juan'}));
-      d.projects[projId].tasks=tasks;
+      for(const t of memo.tareas){
+        await apiPost('/api/projects', {action:'add_task', project_id:projId, text:t, created_by:'Don Juan'});
+      }
     }
-    d.projects[projId].updatedAt=Date.now();
-    saveDB(d);
+    if(_projectsCache){ const p=_projectsCache.find(p=>p.id===projId); if(p){p.memo=memo;p.status=status;} }
     renderMemo(memo);
     document.getElementById('ptab-memo').textContent='📄 Memo ✓';
     switchTab('memo');
@@ -1719,41 +1727,41 @@ function renderTasks(){
   document.getElementById('add-task-row').style.display=canAdd?'flex':'none';
   const list=document.getElementById('tasks-list');
   if(!tasks.length){ list.innerHTML='<p style="color:var(--text3);font-size:14px">No hay tareas todavía. Don Juan las agregará al terminar la evaluación.</p>'; return; }
-  list.innerHTML=tasks.map((t,i)=>`
+  list.innerHTML=tasks.map(t=>`
     <div class="task-item">
-      <div class="task-check ${t.done?'done':''}" onclick="toggleTask(${i})">${t.done?'✓':''}</div>
+      <div class="task-check ${t.done?'done':''}" onclick="toggleTask('${t.id}',${!t.done})">${t.done?'✓':''}</div>
       <div><div class="task-text ${t.done?'done':''}">${t.text}</div>
-      <div class="task-date">De: ${t.createdBy||'Don Juan'} · ${new Date(t.createdAt).toLocaleDateString('es-MX')}</div></div>
+      <div class="task-date">De: ${t.created_by||t.createdBy||'Don Juan'} · ${new Date(t.created_at||t.createdAt).toLocaleDateString('es-MX')}</div></div>
     </div>`).join('');
 }
 
-function toggleTask(i){
-  const d=db(); const tasks=d.projects[projId].tasks||[];
-  tasks[i].done=!tasks[i].done;
-  d.projects[projId].tasks=tasks;
-  d.projects[projId].updatedAt=Date.now();
-  saveDB(d);
+async function toggleTask(taskId, done){
+  await apiPost('/api/projects', {action:'toggle_task', task_id:taskId, done});
+  const p=proj();
+  if(p&&p.tasks){ const t=p.tasks.find(t=>t.id===taskId); if(t) t.done=done; }
   renderTasks();
 }
 
-function addTask(){
+async function addTask(){
   const inp=document.getElementById('new-task-inp');
   const txt=inp.value.trim(); if(!txt) return;
-  const d=db(); const tasks=d.projects[projId].tasks||[];
-  tasks.push({id:Date.now(),text:txt,done:false,createdAt:Date.now(),createdBy:user.name});
-  d.projects[projId].tasks=tasks;
-  d.projects[projId].status='tarea';
-  d.projects[projId].updatedAt=Date.now();
-  saveDB(d);
   inp.value='';
-  renderTasks();
+  const data = await apiPost('/api/projects', {action:'add_task', project_id:projId, text:txt, created_by:user.name});
+  if(data.task){
+    const p=proj();
+    if(p){ if(!p.tasks) p.tasks=[]; p.tasks.push(data.task); }
+    renderTasks();
+  }
 }
 
 // ── ADMIN ──
-function renderAdmin(){
-  const d=db();
-  const projs=Object.values(d.projects);
-  const users=Object.values(d.users);
+async function renderAdmin(){
+  const [projsData, usersData] = await Promise.all([
+    loadProjects(true),
+    apiPost('/api/projects', {action:'admin_users'})
+  ]);
+  const projs = projsData || [];
+  const users = usersData.users || [];
   document.getElementById('admin-stats').innerHTML=`
     <div class="stat-card"><div class="stat-n">${projs.length}</div><div class="stat-l">Proyectos totales</div></div>
     <div class="stat-card"><div class="stat-n">${projs.filter(p=>p.status==='listo').length}</div><div class="stat-l">Listos para el consejo</div></div>
@@ -1762,8 +1770,8 @@ function renderAdmin(){
     <tr>
       <td>${u.name}</td>
       <td>${u.email}</td>
-      <td>${new Date(u.createdAt).toLocaleDateString('es-MX')}</td>
-      <td>${projs.filter(p=>p.ownerEmail===u.email).length}</td>
+      <td>${new Date(u.created_at).toLocaleDateString('es-MX')}</td>
+      <td>${projs.filter(p=>p.owner_email===u.email).length}</td>
       <td><button class="btn-sm" onclick="openResetModal('${u.email}','${u.name}')">Resetear clave</button></td>
     </tr>`).join('');
   document.getElementById('admin-proj-body').innerHTML=projs.sort((a,b)=>b.updatedAt-a.updatedAt).map(p=>`
